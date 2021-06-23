@@ -3,6 +3,7 @@ package io.github.koxx12_dev.scc;
 import io.github.koxx12_dev.scc.Commands.MainCommand;
 import io.github.koxx12_dev.scc.GUI.SCCConfig;
 import io.github.koxx12_dev.scc.Utils.HTTPstuff;
+import io.github.koxx12_dev.scc.Utils.RPC;
 import io.github.koxx12_dev.scc.listeners.ChatListeners;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -27,6 +28,8 @@ public class SCC {
     public static final String MOD_NAME = "${GRADLE_MOD_NAME}";
     public static final String MOD_ID = "${GRADLE_MOD_ID}";
     public static final String MOD_VERSION = "${GRADLE_MOD_VERSION}";
+
+    public static boolean RPCon = false;
 
     public static GuiScreen displayScreen;
 
@@ -59,6 +62,11 @@ public class SCC {
         config.preload();
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new ChatListeners());
+
+        RPC.INSTANCE.RPCManager();
+
+        MinecraftForge.EVENT_BUS.register(RPC.INSTANCE);
+
         ClientCommandHandler.instance.registerCommand(new MainCommand());
 
     }
@@ -67,7 +75,6 @@ public class SCC {
     public void onPostInit(FMLPostInitializationEvent event) {
         // $USER = The username of the currently logged in user.
         // Simply prints out Hello, $USER.
-
         HTTPstuff.reloadTags();
 
     }
