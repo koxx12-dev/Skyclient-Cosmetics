@@ -12,6 +12,9 @@ public class SCCConfig extends Vigilant {
     @Property(type = PropertyType.SWITCH, name = "Hide custom tags", description = "Hides all custom tags in new messages", category = "Main", subcategory = "Tags")
     public static boolean TagsHidden = false;
 
+    @Property(type = PropertyType.SWITCH, name = "Shorten custom tag", description = "Shortens all custom tags in new messages", category = "Tags", subcategory = "Main")
+    public static boolean ShortenTags = false;
+
     @Property(type = PropertyType.BUTTON, name = "Reload Tags", description = "Reloads custom tags", category = "Tags", subcategory = "Main")
     private void reload() {
         HTTPstuff.reloadTags();

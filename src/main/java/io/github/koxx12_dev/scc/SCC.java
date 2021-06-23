@@ -36,6 +36,8 @@ public class SCC {
 
     public static HashMap<String,String> UUIDtags = new HashMap<>();
 
+    public static HashMap<String,String> UUIDtagsShort = new HashMap<>();
+
     public static JSONObject api;
 
     @Mod.EventHandler

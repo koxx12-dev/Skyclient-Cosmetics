@@ -16,7 +16,7 @@ import java.util.List;
 public class ChatListeners {
 
     @SubscribeEvent
-    public void onChatGlobal(ClientChatReceivedEvent event) {
+    public void onChatMsg(ClientChatReceivedEvent event) {
         if (!SCCConfig.TagsHidden && DetectionStuff.isOnHypixel()) {
 
             System.out.println(event.message.getUnformattedText()+" , "+Transformers.cleanMessage(event.message.getUnformattedText()));
@@ -32,6 +32,7 @@ public class ChatListeners {
             for (int i = 0; i < (cleanMsgAsList.toArray().length-1); i++) {
 
                 String val = cleanMsgAsList.get(i);
+                String valClean = cleanMsgAsList.get(i).replaceAll(",","").replaceAll(":","");
                 System.out.println(val+" , "+cleanMsgAsList.toArray().length);
                 if (SCC.HypixelRanks.contains(val)) {
 
@@ -39,7 +40,15 @@ public class ChatListeners {
 
                     int j = (i+1);
                     try {
-                        String val2 = SCC.UUIDtags.get(cleanMsgAsList.get(j).replaceAll(":",""));
+
+                        String val2;
+
+                        if (!SCCConfig.ShortenTags) {
+                            val2 = SCC.UUIDtags.get(cleanMsgAsList.get(j).replaceAll(":",""));
+                        } else {
+                            val2 = SCC.UUIDtagsShort.get(cleanMsgAsList.get(j).replaceAll(":",""));
+                        }
+
                         System.out.println(cleanMsgAsList.get(j)+" , "+val2);
                         if (val2 != null) {
                             msgAsList.add(i,val2);
@@ -51,6 +60,22 @@ public class ChatListeners {
                         System.out.println(cleanMsgAsList.get(j).replaceAll(":","") + " doesnt have a tag");
                     }
                     break;
+                } else if(SCC.UUIDtags.containsKey(valClean)) {
+
+                    String val2;
+
+                    if (!SCCConfig.ShortenTags) {
+                        val2 = SCC.UUIDtags.get(valClean);
+                    } else {
+                        val2 = SCC.UUIDtagsShort.get(valClean);
+                    }
+
+                    msgAsList.add(i,val2);
+
+                    event.message = new ChatComponentText(String.join(" ", msgAsList));
+
+                    break;
+
                 }
 
             }

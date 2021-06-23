@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
 import java.util.Scanner;
 
 public class HTTPstuff {
@@ -27,6 +28,7 @@ public class HTTPstuff {
         try {
             SCC.HypixelRanks.clear();
             SCC.UUIDtags.clear();
+            SCC.UUIDtagsShort.clear();
             SCC.api = HTTPstuff.getApiData();
         } catch (Exception ignored) {}
 
@@ -40,7 +42,7 @@ public class HTTPstuff {
                 throw new Error("Someone broke the repo\nwait for staff to fix it");
             }
             for (int i = 0; i < tagsIdList.length(); i++) {
-                String tag = (String) api.getJSONObject("tags").get((String) tagsIdList.get(i));
+                List<Object> tag = api.getJSONObject("tags").getJSONArray((String) tagsIdList.get(i)).toList();
                 JSONArray perms = api.getJSONObject("perms").getJSONArray((String) tagsIdList.get(i));
                 for (int j = 0; j < perms.length(); j++) {
                     String uuid = perms.getString(j).replaceAll("-","");
@@ -49,7 +51,8 @@ public class HTTPstuff {
                     JSONArray nameJson = new JSONArray(name);
                     String nme = (String) nameJson.getJSONObject(nameJson.length()-1).get("name");
 
-                    SCC.UUIDtags.put(nme,tag.replaceAll("&","\u00A7"));
+                    SCC.UUIDtagsShort.put(nme,tag.get(1).toString().replaceAll("&","\u00A7"));
+                    SCC.UUIDtags.put(nme,tag.get(0).toString().replaceAll("&","\u00A7"));
                 }
             }
             for (int i = 0; i < HPRanks.length(); i++) {
@@ -59,6 +62,7 @@ public class HTTPstuff {
         }
 
         System.out.println(SCC.UUIDtags);
+        System.out.println(SCC.UUIDtagsShort);
         System.out.println(SCC.HypixelRanks);
     }
 
