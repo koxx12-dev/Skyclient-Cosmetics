@@ -41,6 +41,7 @@ public class SCC {
     @Mod.EventHandler
     public void onPreInit(FMLPreInitializationEvent event) throws IOException {
         api = HTTPstuff.getApiData();
+        /*
         if ((boolean)api.get("whitelist")) {
             String UUID = Minecraft.getMinecraft().getSession().getPlayerID();
             List<Object> whitelisted = api.getJSONArray("whitelisted").toList();
@@ -48,6 +49,7 @@ public class SCC {
                 throw new Error("You are not whitelisted LMAO");
             }
         }
+        */
     }
 
     @Mod.EventHandler
