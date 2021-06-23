@@ -1,0 +1,18 @@
+[
+  {
+    "modid": "${modid}",
+    "name": "${name}",
+    "description": "${description}",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [
+      "koxx12"
+    ],
+    "credits": "nacrt for creating skyclient",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
