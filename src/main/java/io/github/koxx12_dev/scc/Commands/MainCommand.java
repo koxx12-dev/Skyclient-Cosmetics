@@ -23,7 +23,7 @@ public class MainCommand extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
         if (args.length != 1) {
             SCC.displayScreen = SCC.config.gui();
-        } else if (args[0].equalsIgnoreCase("reload")){
+        } else if (args[0].equalsIgnoreCase("reload")) {
             HTTPstuff.reloadTags();
         } else {
             sender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED+"Unknown command\n"+EnumChatFormatting.RED+"\"/scc\" for config gui\n"+EnumChatFormatting.RED+"\"/scc reload\" to reload tags"));

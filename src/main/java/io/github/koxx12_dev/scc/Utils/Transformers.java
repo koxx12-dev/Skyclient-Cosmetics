@@ -1,6 +1,10 @@
 package io.github.koxx12_dev.scc.Utils;
 
+import io.github.koxx12_dev.scc.SCC;
+import net.minecraft.client.Minecraft;
+
 public class Transformers {
+
     public static String cleanMessage(String msg) {
         //if null, keep null (no gain or loss of safety)
         if (msg == null)
@@ -29,6 +33,18 @@ public class Transformers {
                 .replaceAll("\u00A78","")
                 .replaceAll("\u00A70","");
 
-        return msg.toString();//build the string, and return
+        return msg;//build the string, and return
+    }
+    public static String DiscordPlaceholder(String text) {
+        String text2 = text.replaceAll("%player%", Minecraft.getMinecraft().getSession().getUsername())
+                .replaceAll("%fps%", String.valueOf(Minecraft.getDebugFPS()))
+                .replaceAll("%shorttag%", cleanMessage(SCC.UUIDtagsShort.get(Minecraft.getMinecraft().getSession().getUsername())))
+                .replaceAll("%tag%", cleanMessage(SCC.UUIDtags.get(Minecraft.getMinecraft().getSession().getUsername())));
+
+        try {
+            return text2.replaceAll("%hand%", cleanMessage(Minecraft.getMinecraft().thePlayer.getHeldItem().getDisplayName()));
+        } catch (NullPointerException e) {
+            return text2.replaceAll("%hand%", "Nothing");
+        }
     }
 }

@@ -5,7 +5,6 @@ import io.github.koxx12_dev.scc.SCC;
 import net.arikia.dev.drpc.DiscordEventHandlers;
 import net.arikia.dev.drpc.DiscordRPC;
 import net.arikia.dev.drpc.DiscordRichPresence;
-import net.minecraft.client.Minecraft;
 
 import java.time.Instant;
 
@@ -29,9 +28,9 @@ public class RPC implements Runnable {
 
         DiscordEventHandlers handlers = new DiscordEventHandlers.Builder().setReadyEventHandler((user) -> {
             System.out.println("Discord user: " + user.username);
-            DiscordRichPresence.Builder presence = new DiscordRichPresence.Builder(SCCConfig.RPCText);
-            presence.setDetails(Minecraft.getMinecraft().getSession().getUsername()+" is very cool");
-            presence.setBigImage("skyclienticon","skyclient is very cool");
+            DiscordRichPresence.Builder presence = new DiscordRichPresence.Builder(Transformers.DiscordPlaceholder(SCCConfig.RPCLineTwo));
+            presence.setDetails(Transformers.DiscordPlaceholder(SCCConfig.RPCLineOne));
+            presence.setBigImage("skyclienticon",SCCConfig.RPCImgText);
             presence.setStartTimestamps(timestamp);
             DiscordRPC.discordUpdatePresence(presence.build());
             SCC.RPCon = true;
@@ -45,16 +44,16 @@ public class RPC implements Runnable {
             DiscordRPC.discordClearPresence();
         } else if(SCCConfig.BadSbeMode){
 
-            DiscordRichPresence.Builder presence = new DiscordRichPresence.Builder(SCCConfig.RPCText);
-            presence.setDetails(Minecraft.getMinecraft().getSession().getUsername()+" hates SBE");
-            presence.setBigImage("nosbe","SBE is a trash mod");
+            DiscordRichPresence.Builder presence = new DiscordRichPresence.Builder(Transformers.DiscordPlaceholder(SCCConfig.RPCLineTwo));
+            presence.setDetails(Transformers.DiscordPlaceholder(SCCConfig.RPCLineOne));
+            presence.setBigImage("nosbe",SCCConfig.RPCImgText);
             presence.setStartTimestamps(timestamp);
             DiscordRPC.discordUpdatePresence(presence.build());
 
         } else {
-            DiscordRichPresence.Builder presence = new DiscordRichPresence.Builder(SCCConfig.RPCText);
-            presence.setDetails(Minecraft.getMinecraft().getSession().getUsername()+" is very cool");
-            presence.setBigImage("skyclienticon","skyclient is very cool");
+            DiscordRichPresence.Builder presence = new DiscordRichPresence.Builder(Transformers.DiscordPlaceholder(SCCConfig.RPCLineTwo));
+            presence.setDetails(Transformers.DiscordPlaceholder(SCCConfig.RPCLineOne));
+            presence.setBigImage("skyclienticon",SCCConfig.RPCImgText);
             presence.setStartTimestamps(timestamp);
             DiscordRPC.discordUpdatePresence(presence.build());
         }

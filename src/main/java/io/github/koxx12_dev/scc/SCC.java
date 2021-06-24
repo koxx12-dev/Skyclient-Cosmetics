@@ -89,5 +89,9 @@ public void onTick(TickEvent.ClientTickEvent event) {
             Minecraft.getMinecraft().displayGuiScreen(displayScreen);
             displayScreen = null;
         }
+        if (SCCConfig.reloadTags) {
+            HTTPstuff.reloadTags();
+            SCCConfig.reloadTags = false;
+        }
     }
 }
