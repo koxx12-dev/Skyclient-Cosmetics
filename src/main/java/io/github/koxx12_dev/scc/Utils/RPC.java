@@ -43,6 +43,14 @@ public class RPC implements Runnable {
 
         if (!SCCConfig.RPC) {
             DiscordRPC.discordClearPresence();
+        } else if(SCCConfig.BadSbeMode){
+
+            DiscordRichPresence.Builder presence = new DiscordRichPresence.Builder(SCCConfig.RPCText);
+            presence.setDetails(Minecraft.getMinecraft().getSession().getUsername()+" hates SBE");
+            presence.setBigImage("nosbe","SBE is a trash mod");
+            presence.setStartTimestamps(timestamp);
+            DiscordRPC.discordUpdatePresence(presence.build());
+
         } else {
             DiscordRichPresence.Builder presence = new DiscordRichPresence.Builder(SCCConfig.RPCText);
             presence.setDetails(Minecraft.getMinecraft().getSession().getUsername()+" is very cool");

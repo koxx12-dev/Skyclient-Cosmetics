@@ -2,6 +2,7 @@ pluginManagement {
     repositories {
         mavenCentral()
         gradlePluginPortal()
+        jcenter()
 
         maven {
             name = 'Forge'
@@ -11,12 +12,20 @@ pluginManagement {
             name = 'JitPack'
             url = 'https://jitpack.io'
         }
+        maven {
+            url "https://repo.spongepowered.org/maven"
+        }
     }
 
     resolutionStrategy {
         eachPlugin {
-            if (requested.id.id == 'net.minecraftforge.gradle.forge') {
-                useModule("com.github.asbyth:ForgeGradle:${requested.version}")
+            switch (requested.id.id) {
+                case "net.minecraftforge.gradle.forge":
+                    useModule("com.github.asbyth:ForgeGradle:${requested.version}")
+                    break
+                case 'org.spongepowered.mixin':
+                    useModule("com.github.xcfrg:MixinGradle:${requested.version}")
+                    break 
             }
         }
     }

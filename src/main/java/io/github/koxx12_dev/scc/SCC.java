@@ -5,6 +5,7 @@ import io.github.koxx12_dev.scc.GUI.SCCConfig;
 import io.github.koxx12_dev.scc.Utils.HTTPstuff;
 import io.github.koxx12_dev.scc.Utils.RPC;
 import io.github.koxx12_dev.scc.listeners.ChatListeners;
+import io.github.koxx12_dev.scc.listeners.PlayerListeners;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.client.ClientCommandHandler;
@@ -25,67 +26,68 @@ import java.util.List;
 @Mod(modid = SCC.MOD_ID, name = SCC.MOD_NAME, version = SCC.MOD_VERSION, clientSideOnly = true)
 public class SCC {
 
-    public static final String MOD_NAME = "${GRADLE_MOD_NAME}";
-    public static final String MOD_ID = "${GRADLE_MOD_ID}";
-    public static final String MOD_VERSION = "${GRADLE_MOD_VERSION}";
+public static final String MOD_NAME = "${GRADLE_MOD_NAME}";
+public static final String MOD_ID = "${GRADLE_MOD_ID}";
+public static final String MOD_VERSION = "${GRADLE_MOD_VERSION}";
 
-    public static boolean RPCon = false;
+public static boolean RPCon = false;
 
-    public static GuiScreen displayScreen;
+public static GuiScreen displayScreen;
 
-    public static List<String> HypixelRanks = new ArrayList<>();
+public static List<String> HypixelRanks = new ArrayList<>();
 
-    public static SCCConfig config = new SCCConfig();
+public static SCCConfig config = new SCCConfig();
 
-    public static HashMap<String,String> UUIDtags = new HashMap<>();
+public static HashMap<String,String> UUIDtags = new HashMap<>();
 
-    public static HashMap<String,String> UUIDtagsShort = new HashMap<>();
+public static HashMap<String,String> UUIDtagsShort = new HashMap<>();
 
-    public static JSONObject api;
+public static JSONObject api;
 
-    @Mod.EventHandler
-    public void onPreInit(FMLPreInitializationEvent event) throws IOException {
-        api = HTTPstuff.getApiData();
-        /*
-        if ((boolean)api.get("whitelist")) {
-            String UUID = Minecraft.getMinecraft().getSession().getPlayerID();
-            List<Object> whitelisted = api.getJSONArray("whitelisted").toList();
-            if (!whitelisted.contains(UUID)){
-                throw new Error("You are not whitelisted LMAO");
-            }
-        }
-        */
-    }
-
-    @Mod.EventHandler
-    public void onInit(FMLInitializationEvent event) {
-        config.preload();
-        MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.register(new ChatListeners());
-
-        RPC.INSTANCE.RPCManager();
-
-        MinecraftForge.EVENT_BUS.register(RPC.INSTANCE);
-
-        ClientCommandHandler.instance.registerCommand(new MainCommand());
-
-    }
-
-    @Mod.EventHandler
-    public void onPostInit(FMLPostInitializationEvent event) {
-        // $USER = The username of the currently logged in user.
-        // Simply prints out Hello, $USER.
-        HTTPstuff.reloadTags();
-
-    }
-
-    @SubscribeEvent
-    public void onTick(TickEvent.ClientTickEvent event) {
-            if (event.phase != TickEvent.Phase.START)
-                return;
-            if (displayScreen != null) {
-                Minecraft.getMinecraft().displayGuiScreen(displayScreen);
-                displayScreen = null;
-            }
+@Mod.EventHandler
+public void onPreInit(FMLPreInitializationEvent event) throws IOException {
+    api = HTTPstuff.getApiData();
+    /*
+    if ((boolean)api.get("whitelist")) {
+        String UUID = Minecraft.getMinecraft().getSession().getPlayerID();
+        List<Object> whitelisted = api.getJSONArray("whitelisted").toList();
+        if (!whitelisted.contains(UUID)){
+            throw new Error("You are not whitelisted LMAO");
         }
     }
+    */
+}
+
+@Mod.EventHandler
+public void onInit(FMLInitializationEvent event) {
+    config.preload();
+    MinecraftForge.EVENT_BUS.register(this);
+    MinecraftForge.EVENT_BUS.register(new ChatListeners());
+    MinecraftForge.EVENT_BUS.register(new PlayerListeners());
+
+    RPC.INSTANCE.RPCManager();
+
+    MinecraftForge.EVENT_BUS.register(RPC.INSTANCE);
+
+    ClientCommandHandler.instance.registerCommand(new MainCommand());
+
+}
+
+@Mod.EventHandler
+public void onPostInit(FMLPostInitializationEvent event) {
+    // $USER = The username of the currently logged in user.
+    // Simply prints out Hello, $USER.
+    HTTPstuff.reloadTags();
+
+}
+
+@SubscribeEvent
+public void onTick(TickEvent.ClientTickEvent event) {
+        if (event.phase != TickEvent.Phase.START)
+            return;
+        if (displayScreen != null) {
+            Minecraft.getMinecraft().displayGuiScreen(displayScreen);
+            displayScreen = null;
+        }
+    }
+}

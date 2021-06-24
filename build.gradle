@@ -4,6 +4,7 @@ plugins {
     id 'java'
     id 'net.minecraftforge.gradle.forge' version '6f5327'
     id 'com.github.johnrengelman.shadow' version '6.1.0'
+    id 'org.spongepowered.mixin' version '0.6-SNAPSHOT'
 }
 /*
 // for people who want stable - not yet functional for MC 1.8.8 - we require the forgegradle 2.1 snapshot
@@ -13,7 +14,7 @@ plugins {
 */
 version = mod_version
 group = "io.github.koxx12-dev"
-archivesBaseName = mod_name
+archivesBaseName = "!!!"+mod_name
 
 minecraft {
     version = "1.8.9-11.15.1.2318-1.8.9"
@@ -24,6 +25,9 @@ minecraft {
     replace('${GRADLE_MOD_NAME}', mod_name)
     replace('${GRADLE_MOD_DESCRIPTION}', mod_description)
     replace('${GRADLE_MOD_VERSION}', mod_version)
+
+    clientRunArgs += "--tweakClass org.spongepowered.asm.launch.MixinTweaker"
+    clientRunArgs += "--mixin mixins.scc.json"
 
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
@@ -37,7 +41,7 @@ minecraft {
 repositories {
     mavenCentral()
     maven { url 'https://jitpack.io' }
-    //maven { url "https://repo.spongepowered.org/repository/maven-public/" }
+    maven { url "https://repo.spongepowered.org/repository/maven-public/" }
     maven { url "https://repo.sk1er.club/repository/maven-public/" }
 }
 
@@ -46,6 +50,10 @@ dependencies {
     implementation "org.json:json:20210307"
     implementation "gg.essential:Vigilance:123-10809-SNAPSHOT"
     implementation 'com.github.Vatuu:discord-rpc:1.6.2'
+
+    implementation "org.spongepowered:mixin:0.7.11-SNAPSHOT"
+    annotationProcessor "org.spongepowered:mixin:0.7.11-SNAPSHOT"
+
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
@@ -67,6 +75,10 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
+}
+
+mixin {
+    add sourceSets.main, 'mixins.scc.refmap.json'
 }
 
 processResources {
@@ -130,7 +142,13 @@ reobf {
 
 jar {
     manifest {
-        attributes "ModSide": "CLIENT"
+        attributes "ModSide": "CLIENT",
+                "FMLCorePlugin": "io.github.koxx12_dev.scc.fml.CoreMod",
+                "FMLCorePluginContainsFMLMod": "true",
+                "ForceLoadAsMod": true,
+                "MixinConfigs": "mixins.scc.json",
+                "TweakClass": "org.spongepowered.asm.launch.MixinTweaker",
+                "TweakOrder": "0"
     }
 }
 

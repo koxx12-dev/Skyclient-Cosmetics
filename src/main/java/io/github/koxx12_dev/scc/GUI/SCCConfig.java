@@ -29,6 +29,12 @@ public class SCCConfig extends Vigilant {
     @Property(type = PropertyType.SWITCH, name = "Discord RPC", description = "Enables Discord RPC", category = "Main", subcategory = "RPC")
     public static boolean RPC = true;
 
+    @Property(type = PropertyType.CHECKBOX, name = "First time message", description = "Get \"First time message\" when u join next time", category = "Main", subcategory = "Other")
+    public static boolean JoinMessage = true;
+
+    @Property(type = PropertyType.SWITCH, name = "Sbe sucks Mode", description = "Do i need to explain this?", category = "Main", subcategory = "RPC")
+    public static boolean BadSbeMode = false;
+
     //@Property(type = PropertyType.TEXT, name = "Skyclient Cosmetics API key", description = "SCC Api key is used for every feature of this mod", category = "Main", subcategory = "Main", protectedText = true)
     //public static String SCCApiKey = "";
 
