@@ -1,5 +1,6 @@
 package io.github.koxx12_dev.scc;
 
+import de.jcm.discordgamesdk.Core;
 import io.github.koxx12_dev.scc.Commands.MainCommand;
 import io.github.koxx12_dev.scc.GUI.SCCConfig;
 import io.github.koxx12_dev.scc.Utils.HTTPstuff;
@@ -30,6 +31,8 @@ public static final String MOD_NAME = "${GRADLE_MOD_NAME}";
 public static final String MOD_ID = "${GRADLE_MOD_ID}";
 public static final String MOD_VERSION = "${GRADLE_MOD_VERSION}";
 
+public static boolean Debug = false;
+
 public static boolean RPCon = false;
 
 public static GuiScreen displayScreen;
@@ -44,8 +47,13 @@ public static HashMap<String,String> UUIDtagsShort = new HashMap<>();
 
 public static JSONObject api;
 
+public static Core RPCcore;
+
+public static String PartyID = RPC.generateID();
+
 @Mod.EventHandler
 public void onPreInit(FMLPreInitializationEvent event) throws IOException {
+
     api = HTTPstuff.getApiData();
     /*
     if ((boolean)api.get("whitelist")) {
@@ -61,6 +69,7 @@ public void onPreInit(FMLPreInitializationEvent event) throws IOException {
 @Mod.EventHandler
 public void onInit(FMLInitializationEvent event) {
     config.preload();
+
     MinecraftForge.EVENT_BUS.register(this);
     MinecraftForge.EVENT_BUS.register(new ChatListeners());
     MinecraftForge.EVENT_BUS.register(new PlayerListeners());
@@ -77,6 +86,19 @@ public void onInit(FMLInitializationEvent event) {
 public void onPostInit(FMLPostInitializationEvent event) {
     // $USER = The username of the currently logged in user.
     // Simply prints out Hello, $USER.
+    /*
+    if (Loader.isModLoaded("SkyblockExtras")) {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+
+
+        }));
+
+        System.out.println(Arrays.toString(new File(Minecraft.getMinecraft().mcDataDir, "mods").list()));
+
+        //throw new Error("fuck sbe https://github.com/MicrocontrollersDev/Alternatives/blob/1e409e056e3e14ca874a2368c045de96787e8cbd/SkyblockExtras.md");
+    }
+    */
+
     HTTPstuff.reloadTags();
 
 }

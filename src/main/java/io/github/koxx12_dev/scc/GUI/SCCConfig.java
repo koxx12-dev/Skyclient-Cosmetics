@@ -3,13 +3,11 @@ package io.github.koxx12_dev.scc.GUI;
 import gg.essential.vigilance.Vigilant;
 import gg.essential.vigilance.data.Property;
 import gg.essential.vigilance.data.PropertyType;
+import io.github.koxx12_dev.scc.SCC;
 
 import java.io.File;
 
 public class SCCConfig extends Vigilant {
-
-    @Property(type = PropertyType.SWITCH, name = "Show Debug Options", description = "SHOWS DEBUG STUFF USELESS FOR EVERYONE BUT ME -koxx12", category = "DEBUG", subcategory = "DEBUG", hidden = true)
-    public static boolean ShowDebug = false;
 
     @Property(type = PropertyType.SWITCH, name = "Show custom tags", description = "Show all custom tags in new messages", category = "Main", subcategory = "Tags")
     public static boolean TagsShow = true;
@@ -25,6 +23,9 @@ public class SCCConfig extends Vigilant {
 
     @Property(type = PropertyType.SWITCH, name = "Debug Display Tags", description = "Changes player names to your tag", category = "DEBUG", subcategory = "DEBUG")
     public static boolean DebugDisplayTags = false;
+
+    @Property(type = PropertyType.SWITCH, name = "Show Debug info in the logs", description = "Spams your logs as fuck", category = "DEBUG", subcategory = "DEBUG")
+    public static boolean DebugLogs = false;
 
     @Property(type = PropertyType.TEXT, name = "Discord RPC Second Line", description = "Allows you to set second line of the Discord RPC", category = "Main", subcategory = "RPC")
     public static String RPCLineTwo = "SBE bad";
@@ -55,9 +56,6 @@ public class SCCConfig extends Vigilant {
 
         initialize();
 
-        addDependency("DebugTags","ShowDebug");
-        addDependency("DebugDisplayTags","ShowDebug");
-
         addDependency("BadSbeMode","RPC");
         addDependency("RPCLineTwo","RPC");
         addDependency("RPCLineOne","RPC");
@@ -67,9 +65,9 @@ public class SCCConfig extends Vigilant {
         addDependency("reloadTags","TagsShow");
         addDependency("DisplayTags","TagsShow");
 
-
-
-
+        hidePropertyIf("DebugTags", () -> SCC.Debug);
+        hidePropertyIf("DebugDisplayTags", () -> SCC.Debug);
+        hidePropertyIf("DebugLogs", () -> SCC.Debug);
     }
 
 }

@@ -19,24 +19,21 @@ public class ChatListeners {
     public void onChatMsg(ClientChatReceivedEvent event) {
         if (SCCConfig.TagsShow && DetectionStuff.isOnHypixel()) {
 
-            //System.out.println(event.message.getFormattedText()+" , "+Transformers.cleanMessage(event.message.getUnformattedText()));
-
-            //System.out.println(event.message.getUnformattedText().split(" ") +" "+ Transformers.cleanMessage(event.message.getUnformattedText()).split(" "));
+            if (SCCConfig.DebugLogs) {
+                System.out.println(event.message.getFormattedText() + " , " + Transformers.cleanMessage(event.message.getUnformattedText()));
+                System.out.println(event.message.getFormattedText().split(" ") + " , " + Transformers.cleanMessage(event.message.getUnformattedText()).split(" "));
+            }
 
             List<String> msgAsList = new ArrayList<>(Arrays.asList(event.message.getFormattedText().split(" ")));
             List<String> cleanMsgAsList = new ArrayList<>(Arrays.asList(Transformers.cleanMessage(event.message.getUnformattedText()).split(" ")));
 
 
-            //System.out.println("\""+cleanMsgAsList+"\"\n\""+msgAsList+"\"");
-
             for (int i = 0; i < (cleanMsgAsList.toArray().length-1); i++) {
 
                 String val = cleanMsgAsList.get(i);
                 String valClean = cleanMsgAsList.get(i).replaceAll(",","").replaceAll(":","");
-                //System.out.println(val+" , "+cleanMsgAsList.toArray().length);
                 if (SCC.HypixelRanks.contains(val)) {
 
-                    //System.out.println(val+" , "+i);
 
                     int j = (i+1);
                     try {
@@ -49,7 +46,6 @@ public class ChatListeners {
                             val2 = SCC.UUIDtagsShort.get(cleanMsgAsList.get(j).replaceAll(":",""));
                         }
 
-                        //System.out.println(cleanMsgAsList.get(j)+" , "+val2);
                         if (val2 != null) {
                             msgAsList.add(i,val2);
                             event.message = new ChatComponentText(String.join(" ", msgAsList));
@@ -60,7 +56,7 @@ public class ChatListeners {
                         System.out.println(cleanMsgAsList.get(j).replaceAll(":","") + " doesnt have a tag");
                     }
                     break;
-                } else if(SCC.UUIDtags.containsKey(valClean)) {
+                } else if(SCC.UUIDtags.containsKey(valClean) && val.contains(":")) {
 
                     String val2;
 

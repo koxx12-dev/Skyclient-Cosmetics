@@ -33,18 +33,25 @@ public class Transformers {
                 .replaceAll("\u00A78","")
                 .replaceAll("\u00A70","");
 
-        return msg;//build the string, and return
+        return msg;
     }
     public static String DiscordPlaceholder(String text) {
-        String text2 = text.replaceAll("%player%", Minecraft.getMinecraft().getSession().getUsername())
-                .replaceAll("%fps%", String.valueOf(Minecraft.getDebugFPS()))
-                .replaceAll("%shorttag%", cleanMessage(SCC.UUIDtagsShort.get(Minecraft.getMinecraft().getSession().getUsername())))
-                .replaceAll("%tag%", cleanMessage(SCC.UUIDtags.get(Minecraft.getMinecraft().getSession().getUsername())));
+        String text2 = text.replaceAll("%player%", Minecraft.getMinecraft().getSession().getUsername());
 
+        try{
+            text2 = text2.replaceAll("%fps%", String.valueOf(Minecraft.getDebugFPS()));
+        } catch (Exception ignored) {}
+        try{
+            text2 = text2.replaceAll("%shorttag%", cleanMessage(SCC.UUIDtagsShort.get(Minecraft.getMinecraft().getSession().getUsername())));
+        } catch (Exception ignored) {}
+        try{
+            text2 = text2.replaceAll("%tag%", cleanMessage(SCC.UUIDtags.get(Minecraft.getMinecraft().getSession().getUsername())));
+        } catch (Exception ignored) {}
         try {
-            return text2.replaceAll("%hand%", cleanMessage(Minecraft.getMinecraft().thePlayer.getHeldItem().getDisplayName()));
+            text2 = text2.replaceAll("%hand%", cleanMessage(Minecraft.getMinecraft().thePlayer.getHeldItem().getDisplayName()));
         } catch (NullPointerException e) {
-            return text2.replaceAll("%hand%", "Nothing");
+            text2 = text2.replaceAll("%hand%", "Nothing");
         }
+        return text2;
     }
 }

@@ -1,75 +1,163 @@
 package io.github.koxx12_dev.scc.Utils;
 
+import de.jcm.discordgamesdk.Core;
+import de.jcm.discordgamesdk.CreateParams;
+import de.jcm.discordgamesdk.DiscordEventAdapter;
+import de.jcm.discordgamesdk.RelationshipManager;
+import de.jcm.discordgamesdk.activity.Activity;
+import de.jcm.discordgamesdk.user.DiscordUser;
+import de.jcm.discordgamesdk.user.Relationship;
 import io.github.koxx12_dev.scc.GUI.SCCConfig;
 import io.github.koxx12_dev.scc.SCC;
-import net.arikia.dev.drpc.DiscordEventHandlers;
-import net.arikia.dev.drpc.DiscordRPC;
-import net.arikia.dev.drpc.DiscordRichPresence;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.Instant;
+import java.util.Random;
 
-public class RPC implements Runnable {
+public class RPC extends Thread {
 
     public static RPC INSTANCE = new RPC();
 
     private Thread trd = new Thread(this);
 
-    private long timestamp = Instant.now().getEpochSecond();
+    private static Instant timestamp = Instant.now();
 
     public void RPCManager() {
+
         trd.start();
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            System.out.println("Closing Discord hook.");
-            DiscordRPC.discordShutdown();
-        }));
     }
 
-    public void initRPC() {
+    public void run() {
 
-        DiscordEventHandlers handlers = new DiscordEventHandlers.Builder().setReadyEventHandler((user) -> {
-            System.out.println("Discord user: " + user.username);
-            DiscordRichPresence.Builder presence = new DiscordRichPresence.Builder(Transformers.DiscordPlaceholder(SCCConfig.RPCLineTwo));
-            presence.setDetails(Transformers.DiscordPlaceholder(SCCConfig.RPCLineOne));
-            presence.setBigImage("skyclienticon",SCCConfig.RPCImgText);
-            presence.setStartTimestamps(timestamp);
-            DiscordRPC.discordUpdatePresence(presence.build());
-            SCC.RPCon = true;
-        }).build();
-        DiscordRPC.discordInitialize("857240025288802356", handlers, true);
-    }
+        try {
+            File discordLibrary = DownloadSDK.downloadDiscordLibrary();
+            if(discordLibrary == null) {
+                System.err.println("Error downloading Discord SDK.");
+                System.exit(-1);
+            }
+            // Initialize the Core
+            Core.init(discordLibrary);
 
-    public void updateRPC() {
+            // Set parameters for the Core
+            try(CreateParams params = new CreateParams()) {
+                params.setClientID(857240025288802356L);
+                params.setFlags(CreateParams.getDefaultFlags());
+                // Create the Core
 
-        if (!SCCConfig.RPC) {
-            DiscordRPC.discordClearPresence();
-        } else if(SCCConfig.BadSbeMode){
+                params.registerEventHandler(new DiscordEventAdapter()
+                {
 
-            DiscordRichPresence.Builder presence = new DiscordRichPresence.Builder(Transformers.DiscordPlaceholder(SCCConfig.RPCLineTwo));
-            presence.setDetails(Transformers.DiscordPlaceholder(SCCConfig.RPCLineOne));
-            presence.setBigImage("nosbe",SCCConfig.RPCImgText);
-            presence.setStartTimestamps(timestamp);
-            DiscordRPC.discordUpdatePresence(presence.build());
+                    @Override
+                    public void onActivityJoinRequest(DiscordUser user)
+                    {
+                        System.out.println("DiscordTest.onActivityJoinRequest");
+                        System.out.println("user = " + user);
+                    }
 
-        } else {
-            DiscordRichPresence.Builder presence = new DiscordRichPresence.Builder(Transformers.DiscordPlaceholder(SCCConfig.RPCLineTwo));
-            presence.setDetails(Transformers.DiscordPlaceholder(SCCConfig.RPCLineOne));
-            presence.setBigImage("skyclienticon",SCCConfig.RPCImgText);
-            presence.setStartTimestamps(timestamp);
-            DiscordRPC.discordUpdatePresence(presence.build());
+                    @Override
+                    public void onRelationshipRefresh()
+                    {
+                        // for debugging
+                        System.out.println("RelationshipExample.onRelationshipRefresh");
+
+                        // We are now ready to read information about relationships
+
+                        // filter for all our friends
+                        SCC.RPCcore.relationshipManager().filter(RelationshipManager.FRIEND_FILTER);
+                        int friendCount = SCC.RPCcore.relationshipManager().count(); // get how many relationships match our filter
+
+                        // filter for all our online friends (previous filter is reset automatically)
+                        SCC.RPCcore.relationshipManager().filter(RelationshipManager.FRIEND_FILTER.and(RelationshipManager.ONLINE_FILTER));
+                        int onlineFriendCount = SCC.RPCcore.relationshipManager().count();
+
+                        System.out.println("online: "+onlineFriendCount+"\nall: "+friendCount);
+
+                    }
+
+                    @Override
+                    public void onRelationshipUpdate(Relationship relationship)
+                    {
+                        // for debugging
+                        System.out.println("RelationshipExample.onRelationshipUpdate");
+                        System.out.println("relationship = " + relationship);
+
+                        // A relationship has changed -> update activity by calling onRelationshipRefresh manually
+                        onRelationshipRefresh();
+                    }
+
+                });
+
+                try(Core core = new Core(params)) {
+                    // Run callbacks forever
+                    SCC.RPCcore = core;
+
+                    while(true) {
+                        core.runCallbacks();
+                        try {
+                            // Sleep a bit to save CPU
+                            Thread.sleep(16);
+                        }
+                        catch(InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        if (!SCCConfig.RPC && SCC.RPCon) {
+                            core.activityManager().clearActivity();
+                            SCC.RPCon = false;
+                        } else if(SCCConfig.RPC) {
+                            RPC.update(SCC.RPCcore);
+                        }
+
+                    }
+                }
+            }
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+            System.err.println("Error downloading Discord SDK.");
+            System.exit(-1);
         }
 
     }
 
-    @Override
-    public void run() {
-        try {
-            Thread.sleep(300L);
-            initRPC();
-            while(!Thread.interrupted()) {
-                DiscordRPC.discordRunCallbacks();
-                Thread.sleep(300L);
-                updateRPC();
+    public static void update(Core core) {
+        try(Activity activity = new Activity())  {
+            activity.setDetails(Transformers.DiscordPlaceholder(SCCConfig.RPCLineOne));
+            activity.setState(Transformers.DiscordPlaceholder(SCCConfig.RPCLineTwo));
+
+            activity.timestamps().setStart(timestamp);
+
+            activity.party().size().setMaxSize(4);
+            activity.party().size().setCurrentSize(1);
+
+            if (SCCConfig.BadSbeMode) {
+                activity.assets().setLargeImage("nosbe");
+            } else {
+                activity.assets().setLargeImage("skyclienticon");
             }
-        } catch (Exception e) {e.printStackTrace();}
+
+            activity.assets().setLargeText(Transformers.DiscordPlaceholder(SCCConfig.RPCImgText));
+
+            activity.party().setID(SCC.PartyID);
+            activity.secrets().setJoinSecret("Secret");
+
+            core.activityManager().updateActivity(activity);
+            SCC.RPCon = true;
+        }
+
     }
+
+    public static String generateID() {
+        int leftLimit = 48; // numeral '0'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 127;
+        Random random = new Random();
+
+        return random.ints(leftLimit, rightLimit + 1)
+                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+                .limit(targetStringLength)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+    }
+
 }
