@@ -30,19 +30,19 @@ public class SCCConfig extends Vigilant {
     @Property(type = PropertyType.TEXT, name = "Discord RPC Second Line", description = "Allows you to set second line of the Discord RPC", category = "Main", subcategory = "RPC")
     public static String RPCLineTwo = "SBE bad";
 
-    @Property(type = PropertyType.TEXT, name = "Discord RPC First Line", description = "Allows you to set first line of the Discord RPC", category = "Main", subcategory = "RPC")
+    @Property(type = PropertyType.TEXT, name = "Discord RPC First Line", description = "Allows you to set the first line of the Discord RPC", category = "Main", subcategory = "RPC")
     public static String RPCLineOne = "%player% is very cool";
 
     @Property(type = PropertyType.TEXT, name = "Discord RPC Img Text", description = "Allows you to set text of the img", category = "Main", subcategory = "RPC")
-    public static String RPCImgText = "Skyclient is cool";
+    public static String RPCImgText = "SkyClient is cool";
 
     @Property(type = PropertyType.SWITCH, name = "Discord RPC", description = "Enables Discord RPC", category = "Main", subcategory = "RPC")
     public static boolean RPC = true;
 
-    @Property(type = PropertyType.CHECKBOX, name = "First time message", description = "Get \"First time message\" when u join next time", category = "Main", subcategory = "Other")
+    @Property(type = PropertyType.CHECKBOX, name = "First time message", description = "Get \"First time message\" when you join next time", category = "Main", subcategory = "Other")
     public static boolean JoinMessage = true;
 
-    @Property(type = PropertyType.SWITCH, name = "Sbe sucks Mode", description = "Do i need to explain this?", category = "Main", subcategory = "RPC")
+    @Property(type = PropertyType.SWITCH, name = "SBE sucks Mode", description = "Do I need to explain this?", category = "Main", subcategory = "RPC")
     public static boolean BadSbeMode = false;
 
     @Property(type = PropertyType.SWITCH, name = "Tags in Display Names", description = "Shows tags above player names (May crash)", category = "Main", subcategory = "Tags")
