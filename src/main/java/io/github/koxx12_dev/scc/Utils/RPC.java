@@ -87,8 +87,17 @@ public class RPC extends Thread {
 
     public static void update(Core core) {
         try(Activity activity = new Activity())  {
-            activity.setDetails(Transformers.DiscordPlaceholder(SCCConfig.RPCLineOne));
-            activity.setState(Transformers.DiscordPlaceholder(SCCConfig.RPCLineTwo));
+
+            String LineOne = Transformers.DiscordPlaceholder(SCCConfig.RPCLineOne);
+            String LineTwo = Transformers.DiscordPlaceholder(SCCConfig.RPCLineTwo);
+
+            if (!LineOne.equals("") && LineOne.length() >= 2 && LineOne.length() <= 127) {
+                activity.setDetails(LineOne);
+            }
+
+            if (!LineTwo.equals("") && LineTwo.length() >= 2 && LineTwo.length() <= 127) {
+                activity.setState(LineTwo);
+            }
 
             activity.timestamps().setStart(timestamp);
 
