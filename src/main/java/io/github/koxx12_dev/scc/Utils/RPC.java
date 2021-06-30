@@ -3,10 +3,7 @@ package io.github.koxx12_dev.scc.Utils;
 import de.jcm.discordgamesdk.Core;
 import de.jcm.discordgamesdk.CreateParams;
 import de.jcm.discordgamesdk.DiscordEventAdapter;
-import de.jcm.discordgamesdk.RelationshipManager;
 import de.jcm.discordgamesdk.activity.Activity;
-import de.jcm.discordgamesdk.user.DiscordUser;
-import de.jcm.discordgamesdk.user.Relationship;
 import io.github.koxx12_dev.scc.GUI.SCCConfig;
 import io.github.koxx12_dev.scc.SCC;
 
@@ -49,41 +46,9 @@ public class RPC extends Thread {
                 {
 
                     @Override
-                    public void onActivityJoinRequest(DiscordUser user)
+                    public void onActivityJoin(String secret)
                     {
-                        System.out.println("DiscordTest.onActivityJoinRequest");
-                        System.out.println("user = " + user);
-                    }
-
-                    @Override
-                    public void onRelationshipRefresh()
-                    {
-                        // for debugging
-                        System.out.println("RelationshipExample.onRelationshipRefresh");
-
-                        // We are now ready to read information about relationships
-
-                        // filter for all our friends
-                        SCC.RPCcore.relationshipManager().filter(RelationshipManager.FRIEND_FILTER);
-                        int friendCount = SCC.RPCcore.relationshipManager().count(); // get how many relationships match our filter
-
-                        // filter for all our online friends (previous filter is reset automatically)
-                        SCC.RPCcore.relationshipManager().filter(RelationshipManager.FRIEND_FILTER.and(RelationshipManager.ONLINE_FILTER));
-                        int onlineFriendCount = SCC.RPCcore.relationshipManager().count();
-
-                        System.out.println("online: "+onlineFriendCount+"\nall: "+friendCount);
-
-                    }
-
-                    @Override
-                    public void onRelationshipUpdate(Relationship relationship)
-                    {
-                        // for debugging
-                        System.out.println("RelationshipExample.onRelationshipUpdate");
-                        System.out.println("relationship = " + relationship);
-
-                        // A relationship has changed -> update activity by calling onRelationshipRefresh manually
-                        onRelationshipRefresh();
+                        SCC.LOGGER.info("");
                     }
 
                 });
@@ -127,8 +92,8 @@ public class RPC extends Thread {
 
             activity.timestamps().setStart(timestamp);
 
-            activity.party().size().setMaxSize(4);
-            activity.party().size().setCurrentSize(1);
+            //activity.party().size().setMaxSize(4);
+            //activity.party().size().setCurrentSize(1);
 
             if (SCCConfig.BadSbeMode) {
                 activity.assets().setLargeImage("nosbe");
@@ -138,8 +103,8 @@ public class RPC extends Thread {
 
             activity.assets().setLargeText(Transformers.DiscordPlaceholder(SCCConfig.RPCImgText));
 
-            activity.party().setID(SCC.PartyID);
-            activity.secrets().setJoinSecret("Secret");
+            //activity.party().setID(SCC.PartyID);
+            //activity.secrets().setJoinSecret("Secret");
 
             core.activityManager().updateActivity(activity);
             SCC.RPCon = true;
@@ -148,8 +113,8 @@ public class RPC extends Thread {
     }
 
     public static String generateID() {
-        int leftLimit = 48; // numeral '0'
-        int rightLimit = 122; // letter 'z'
+        int leftLimit = 48;
+        int rightLimit = 122;
         int targetStringLength = 127;
         Random random = new Random();
 

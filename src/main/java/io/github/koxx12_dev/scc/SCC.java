@@ -17,6 +17,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -51,8 +52,12 @@ public static Core RPCcore;
 
 public static String PartyID = RPC.generateID();
 
+public static Logger LOGGER;
+
 @Mod.EventHandler
 public void onPreInit(FMLPreInitializationEvent event) throws IOException {
+
+    LOGGER = event.getModLog();
 
     api = HTTPstuff.getApiData();
     /*
@@ -93,12 +98,12 @@ public void onPostInit(FMLPostInitializationEvent event) {
 
         }));
 
-        System.out.println(Arrays.toString(new File(Minecraft.getMinecraft().mcDataDir, "mods").list()));
+        SCC.LOGGER.info(Arrays.toString(new File(Minecraft.getMinecraft().mcDataDir, "mods").list()));
 
         //throw new Error("fuck sbe https://github.com/MicrocontrollersDev/Alternatives/blob/1e409e056e3e14ca874a2368c045de96787e8cbd/SkyblockExtras.md");
     }
     */
-
+    
     HTTPstuff.reloadTags();
 
 }

@@ -5,8 +5,8 @@ import net.minecraft.client.Minecraft;
 public class DetectionStuff {
 
     /*
-        Code stolen from dsm
-        @Author bowser0000
+        Code stolen from skytils
+        @Author My-Name-Is-Jeff
     */
 
     public static boolean isOnHypixel() {

@@ -3,11 +3,13 @@ package io.github.koxx12_dev.scc.GUI;
 import gg.essential.vigilance.Vigilant;
 import gg.essential.vigilance.data.Property;
 import gg.essential.vigilance.data.PropertyType;
-import io.github.koxx12_dev.scc.SCC;
 
 import java.io.File;
 
 public class SCCConfig extends Vigilant {
+
+    @Property(type = PropertyType.SWITCH, name = "Show Debug Options", description = "SHOWS DEBUG STUFF USELESS FOR EVERYONE BUT ME -koxx12", category = "DEBUG", subcategory = "DEBUG")
+    public static boolean ShowDebug = false;
 
     @Property(type = PropertyType.SWITCH, name = "Show custom tags", description = "Show all custom tags in new messages", category = "Main", subcategory = "Tags")
     public static boolean TagsShow = true;
@@ -39,10 +41,10 @@ public class SCCConfig extends Vigilant {
     @Property(type = PropertyType.SWITCH, name = "Discord RPC", description = "Enables Discord RPC", category = "Main", subcategory = "RPC")
     public static boolean RPC = true;
 
-    @Property(type = PropertyType.CHECKBOX, name = "First time message", description = "Get \"First time message\" when you join next time", category = "Main", subcategory = "Other")
+    @Property(type = PropertyType.CHECKBOX, name = "First time message", description = "Get \"First time message\" when u join next time", category = "Main", subcategory = "Other")
     public static boolean JoinMessage = true;
 
-    @Property(type = PropertyType.SWITCH, name = "SBE sucks Mode", description = "Do I need to explain this?", category = "Main", subcategory = "RPC")
+    @Property(type = PropertyType.SWITCH, name = "Sbe sucks Mode", description = "Do i need to explain this?", category = "Main", subcategory = "RPC")
     public static boolean BadSbeMode = false;
 
     @Property(type = PropertyType.SWITCH, name = "Tags in Display Names", description = "Shows tags above player names (May crash)", category = "Main", subcategory = "Tags")
@@ -56,6 +58,10 @@ public class SCCConfig extends Vigilant {
 
         initialize();
 
+        addDependency("DebugTags","ShowDebug");
+        addDependency("DebugDisplayTags","ShowDebug");
+        addDependency("DebugLogs","ShowDebug");
+
         addDependency("BadSbeMode","RPC");
         addDependency("RPCLineTwo","RPC");
         addDependency("RPCLineOne","RPC");
@@ -64,10 +70,6 @@ public class SCCConfig extends Vigilant {
         addDependency("ShortenTags","TagsShow");
         addDependency("reloadTags","TagsShow");
         addDependency("DisplayTags","TagsShow");
-
-        hidePropertyIf("DebugTags", () -> SCC.Debug);
-        hidePropertyIf("DebugDisplayTags", () -> SCC.Debug);
-        hidePropertyIf("DebugLogs", () -> SCC.Debug);
     }
 
 }

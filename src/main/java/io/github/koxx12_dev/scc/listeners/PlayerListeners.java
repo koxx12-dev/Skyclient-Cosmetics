@@ -25,9 +25,7 @@ public class PlayerListeners {
         }
 
         if (SCCConfig.DisplayTags) {
-            System.out.println(event.displayname);
             if (SCC.UUIDtags.containsKey(event.displayname)) {
-                System.out.println(event.displayname);
                 String tag;
 
                 if (SCCConfig.ShortenTags) {

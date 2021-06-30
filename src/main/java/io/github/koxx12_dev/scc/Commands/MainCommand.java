@@ -25,12 +25,6 @@ public class MainCommand extends CommandBase {
             SCC.displayScreen = SCC.config.gui();
         } else if (args[0].equalsIgnoreCase("reload")) {
             HTTPstuff.reloadTags();
-        } else if (args[0].equalsIgnoreCase("debug")) {
-            if (args[1].equalsIgnoreCase("on")) {
-                SCC.Debug = true;
-            } else {
-                SCC.Debug = false;
-            }
         } else {
             sender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED+"Unknown command\n"+EnumChatFormatting.RED+"\"/scc\" for config gui\n"+EnumChatFormatting.RED+"\"/scc reload\" to reload tags"));
         }

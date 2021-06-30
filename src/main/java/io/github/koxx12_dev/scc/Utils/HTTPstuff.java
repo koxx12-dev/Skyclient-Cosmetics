@@ -61,9 +61,9 @@ public class HTTPstuff {
         } catch (IOException ignored) {
         }
 
-        System.out.println(SCC.UUIDtags);
-        System.out.println(SCC.UUIDtagsShort);
-        System.out.println(SCC.HypixelRanks);
+        SCC.LOGGER.debug(SCC.UUIDtags);
+        SCC.LOGGER.debug(SCC.UUIDtagsShort);
+        SCC.LOGGER.debug(SCC.HypixelRanks);
     }
 
     public static JSONObject getApiData() throws IOException {

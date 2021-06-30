@@ -20,8 +20,8 @@ public class ChatListeners {
         if (SCCConfig.TagsShow && DetectionStuff.isOnHypixel()) {
 
             if (SCCConfig.DebugLogs) {
-                System.out.println(event.message.getFormattedText() + " , " + Transformers.cleanMessage(event.message.getUnformattedText()));
-                System.out.println(event.message.getFormattedText().split(" ") + " , " + Transformers.cleanMessage(event.message.getUnformattedText()).split(" "));
+                SCC.LOGGER.info(event.message.getFormattedText() + " , " + Transformers.cleanMessage(event.message.getUnformattedText()));
+                SCC.LOGGER.info(Arrays.toString(event.message.getFormattedText().split(" ")) + " , " + Arrays.toString(Transformers.cleanMessage(event.message.getUnformattedText()).split(" ")));
             }
 
             List<String> msgAsList = new ArrayList<>(Arrays.asList(event.message.getFormattedText().split(" ")));
@@ -50,10 +50,10 @@ public class ChatListeners {
                             msgAsList.add(i,val2);
                             event.message = new ChatComponentText(String.join(" ", msgAsList));
                         } else {
-                            System.out.println(cleanMsgAsList.get(j).replaceAll(":","") + " doesnt have a tag");
+                            SCC.LOGGER.debug(cleanMsgAsList.get(j).replaceAll(":","") + " doesnt have a tag");
                         }
                     }  catch (Exception e) {
-                        System.out.println(cleanMsgAsList.get(j).replaceAll(":","") + " doesnt have a tag");
+                        SCC.LOGGER.debug(cleanMsgAsList.get(j).replaceAll(":","") + " doesnt have a tag");
                     }
                     break;
                 } else if(SCC.UUIDtags.containsKey(valClean) && val.contains(":")) {
@@ -81,9 +81,9 @@ public class ChatListeners {
         }
         if (SCCConfig.DebugTags) {
             try {
-                System.out.println(event.message = new ChatComponentText(SCC.UUIDtags.get(Minecraft.getMinecraft().getSession().getUsername())));
+                SCC.LOGGER.debug(event.message = new ChatComponentText(SCC.UUIDtags.get(Minecraft.getMinecraft().getSession().getUsername())));
             } catch (Exception e) {
-                System.out.println(Minecraft.getMinecraft().getSession().getUsername() + " doesnt have a tag");
+                SCC.LOGGER.debug(Minecraft.getMinecraft().getSession().getUsername() + " doesnt have a tag");
             }
 
         }
