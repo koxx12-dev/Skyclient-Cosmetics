@@ -41,7 +41,7 @@ public static GuiScreen displayScreen;
 
 public static List<String> HypixelRanks = new ArrayList<>();
 
-public static SCCConfig config = new SCCConfig();
+public static SCCConfig config;
 
 public static HashMap<String,String> UUIDtags = new HashMap<>();
 
@@ -74,7 +74,6 @@ public void onPreInit(FMLPreInitializationEvent event) throws IOException {
 
 @Mod.EventHandler
 public void onInit(FMLInitializationEvent event) {
-    config.preload();
 
     MinecraftForge.EVENT_BUS.register(this);
     MinecraftForge.EVENT_BUS.register(new ChatListeners());
@@ -107,7 +106,8 @@ public void onPostInit(FMLPostInitializationEvent event) {
     */
     
     HTTPstuff.reloadTags();
-
+    config = new SCCConfig();
+    config.preload();
 }
 
 @SubscribeEvent
