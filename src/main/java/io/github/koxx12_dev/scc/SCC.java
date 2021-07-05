@@ -6,7 +6,6 @@ import io.github.koxx12_dev.scc.GUI.SCCConfig;
 import io.github.koxx12_dev.scc.Utils.HTTPstuff;
 import io.github.koxx12_dev.scc.Utils.RPC;
 import io.github.koxx12_dev.scc.listeners.ChatListeners;
-import io.github.koxx12_dev.scc.listeners.GuiListenrs;
 import io.github.koxx12_dev.scc.listeners.PlayerListeners;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -79,7 +78,6 @@ public void onInit(FMLInitializationEvent event) {
     MinecraftForge.EVENT_BUS.register(this);
     MinecraftForge.EVENT_BUS.register(new ChatListeners());
     MinecraftForge.EVENT_BUS.register(new PlayerListeners());
-    MinecraftForge.EVENT_BUS.register(new GuiListenrs());
 
     RPC.INSTANCE.RPCManager();
 
