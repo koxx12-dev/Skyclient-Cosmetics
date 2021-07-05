@@ -3,6 +3,7 @@ package io.github.koxx12_dev.scc.GUI;
 import gg.essential.vigilance.Vigilant;
 import gg.essential.vigilance.data.Property;
 import gg.essential.vigilance.data.PropertyType;
+import io.github.koxx12_dev.scc.SCC;
 
 import java.io.File;
 
@@ -70,6 +71,13 @@ public class SCCConfig extends Vigilant {
         addDependency("ShortenTags","TagsShow");
         addDependency("reloadTags","TagsShow");
         addDependency("DisplayTags","TagsShow");
+
+        hidePropertyIf("BadSbeMode",() -> !SCC.RPCRunning);
+        hidePropertyIf("RPCLineTwo",() -> !SCC.RPCRunning);
+        hidePropertyIf("RPCLineOne",() -> !SCC.RPCRunning);
+        hidePropertyIf("RPCImgText",() -> !SCC.RPCRunning);
+        hidePropertyIf("RPC",() -> !SCC.RPCRunning);
+
     }
 
 }

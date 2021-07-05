@@ -3,6 +3,7 @@ package io.github.koxx12_dev.scc.Utils;
 import de.jcm.discordgamesdk.Core;
 import de.jcm.discordgamesdk.CreateParams;
 import de.jcm.discordgamesdk.DiscordEventAdapter;
+import de.jcm.discordgamesdk.GameSDKException;
 import de.jcm.discordgamesdk.activity.Activity;
 import io.github.koxx12_dev.scc.GUI.SCCConfig;
 import io.github.koxx12_dev.scc.SCC;
@@ -21,8 +22,10 @@ public class RPC extends Thread {
     private static Instant timestamp = Instant.now();
 
     public void RPCManager() {
-
-        trd.start();
+        if (!SCC.RPCRunning) {
+            SCC.RPCRunning = true;
+            trd.start();
+        }
     }
 
     public void run() {
@@ -39,7 +42,7 @@ public class RPC extends Thread {
             // Set parameters for the Core
             try(CreateParams params = new CreateParams()) {
                 params.setClientID(857240025288802356L);
-                params.setFlags(CreateParams.getDefaultFlags());
+                params.setFlags(CreateParams.Flags.NO_REQUIRE_DISCORD);
                 // Create the Core
 
                 params.registerEventHandler(new DiscordEventAdapter()
@@ -57,23 +60,33 @@ public class RPC extends Thread {
                     // Run callbacks forever
                     SCC.RPCcore = core;
 
-                    while(true) {
-                        core.runCallbacks();
+                    while(SCC.RPCRunning) {
                         try {
-                            // Sleep a bit to save CPU
-                            Thread.sleep(16);
+                            core.runCallbacks();
+                        } catch (GameSDKException e) {
+                            System.out.println("FAILED TO LAUNCH RPC");
+                            SCC.RPCRunning = false;
+                        }
+                        try {
+                            if (SCC.RPCRunning) {
+                                Thread.sleep(16);
+                            }
+
                         }
                         catch(InterruptedException e) {
                             e.printStackTrace();
                         }
-                        if (!SCCConfig.RPC && SCC.RPCon) {
+                        if (!SCCConfig.RPC && SCC.RPCon && SCC.RPCRunning) {
                             core.activityManager().clearActivity();
                             SCC.RPCon = false;
-                        } else if(SCCConfig.RPC) {
+                        } else if(SCCConfig.RPC && SCC.RPCRunning) {
                             RPC.update(SCC.RPCcore);
                         }
 
                     }
+                } catch (GameSDKException e) {
+                    System.out.println("FAILED TO LAUNCH RPC");
+                    SCC.RPCRunning = false;
                 }
             }
         }

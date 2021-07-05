@@ -6,6 +6,7 @@ import io.github.koxx12_dev.scc.GUI.SCCConfig;
 import io.github.koxx12_dev.scc.Utils.HTTPstuff;
 import io.github.koxx12_dev.scc.Utils.RPC;
 import io.github.koxx12_dev.scc.listeners.ChatListeners;
+import io.github.koxx12_dev.scc.listeners.GuiListners;
 import io.github.koxx12_dev.scc.listeners.PlayerListeners;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -32,7 +33,7 @@ public static final String MOD_NAME = "${GRADLE_MOD_NAME}";
 public static final String MOD_ID = "${GRADLE_MOD_ID}";
 public static final String MOD_VERSION = "${GRADLE_MOD_VERSION}";
 
-public static boolean Debug = false;
+public static boolean RPCRunning = false;
 
 public static boolean RPCon = false;
 
@@ -78,6 +79,7 @@ public void onInit(FMLInitializationEvent event) {
     MinecraftForge.EVENT_BUS.register(this);
     MinecraftForge.EVENT_BUS.register(new ChatListeners());
     MinecraftForge.EVENT_BUS.register(new PlayerListeners());
+    MinecraftForge.EVENT_BUS.register(new GuiListners());
 
     RPC.INSTANCE.RPCManager();
 
