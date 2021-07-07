@@ -1,7 +1,7 @@
 {
   "compatibilityLevel": "JAVA_8",
   "minVersion": "0.7",
-  "priority": 1001,
+  "priority": 2147483647,
   "package": "io.github.koxx12_dev.scc.mixins",
   "refmap": "mixins.scc.refmap.json",
   "mixins": [
