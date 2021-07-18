@@ -1,12 +1,12 @@
-package io.github.koxx12_dev.scc.Utils;
+package io.github.koxx12dev.scc.Utils;
 
 import de.jcm.discordgamesdk.Core;
 import de.jcm.discordgamesdk.CreateParams;
 import de.jcm.discordgamesdk.DiscordEventAdapter;
 import de.jcm.discordgamesdk.GameSDKException;
 import de.jcm.discordgamesdk.activity.Activity;
-import io.github.koxx12_dev.scc.GUI.SCCConfig;
-import io.github.koxx12_dev.scc.SCC;
+import io.github.koxx12dev.scc.SkyclientCosmetics;
+import io.github.koxx12dev.scc.gui.Settings;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,9 +21,9 @@ public class RPC extends Thread {
 
     private static Instant timestamp = Instant.now();
 
-    public void RPCManager() {
-        if (!SCC.RPCRunning) {
-            SCC.RPCRunning = true;
+    public void rpcManager() {
+        if (!SkyclientCosmetics.rpcRunning) {
+            SkyclientCosmetics.rpcRunning = true;
             trd.start();
         }
     }
@@ -51,24 +51,24 @@ public class RPC extends Thread {
                     @Override
                     public void onActivityJoin(String secret)
                     {
-                        SCC.LOGGER.info("");
+                        SkyclientCosmetics.LOGGER.info("");
                     }
 
                 });
 
                 try(Core core = new Core(params)) {
                     // Run callbacks forever
-                    SCC.RPCcore = core;
+                    SkyclientCosmetics.rpcCore = core;
 
-                    while(SCC.RPCRunning) {
+                    while(SkyclientCosmetics.rpcRunning) {
                         try {
                             core.runCallbacks();
                         } catch (GameSDKException e) {
-                            System.out.println("FAILED TO LAUNCH RPC");
-                            SCC.RPCRunning = false;
+                            SkyclientCosmetics.LOGGER.warn("FAILED TO LAUNCH RPC");
+                            SkyclientCosmetics.rpcRunning = false;
                         }
                         try {
-                            if (SCC.RPCRunning) {
+                            if (SkyclientCosmetics.rpcRunning) {
                                 Thread.sleep(16);
                             }
 
@@ -76,17 +76,17 @@ public class RPC extends Thread {
                         catch(InterruptedException e) {
                             e.printStackTrace();
                         }
-                        if (!SCCConfig.RPC && SCC.RPCon && SCC.RPCRunning) {
+                        if (!Settings.rpc && SkyclientCosmetics.rpcOn && SkyclientCosmetics.rpcRunning) {
                             core.activityManager().clearActivity();
-                            SCC.RPCon = false;
-                        } else if(SCCConfig.RPC && SCC.RPCRunning) {
-                            RPC.update(SCC.RPCcore);
+                            SkyclientCosmetics.rpcOn = false;
+                        } else if(Settings.rpc && SkyclientCosmetics.rpcRunning) {
+                            RPC.update(SkyclientCosmetics.rpcCore);
                         }
 
                     }
                 } catch (GameSDKException e) {
-                    System.out.println("FAILED TO LAUNCH RPC");
-                    SCC.RPCRunning = false;
+                    SkyclientCosmetics.LOGGER.warn("FAILED TO LAUNCH RPC");
+                    SkyclientCosmetics.rpcRunning = false;
                 }
             }
         }
@@ -101,8 +101,8 @@ public class RPC extends Thread {
     public static void update(Core core) {
         try(Activity activity = new Activity())  {
 
-            String LineOne = Transformers.DiscordPlaceholder(SCCConfig.RPCLineOne);
-            String LineTwo = Transformers.DiscordPlaceholder(SCCConfig.RPCLineTwo);
+            String LineOne = Transformers.discordPlaceholder(Settings.rpcLineOne);
+            String LineTwo = Transformers.discordPlaceholder(Settings.rpcLineTwo);
 
             if (!LineOne.equals("") && LineOne.length() >= 2 && LineOne.length() <= 127) {
                 activity.setDetails(LineOne);
@@ -117,19 +117,19 @@ public class RPC extends Thread {
             //activity.party().size().setMaxSize(4);
             //activity.party().size().setCurrentSize(1);
 
-            if (SCCConfig.BadSbeMode) {
+            if (Settings.sbeBadMode) {
                 activity.assets().setLargeImage("nosbe");
             } else {
                 activity.assets().setLargeImage("skyclienticon");
             }
 
-            activity.assets().setLargeText(Transformers.DiscordPlaceholder(SCCConfig.RPCImgText));
+            activity.assets().setLargeText(Transformers.discordPlaceholder(Settings.rpcImgText));
 
-            //activity.party().setID(SCC.PartyID);
+            //activity.party().setID(SkyclientCosmetics.PartyID);
             //activity.secrets().setJoinSecret("Secret");
 
             core.activityManager().updateActivity(activity);
-            SCC.RPCon = true;
+            SkyclientCosmetics.rpcOn = true;
         }
 
     }

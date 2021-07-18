@@ -1,83 +1,88 @@
-package io.github.koxx12_dev.scc.GUI;
+package io.github.koxx12dev.scc.gui;
 
 import gg.essential.vigilance.Vigilant;
 import gg.essential.vigilance.data.Property;
 import gg.essential.vigilance.data.PropertyType;
-import io.github.koxx12_dev.scc.SCC;
+import io.github.koxx12dev.scc.SkyclientCosmetics;
 
 import java.io.File;
 
-public class SCCConfig extends Vigilant {
+public class Settings extends Vigilant {
 
     @Property(type = PropertyType.SWITCH, name = "Show Debug Options", description = "SHOWS DEBUG STUFF USELESS FOR EVERYONE BUT ME -koxx12", category = "DEBUG", subcategory = "DEBUG")
-    public static boolean ShowDebug = false;
+    public static boolean showDebug = false;
 
     @Property(type = PropertyType.SWITCH, name = "Show custom tags", description = "Show all custom tags in new messages", category = "Main", subcategory = "Tags")
-    public static boolean TagsShow = true;
+    public static boolean showTags = true;
 
     @Property(type = PropertyType.SWITCH, name = "Shorten custom tag", description = "Shortens all custom tags in new messages", category = "Main", subcategory = "Tags")
-    public static boolean ShortenTags = false;
+    public static boolean shortenTags = false;
 
     @Property(type = PropertyType.CHECKBOX, name = "Reload Tags", description = "Reloads custom tags", category = "Main", subcategory = "Tags")
     public static boolean reloadTags = false;
 
     @Property(type = PropertyType.SWITCH, name = "Debug Tags", description = "Replaces every message with your tag", category = "DEBUG", subcategory = "DEBUG")
-    public static boolean DebugTags = false;
+    public static boolean debugTags = false;
 
     @Property(type = PropertyType.SWITCH, name = "Debug Display Tags", description = "Changes player names to your tag", category = "DEBUG", subcategory = "DEBUG")
-    public static boolean DebugDisplayTags = false;
+    public static boolean debugDisplayTags = false;
 
     @Property(type = PropertyType.SWITCH, name = "Show Debug info in the logs", description = "Spams your logs as fuck", category = "DEBUG", subcategory = "DEBUG")
-    public static boolean DebugLogs = false;
+    public static boolean debugLogs = false;
 
     @Property(type = PropertyType.TEXT, name = "Discord RPC Second Line", description = "Allows you to set second line of the Discord RPC", category = "Main", subcategory = "RPC")
-    public static String RPCLineTwo = "SBE bad";
+    public static String rpcLineTwo = "SBE bad";
 
     @Property(type = PropertyType.TEXT, name = "Discord RPC First Line", description = "Allows you to set the first line of the Discord RPC", category = "Main", subcategory = "RPC")
-    public static String RPCLineOne = "%player% is very cool";
+    public static String rpcLineOne = "%player% is very cool";
 
     @Property(type = PropertyType.TEXT, name = "Discord RPC Img Text", description = "Allows you to set text of the img", category = "Main", subcategory = "RPC")
-    public static String RPCImgText = "SkyClient is cool";
+    public static String rpcImgText = "SkyClient is cool";
 
     @Property(type = PropertyType.SWITCH, name = "Discord RPC", description = "Enables Discord RPC", category = "Main", subcategory = "RPC")
-    public static boolean RPC = true;
+    public static boolean rpc = true;
 
     @Property(type = PropertyType.CHECKBOX, name = "First time message", description = "Get \"First time message\" when u join next time", category = "Main", subcategory = "Other")
-    public static boolean JoinMessage = true;
+    public static boolean joinMessage = true;
 
     @Property(type = PropertyType.SWITCH, name = "Sbe sucks Mode", description = "Do i need to explain this?", category = "Main", subcategory = "RPC")
-    public static boolean BadSbeMode = false;
+    public static boolean sbeBadMode = false;
 
     @Property(type = PropertyType.SWITCH, name = "Tags in Display Names", description = "Shows tags above player names (May crash)", category = "Main", subcategory = "Tags")
-    public static boolean DisplayTags = false;
+    public static boolean displayTags = false;
 
-    //@Property(type = PropertyType.TEXT, name = "Skyclient Cosmetics API key", description = "SCC Api key is used for every feature of this mod", category = "Main", subcategory = "Main", protectedText = true)
+    @Property(type = PropertyType.TEXT, name = "Hypixel API key", description = "Hypixel API key used for requests", category = "Main", subcategory = "Hypixel", protectedText = true)
+    public static String hpApiKey = "";
+
+    @Property(type = PropertyType.SWITCH, name = "Display Name fix", description = "Fixes your display name display names (only useful is you use patcher)", category = "Fixes", subcategory = "Main")
+    public static boolean displanameFix = false;
+
+    //@Property(type = PropertyType.TEXT, name = "Skyclient Cosmetics API key", description = "SkyclientCosmetics Api key is used for every feature of this mod", category = "Main", subcategory = "Main", protectedText = true)
     //public static String SCCApiKey = "";
 
-    public SCCConfig() {
+    public Settings() {
         super(new File("./config/skyclientcosmetics.toml"));
 
         initialize();
 
-        addDependency("DebugTags","ShowDebug");
-        addDependency("DebugDisplayTags","ShowDebug");
-        addDependency("DebugLogs","ShowDebug");
+        addDependency("debugTags","showDebug");
+        addDependency("debugDisplayTags","showDebug");
+        addDependency("debugLogs","showDebug");
 
-        addDependency("BadSbeMode","RPC");
-        addDependency("RPCLineTwo","RPC");
-        addDependency("RPCLineOne","RPC");
-        addDependency("RPCImgText","RPC");
+        addDependency("sbeBadMode","rpc");
+        addDependency("rpcLineTwo","rpc");
+        addDependency("rpcLineOne","rpc");
+        addDependency("rpcImgText","rpc");
 
-        addDependency("ShortenTags","TagsShow");
-        addDependency("reloadTags","TagsShow");
-        addDependency("DisplayTags","TagsShow");
+        addDependency("shortenTags","showTags");
+        addDependency("reloadTags","showTags");
+        addDependency("displayTags","showTags");
 
-        hidePropertyIf("BadSbeMode",() -> !SCC.RPCRunning);
-        hidePropertyIf("RPCLineTwo",() -> !SCC.RPCRunning);
-        hidePropertyIf("RPCLineOne",() -> !SCC.RPCRunning);
-        hidePropertyIf("RPCImgText",() -> !SCC.RPCRunning);
-        hidePropertyIf("RPC",() -> !SCC.RPCRunning);
-
+        hidePropertyIf("sbeBadMode",() -> !SkyclientCosmetics.rpcRunning);
+        hidePropertyIf("rpcLineTwo",() -> !SkyclientCosmetics.rpcRunning);
+        hidePropertyIf("rpcLineOne",() -> !SkyclientCosmetics.rpcRunning);
+        hidePropertyIf("rpcImgText",() -> !SkyclientCosmetics.rpcRunning);
+        hidePropertyIf("rpc",() -> !SkyclientCosmetics.rpcRunning);
     }
 
 }

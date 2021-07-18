@@ -1,4 +1,4 @@
-package io.github.koxx12_dev.scc.fml;
+package io.github.koxx12dev.scc.fml;
 
 import net.minecraftforge.fml.relauncher.CoreModManager;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;

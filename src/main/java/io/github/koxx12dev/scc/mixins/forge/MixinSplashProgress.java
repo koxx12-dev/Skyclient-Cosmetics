@@ -1,4 +1,4 @@
-package io.github.koxx12_dev.scc.mixins.forge;
+package io.github.koxx12dev.scc.mixins.forge;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.SplashProgress;

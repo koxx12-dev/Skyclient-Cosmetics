@@ -1,12 +1,13 @@
-package io.github.koxx12_dev.scc.Commands;
+package io.github.koxx12dev.scc.commands;
 
-import io.github.koxx12_dev.scc.SCC;
-import io.github.koxx12_dev.scc.Utils.HTTPstuff;
+import io.github.koxx12dev.scc.SkyclientCosmetics;
+import io.github.koxx12dev.scc.Utils.Requests;
 import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
+
+import java.io.IOException;
 
 public class MainCommand extends CommandBase {
     @Override
@@ -20,11 +21,16 @@ public class MainCommand extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+    public void processCommand(ICommandSender sender, String[] args) {
         if (args.length != 1) {
-            SCC.displayScreen = SCC.config.gui();
+            SkyclientCosmetics.displayScreen = SkyclientCosmetics.config.gui();
         } else if (args[0].equalsIgnoreCase("reload")) {
-            HTTPstuff.reloadTags();
+            try {
+                Requests.reloadTags();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Requests.setRankColor();
         } else {
             sender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED+"Unknown command\n"+EnumChatFormatting.RED+"\"/scc\" for config gui\n"+EnumChatFormatting.RED+"\"/scc reload\" to reload tags"));
         }

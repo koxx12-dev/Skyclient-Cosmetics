@@ -1,13 +1,14 @@
-package io.github.koxx12_dev.scc;
+package io.github.koxx12dev.scc;
 
 import de.jcm.discordgamesdk.Core;
-import io.github.koxx12_dev.scc.Commands.MainCommand;
-import io.github.koxx12_dev.scc.GUI.SCCConfig;
-import io.github.koxx12_dev.scc.Utils.HTTPstuff;
-import io.github.koxx12_dev.scc.Utils.RPC;
-import io.github.koxx12_dev.scc.listeners.ChatListeners;
-import io.github.koxx12_dev.scc.listeners.GuiListners;
-import io.github.koxx12_dev.scc.listeners.PlayerListeners;
+import io.github.koxx12dev.scc.Utils.Cache;
+import io.github.koxx12dev.scc.commands.MainCommand;
+import io.github.koxx12dev.scc.gui.Settings;
+import io.github.koxx12dev.scc.Utils.Requests;
+import io.github.koxx12dev.scc.Utils.RPC;
+import io.github.koxx12dev.scc.listeners.ChatListeners;
+import io.github.koxx12dev.scc.listeners.GuiListners;
+import io.github.koxx12dev.scc.listeners.PlayerListeners;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.client.ClientCommandHandler;
@@ -26,41 +27,43 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-@Mod(modid = SCC.MOD_ID, name = SCC.MOD_NAME, version = SCC.MOD_VERSION, clientSideOnly = true)
-public class SCC {
+@Mod(modid = SkyclientCosmetics.MOD_ID, name = SkyclientCosmetics.MOD_NAME, version = SkyclientCosmetics.MOD_VERSION, clientSideOnly = true)
+public class SkyclientCosmetics {
 
 public static final String MOD_NAME = "${GRADLE_MOD_NAME}";
 public static final String MOD_ID = "${GRADLE_MOD_ID}";
 public static final String MOD_VERSION = "${GRADLE_MOD_VERSION}";
 
-public static boolean RPCRunning = false;
+public static boolean rpcRunning = false;
 
-public static boolean RPCon = false;
+public static boolean rpcOn = false;
 
 public static GuiScreen displayScreen;
 
-public static List<String> HypixelRanks = new ArrayList<>();
+public static List<String> hypixelRanks = new ArrayList<>();
 
-public static SCCConfig config;
+public static Settings config;
 
-public static HashMap<String,String> UUIDtags = new HashMap<>();
-
-public static HashMap<String,String> UUIDtagsShort = new HashMap<>();
+public static HashMap<String,List<String>> uuidTags = new HashMap<>();
 
 public static JSONObject api;
 
-public static Core RPCcore;
+public static Core rpcCore;
 
-public static String PartyID = RPC.generateID();
+public static String partyID = RPC.generateID();
 
 public static Logger LOGGER;
+
+public static String rankColor;
 
 @Mod.EventHandler
 public void onPreInit(FMLPreInitializationEvent event) throws IOException {
 
+    Cache.setup();
+
     LOGGER = event.getModLog();
 
-    api = HTTPstuff.getApiData();
+    api = Requests.getApiData();
     /*
     if ((boolean)api.get("whitelist")) {
         String UUID = Minecraft.getMinecraft().getSession().getPlayerID();
@@ -80,7 +83,7 @@ public void onInit(FMLInitializationEvent event) {
     MinecraftForge.EVENT_BUS.register(new PlayerListeners());
     MinecraftForge.EVENT_BUS.register(new GuiListners());
 
-    RPC.INSTANCE.RPCManager();
+    RPC.INSTANCE.rpcManager();
 
     MinecraftForge.EVENT_BUS.register(RPC.INSTANCE);
 
@@ -89,7 +92,7 @@ public void onInit(FMLInitializationEvent event) {
 }
 
 @Mod.EventHandler
-public void onPostInit(FMLPostInitializationEvent event) {
+public void onPostInit(FMLPostInitializationEvent event) throws IOException {
     // $USER = The username of the currently logged in user.
     // Simply prints out Hello, $USER.
     /*
@@ -99,28 +102,28 @@ public void onPostInit(FMLPostInitializationEvent event) {
 
         }));
 
-        SCC.LOGGER.info(Arrays.toString(new File(Minecraft.getMinecraft().mcDataDir, "mods").list()));
+        SkyclientCosmetics.LOGGER.info(Arrays.toString(new File(Minecraft.getMinecraft().mcDataDir, "mods").list()));
 
         //throw new Error("fuck sbe https://github.com/MicrocontrollersDev/Alternatives/blob/1e409e056e3e14ca874a2368c045de96787e8cbd/SkyblockExtras.md");
     }
     */
-    
-    HTTPstuff.reloadTags();
-    config = new SCCConfig();
+    Requests.reloadTags();
+    config = new Settings();
     config.preload();
+    Requests.setRankColor();
 }
 
 @SubscribeEvent
-public void onTick(TickEvent.ClientTickEvent event) {
+public void onTick(TickEvent.ClientTickEvent event) throws IOException {
         if (event.phase != TickEvent.Phase.START)
             return;
         if (displayScreen != null) {
             Minecraft.getMinecraft().displayGuiScreen(displayScreen);
             displayScreen = null;
         }
-        if (SCCConfig.reloadTags) {
-            HTTPstuff.reloadTags();
-            SCCConfig.reloadTags = false;
+        if (Settings.reloadTags) {
+            Requests.reloadTags();
+            Settings.reloadTags = false;
         }
     }
 }

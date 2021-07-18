@@ -1,4 +1,4 @@
-package io.github.koxx12_dev.scc.Utils;
+package io.github.koxx12dev.scc.Utils;
 
 import java.io.BufferedInputStream;
 import java.io.File;

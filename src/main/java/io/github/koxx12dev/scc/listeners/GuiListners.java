@@ -1,6 +1,6 @@
-package io.github.koxx12_dev.scc.listeners;
+package io.github.koxx12dev.scc.listeners;
 
-import io.github.koxx12_dev.scc.SCC;
+import io.github.koxx12dev.scc.SkyclientCosmetics;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraftforge.client.event.GuiScreenEvent;
@@ -22,7 +22,7 @@ public class GuiListners {
     @SubscribeEvent
     public void onGuiAction(GuiScreenEvent.ActionPerformedEvent.Post event) {
         if (event.gui instanceof GuiIngameMenu && event.button.id == 2666487) {
-            SCC.displayScreen = SCC.config.gui();
+            SkyclientCosmetics.displayScreen = SkyclientCosmetics.config.gui();
         }
     }
 

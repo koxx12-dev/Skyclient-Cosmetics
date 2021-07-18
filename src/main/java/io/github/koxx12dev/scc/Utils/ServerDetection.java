@@ -1,8 +1,8 @@
-package io.github.koxx12_dev.scc.Utils;
+package io.github.koxx12dev.scc.Utils;
 
 import net.minecraft.client.Minecraft;
 
-public class DetectionStuff {
+public class ServerDetection {
 
     /*
         Code stolen from skytils
