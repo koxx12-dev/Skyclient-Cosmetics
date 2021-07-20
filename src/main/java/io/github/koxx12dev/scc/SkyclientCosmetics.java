@@ -1,11 +1,11 @@
 package io.github.koxx12dev.scc;
 
 import de.jcm.discordgamesdk.Core;
-import io.github.koxx12dev.scc.Utils.Cache;
+import io.github.koxx12dev.scc.utils.Cache;
 import io.github.koxx12dev.scc.commands.MainCommand;
 import io.github.koxx12dev.scc.gui.Settings;
-import io.github.koxx12dev.scc.Utils.Requests;
-import io.github.koxx12dev.scc.Utils.RPC;
+import io.github.koxx12dev.scc.utils.Requests;
+import io.github.koxx12dev.scc.utils.RPC;
 import io.github.koxx12dev.scc.listeners.ChatListeners;
 import io.github.koxx12dev.scc.listeners.GuiListners;
 import io.github.koxx12dev.scc.listeners.PlayerListeners;

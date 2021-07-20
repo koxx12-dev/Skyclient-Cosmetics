@@ -1,7 +1,7 @@
 package io.github.koxx12dev.scc.commands;
 
 import io.github.koxx12dev.scc.SkyclientCosmetics;
-import io.github.koxx12dev.scc.Utils.Requests;
+import io.github.koxx12dev.scc.utils.Requests;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;

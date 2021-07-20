@@ -1,4 +1,4 @@
-package io.github.koxx12dev.scc.Utils;
+package io.github.koxx12dev.scc.utils;
 
 import gg.essential.universal.ChatColor;
 import net.minecraft.client.Minecraft;

@@ -21,13 +21,13 @@ public class Settings extends Vigilant {
     @Property(type = PropertyType.CHECKBOX, name = "Reload Tags", description = "Reloads custom tags", category = "Main", subcategory = "Tags")
     public static boolean reloadTags = false;
 
-    @Property(type = PropertyType.SWITCH, name = "Debug Tags", description = "Replaces every message with your tag", category = "DEBUG", subcategory = "DEBUG")
+    @Property(type = PropertyType.SWITCH, name = "Debug Tags", description = "(RN DOES NOTHING) Replaces every message with your tag", category = "DEBUG", subcategory = "DEBUG")
     public static boolean debugTags = false;
 
     @Property(type = PropertyType.SWITCH, name = "Debug Display Tags", description = "Changes player names to your tag", category = "DEBUG", subcategory = "DEBUG")
     public static boolean debugDisplayTags = false;
 
-    @Property(type = PropertyType.SWITCH, name = "Show Debug info in the logs", description = "Spams your logs as fuck", category = "DEBUG", subcategory = "DEBUG")
+    @Property(type = PropertyType.SWITCH, name = "Show Debug info in the logs", description = "(RN DOES NOTHING) Spams your logs as fuck", category = "DEBUG", subcategory = "DEBUG")
     public static boolean debugLogs = false;
 
     @Property(type = PropertyType.TEXT, name = "Discord RPC Second Line", description = "Allows you to set second line of the Discord RPC", category = "Main", subcategory = "RPC")
@@ -54,7 +54,7 @@ public class Settings extends Vigilant {
     @Property(type = PropertyType.TEXT, name = "Hypixel API key", description = "Hypixel API key used for requests", category = "Main", subcategory = "Hypixel", protectedText = true)
     public static String hpApiKey = "";
 
-    @Property(type = PropertyType.SWITCH, name = "Display Name fix", description = "Fixes your display name display names (only useful is you use patcher)", category = "Fixes", subcategory = "Main")
+    @Property(type = PropertyType.SWITCH, name = "Display Name fix", description = "Fixes your display name color (only useful if you use patcher)", category = "Fixes", subcategory = "Main")
     public static boolean displanameFix = false;
 
     //@Property(type = PropertyType.TEXT, name = "Skyclient Cosmetics API key", description = "SkyclientCosmetics Api key is used for every feature of this mod", category = "Main", subcategory = "Main", protectedText = true)

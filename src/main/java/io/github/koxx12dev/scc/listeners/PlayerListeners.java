@@ -1,7 +1,7 @@
 package io.github.koxx12dev.scc.listeners;
 
 import io.github.koxx12dev.scc.SkyclientCosmetics;
-import io.github.koxx12dev.scc.Utils.Tag;
+import io.github.koxx12dev.scc.utils.Tag;
 import io.github.koxx12dev.scc.gui.Settings;
 import io.github.koxx12dev.scc.threads.JoinThread;
 import net.minecraft.client.Minecraft;

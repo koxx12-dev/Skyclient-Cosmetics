@@ -1,6 +1,6 @@
 package io.github.koxx12dev.scc.threads;
 
-import io.github.koxx12dev.scc.Utils.Chat;
+import io.github.koxx12dev.scc.utils.Chat;
 import io.github.koxx12dev.scc.gui.Settings;
 import net.minecraft.util.EnumChatFormatting;
 

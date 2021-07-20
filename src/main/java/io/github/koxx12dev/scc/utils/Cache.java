@@ -1,4 +1,4 @@
-package io.github.koxx12dev.scc.Utils;
+package io.github.koxx12dev.scc.utils;
 
 import net.minecraft.client.Minecraft;
 import org.json.JSONArray;
