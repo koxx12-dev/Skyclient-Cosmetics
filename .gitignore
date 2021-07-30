@@ -24,6 +24,7 @@ build
 .nb-gradle-properties
 
 # other
+notUsed/*
 run
 .DS_Store
 Thumbs.db

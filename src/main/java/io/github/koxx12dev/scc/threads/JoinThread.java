@@ -1,7 +1,7 @@
 package io.github.koxx12dev.scc.threads;
 
-import io.github.koxx12dev.scc.utils.Chat;
 import io.github.koxx12dev.scc.gui.Settings;
+import io.github.koxx12dev.scc.utils.Chat;
 import net.minecraft.util.EnumChatFormatting;
 
 public class JoinThread extends Thread {

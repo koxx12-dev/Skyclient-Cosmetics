@@ -1,19 +1,20 @@
 package io.github.koxx12dev.scc;
 
 import de.jcm.discordgamesdk.Core;
-import io.github.koxx12dev.scc.utils.Cache;
 import io.github.koxx12dev.scc.commands.MainCommand;
 import io.github.koxx12dev.scc.gui.Settings;
-import io.github.koxx12dev.scc.utils.Requests;
-import io.github.koxx12dev.scc.utils.RPC;
 import io.github.koxx12dev.scc.listeners.ChatListeners;
 import io.github.koxx12dev.scc.listeners.GuiListners;
 import io.github.koxx12dev.scc.listeners.PlayerListeners;
+import io.github.koxx12dev.scc.utils.Cache;
+import io.github.koxx12dev.scc.utils.RPC;
+import io.github.koxx12dev.scc.utils.Requests;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.ProgressManager;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -59,11 +60,21 @@ public static String rankColor;
 @Mod.EventHandler
 public void onPreInit(FMLPreInitializationEvent event) throws IOException {
 
+    ProgressManager.ProgressBar progress = ProgressManager.push("Pre Init Setup", 3);
+
+    progress.step("Setting up Cache");
+
     Cache.setup();
+
+    progress.step("Getting log4j logger");
 
     LOGGER = event.getModLog();
 
+    progress.step("Getting api data");
+
     api = Requests.getApiData();
+
+    ProgressManager.pop(progress);
     /*
     if ((boolean)api.get("whitelist")) {
         String UUID = Minecraft.getMinecraft().getSession().getPlayerID();
@@ -78,39 +89,48 @@ public void onPreInit(FMLPreInitializationEvent event) throws IOException {
 @Mod.EventHandler
 public void onInit(FMLInitializationEvent event) {
 
+    ProgressManager.ProgressBar progress = ProgressManager.push("Init Setup", 3);
+
+    progress.step("Registering Listeners");
+
     MinecraftForge.EVENT_BUS.register(this);
     MinecraftForge.EVENT_BUS.register(new ChatListeners());
     MinecraftForge.EVENT_BUS.register(new PlayerListeners());
     MinecraftForge.EVENT_BUS.register(new GuiListners());
 
+    progress.step("Starting RPC");
+
     RPC.INSTANCE.rpcManager();
 
     MinecraftForge.EVENT_BUS.register(RPC.INSTANCE);
 
+    progress.step("Registering Commands");
+
     ClientCommandHandler.instance.registerCommand(new MainCommand());
 
+    ProgressManager.pop(progress);
 }
 
 @Mod.EventHandler
 public void onPostInit(FMLPostInitializationEvent event) throws IOException {
-    // $USER = The username of the currently logged in user.
-    // Simply prints out Hello, $USER.
-    /*
-    if (Loader.isModLoaded("SkyblockExtras")) {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 
+    ProgressManager.ProgressBar progress = ProgressManager.push("Post Init Setup", 3);
 
-        }));
+    progress.step("Loading tags");
 
-        SkyclientCosmetics.LOGGER.info(Arrays.toString(new File(Minecraft.getMinecraft().mcDataDir, "mods").list()));
-
-        //throw new Error("fuck sbe https://github.com/MicrocontrollersDev/Alternatives/blob/1e409e056e3e14ca874a2368c045de96787e8cbd/SkyblockExtras.md");
-    }
-    */
     Requests.reloadTags();
+
+    progress.step("Loading Vigilance");
+
     config = new Settings();
     config.preload();
+
+    progress.step("Setting rank color");
+
     Requests.setRankColor();
+
+    ProgressManager.pop(progress);
+
 }
 
 @SubscribeEvent
