@@ -49,8 +49,8 @@ dependencies {
 
     implementation fileTree(dir: 'libs', include: '*.jar')
 
-    implementation "gg.essential:vigilance-1.8.9-forge:160"
-    
+    implementation "gg.essential:vigilance-1.8.9-forge:162"
+
     implementation "org.spongepowered:mixin:0.8.3"
     annotationProcessor "org.spongepowered:mixin:0.7.11-SNAPSHOT"
 
