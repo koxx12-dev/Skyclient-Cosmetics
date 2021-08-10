@@ -16,6 +16,10 @@ version = mod_version
 group = "io.github.koxx12-dev"
 archivesBaseName = "!!"+mod_name
 
+compileJava {
+    sourceCompatibility = targetCompatibility = "1.8"
+}
+
 minecraft {
     version = "1.8.9-11.15.1.2318-1.8.9"
     runDir = "run"
@@ -47,9 +51,11 @@ repositories {
 
 dependencies {
 
-    implementation fileTree(dir: 'libs', include: '*.jar')
+    //implementation fileTree(dir: 'libs', include: '*.jar')
 
     implementation "gg.essential:vigilance-1.8.9-forge:162"
+    implementation 'com.google.code.gson:gson:2.8.7'
+    implementation 'com.github.JnCrMx:discord-game-sdk4j:v0.5.4'
 
     implementation "org.spongepowered:mixin:0.8.3"
     annotationProcessor "org.spongepowered:mixin:0.7.11-SNAPSHOT"
