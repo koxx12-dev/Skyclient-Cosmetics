@@ -57,7 +57,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.7'
     implementation 'com.github.JnCrMx:discord-game-sdk4j:v0.5.4'
 
-    implementation "org.spongepowered:mixin:0.8.3"
+    implementation "org.spongepowered:mixin:0.7.11-SNAPSHOT"
     annotationProcessor "org.spongepowered:mixin:0.7.11-SNAPSHOT"
 
     // you may put jars on which you depend on in ./libs
@@ -119,25 +119,26 @@ shadowJar {
     archiveFileName = jar.archiveFileName
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-    exclude "LICENSE.md"
-    exclude "pack.mcmeta"
-    exclude "dummyThing"
-    exclude "**/module-info.class"
-    exclude "*.so"
-    exclude "*.dylib"
-    exclude "*.dll"
-    exclude "*.jnilib"
-    exclude "ibxm/**"
-    exclude "com/jcraft/**"
-    exclude "org/lwjgl/**"
-    exclude "net/java/**"
+    relocate("com.google.code.gson", "scc.googlecom.gson")
 
-    exclude "META-INF/proguard/**"
-    exclude "META-INF/maven/**"
-    exclude "META-INF/versions/**"
-    exclude "META-INF/com.android.tools/**"
-
-    exclude "fabric.mod.json"
+    exclude(
+            "LICENSE.md",
+            "pack.mcmeta",
+            "**/module-info.class",
+            "*.so",
+            "*.dylib",
+            "*.dll",
+            "*.jnilib",
+            "ibxm/**",
+            "com/jcraft/**",
+            "org/lwjgl/**",
+            "net/java/**",
+            "META-INF/proguard/**",
+            "META-INF/maven/**",
+            "META-INF/versions/**",
+            "META-INF/com.android.tools/**",
+            "fabric.mod.json"
+    )
 }
 
 reobf {
