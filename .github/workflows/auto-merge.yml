@@ -2,7 +2,7 @@ name: auto-merge
 
 on:
   pull_request_target:
-    types: [opened]
+    types: [assigned, opened, synchronize, reopened]
 
 jobs:
   auto-merge:
