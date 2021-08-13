@@ -13,9 +13,9 @@ import java.net.URL;
 import java.security.CodeSource;
 import java.util.Map;
 
-public class CoreMod implements IFMLLoadingPlugin {
+public class SkyclientCosmeticsLoadingPlugin implements IFMLLoadingPlugin {
 
-    public CoreMod() {
+    public SkyclientCosmeticsLoadingPlugin() {
         MixinBootstrap.init();
         Mixins.addConfiguration("mixins.scc.json");
 

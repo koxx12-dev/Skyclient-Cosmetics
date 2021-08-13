@@ -1,4 +1,4 @@
-package io.github.koxx12dev.scc.utils;
+package io.github.koxx12dev.scc.rpc;
 
 import de.jcm.discordgamesdk.Core;
 import de.jcm.discordgamesdk.CreateParams;
@@ -7,6 +7,7 @@ import de.jcm.discordgamesdk.GameSDKException;
 import de.jcm.discordgamesdk.activity.Activity;
 import io.github.koxx12dev.scc.SkyclientCosmetics;
 import io.github.koxx12dev.scc.gui.Settings;
+import io.github.koxx12dev.scc.utils.StringTransformers;
 
 import java.io.File;
 import java.io.IOException;
@@ -79,8 +80,9 @@ public class RPC extends Thread {
                         if (!Settings.rpc && SkyclientCosmetics.rpcOn && SkyclientCosmetics.rpcRunning) {
                             core.activityManager().clearActivity();
                             SkyclientCosmetics.rpcOn = false;
-                        } else if(Settings.rpc && SkyclientCosmetics.rpcRunning) {
+                        } else if (Settings.rpc && SkyclientCosmetics.rpcRunning) {
                             RPC.update(SkyclientCosmetics.rpcCore);
+                            SkyclientCosmetics.rpcOn = true;
                         }
 
                     }
@@ -101,14 +103,14 @@ public class RPC extends Thread {
     public static void update(Core core) {
         try(Activity activity = new Activity())  {
 
-            String LineOne = Transformers.discordPlaceholder(Settings.rpcLineOne);
-            String LineTwo = Transformers.discordPlaceholder(Settings.rpcLineTwo);
+            String LineOne = StringTransformers.discordPlaceholder(Settings.rpcLineOne);
+            String LineTwo = StringTransformers.discordPlaceholder(Settings.rpcLineTwo);
 
-            if (!LineOne.equals("") && LineOne.length() >= 2 && LineOne.length() <= 127) {
+            if (LineOne.length() >= 2 && LineOne.length() <= 127) {
                 activity.setDetails(LineOne);
             }
 
-            if (!LineTwo.equals("") && LineTwo.length() >= 2 && LineTwo.length() <= 127) {
+            if (LineTwo.length() >= 2 && LineTwo.length() <= 127) {
                 activity.setState(LineTwo);
             }
 
@@ -123,7 +125,7 @@ public class RPC extends Thread {
                 activity.assets().setLargeImage("skyclienticon");
             }
 
-            activity.assets().setLargeText(Transformers.discordPlaceholder(Settings.rpcImgText));
+            activity.assets().setLargeText(StringTransformers.discordPlaceholder(Settings.rpcImgText));
 
             //activity.party().setID(SkyclientCosmetics.PartyID);
             //activity.secrets().setJoinSecret("Secret");

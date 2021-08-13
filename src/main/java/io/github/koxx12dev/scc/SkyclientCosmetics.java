@@ -1,14 +1,17 @@
 package io.github.koxx12dev.scc;
 
+import com.google.gson.JsonObject;
 import de.jcm.discordgamesdk.Core;
 import io.github.koxx12dev.scc.commands.MainCommand;
 import io.github.koxx12dev.scc.gui.Settings;
 import io.github.koxx12dev.scc.listeners.ChatListeners;
 import io.github.koxx12dev.scc.listeners.GuiListners;
 import io.github.koxx12dev.scc.listeners.PlayerListeners;
-import io.github.koxx12dev.scc.utils.Cache;
-import io.github.koxx12dev.scc.utils.RPC;
+import io.github.koxx12dev.scc.rpc.RPC;
 import io.github.koxx12dev.scc.utils.Requests;
+import io.github.koxx12dev.scc.utils.exceptions.APIException;
+import io.github.koxx12dev.scc.utils.exceptions.CacheException;
+import io.github.koxx12dev.scc.utils.managers.CacheManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.client.ClientCommandHandler;
@@ -21,14 +24,10 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
-@Mod(modid = SkyclientCosmetics.MOD_ID, name = SkyclientCosmetics.MOD_NAME, version = SkyclientCosmetics.MOD_VERSION, clientSideOnly = true)
+@Mod(modid = SkyclientCosmetics.MOD_ID, name = SkyclientCosmetics.MOD_NAME, version = SkyclientCosmetics.MOD_VERSION, clientSideOnly = true,  acceptedMinecraftVersions = "[1.8.9]")
 public class SkyclientCosmetics {
 
 public static final String MOD_NAME = "${GRADLE_MOD_NAME}";
@@ -41,13 +40,11 @@ public static boolean rpcOn = false;
 
 public static GuiScreen displayScreen;
 
-public static List<String> hypixelRanks = new ArrayList<>();
-
 public static Settings config;
 
-public static HashMap<String,List<String>> uuidTags = new HashMap<>();
+public static boolean apiConnectionSuccess = true;
 
-public static JSONObject api;
+public static JsonObject api;
 
 public static Core rpcCore;
 
@@ -58,13 +55,18 @@ public static Logger LOGGER;
 public static String rankColor;
 
 @Mod.EventHandler
-public void onPreInit(FMLPreInitializationEvent event) throws IOException {
+public void onPreInit(FMLPreInitializationEvent event) throws IOException, CacheException, APIException, NoSuchFieldException {
 
-    ProgressManager.ProgressBar progress = ProgressManager.push("Pre Init Setup", 3);
+    ProgressManager.ProgressBar progress = ProgressManager.push("Pre Init Setup", 4);
+
+    progress.step("Loading Vigilance");
+
+    config = new Settings();
+    config.preload();
 
     progress.step("Setting up Cache");
 
-    Cache.setup();
+    CacheManager.setupCache();
 
     progress.step("Getting log4j logger");
 
@@ -112,18 +114,15 @@ public void onInit(FMLInitializationEvent event) {
 }
 
 @Mod.EventHandler
-public void onPostInit(FMLPostInitializationEvent event) throws IOException {
+public void onPostInit(FMLPostInitializationEvent event) throws IOException, CacheException {
 
-    ProgressManager.ProgressBar progress = ProgressManager.push("Post Init Setup", 3);
+    ProgressManager.ProgressBar progress = ProgressManager.push("Post Init Setup", 2);
 
     progress.step("Loading tags");
 
-    Requests.reloadTags();
-
-    progress.step("Loading Vigilance");
-
-    config = new Settings();
-    config.preload();
+    if (apiConnectionSuccess) {
+        Requests.reloadTags();
+    }
 
     progress.step("Setting rank color");
 
@@ -134,16 +133,12 @@ public void onPostInit(FMLPostInitializationEvent event) throws IOException {
 }
 
 @SubscribeEvent
-public void onTick(TickEvent.ClientTickEvent event) throws IOException {
+public void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.START)
             return;
         if (displayScreen != null) {
             Minecraft.getMinecraft().displayGuiScreen(displayScreen);
             displayScreen = null;
-        }
-        if (Settings.reloadTags) {
-            Requests.reloadTags();
-            Settings.reloadTags = false;
         }
     }
 }

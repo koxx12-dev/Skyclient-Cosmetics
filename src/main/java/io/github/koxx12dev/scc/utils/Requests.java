@@ -1,17 +1,25 @@
 package io.github.koxx12dev.scc.utils;
 
+import com.google.common.collect.Lists;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import gg.essential.universal.ChatColor;
 import io.github.koxx12dev.scc.SkyclientCosmetics;
 import io.github.koxx12dev.scc.gui.Settings;
+import io.github.koxx12dev.scc.utils.cache.UserCache;
+import io.github.koxx12dev.scc.utils.exceptions.APIException;
+import io.github.koxx12dev.scc.utils.exceptions.CacheException;
+import io.github.koxx12dev.scc.utils.managers.CacheManager;
+import io.github.koxx12dev.scc.utils.managers.CosmeticsManager;
+import io.github.koxx12dev.scc.utils.types.User;
 import net.minecraft.client.Minecraft;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -27,72 +35,100 @@ public class Requests {
 
     }
 
-    public static void reloadTags() throws IOException {
+    public static void reloadTags() throws IOException, CacheException {
+
+        CosmeticsManager.clearUsers();
+
+        JsonObject api = SkyclientCosmetics.api;
 
         try {
-            SkyclientCosmetics.hypixelRanks.clear();
-            SkyclientCosmetics.uuidTags.clear();
-            SkyclientCosmetics.api = Requests.getApiData();
-        } catch (Exception ignored) {
-        }
 
-        JSONObject api = SkyclientCosmetics.api;
+            JsonObject tags = api.getAsJsonObject("tags");
+            JsonObject perms = api.getAsJsonObject("perms");
 
-        try {
-            JSONArray tagsIdList = api.getJSONObject("tags").names();
-            JSONArray permsIdList = api.getJSONObject("perms").names();
-            JSONArray HPRanks = api.getJSONArray("HpRanks");
-            if (permsIdList.length() != tagsIdList.length()) {
+            List<String> tagsIDList = Lists.newArrayList(tags.keySet().iterator());
+            List<String> permsIDList = Lists.newArrayList(perms.keySet().iterator());
+
+            if (permsIDList.size() != tagsIDList.size()) {
                 throw new Error("Someone broke the repo\nwait for staff to fix it");
             }
-            for (int i = 0; i < tagsIdList.length(); i++) {
-                List<Object> tag = api.getJSONObject("tags").getJSONArray((String) tagsIdList.get(i)).toList();
-                JSONArray perms = api.getJSONObject("perms").getJSONArray((String) tagsIdList.get(i));
-                for (int j = 0; j < perms.length(); j++) {
-                    String uuid = perms.getString(j).replaceAll("-", "");
 
-                    String nme = Cache.getData(uuid);
+            for (String s : tagsIDList) {
+                JsonElement tag = tags.get(s);
 
-                    List<String> tmp = new ArrayList<>();
+                String tagLong = tag.getAsJsonArray().get(0).getAsString().replace("&", "\u00A7");
 
-                    tmp.add(tag.get(0).toString().replaceAll("&", "\u00A7"));
-                    tmp.add(tag.get(1).toString().replaceAll("&", "\u00A7"));
+                String tagShort = tag.getAsJsonArray().get(1).getAsString().replace("&", "\u00A7");
 
-                    SkyclientCosmetics.uuidTags.put(nme, tmp);
+                JsonArray users = perms.get(s).getAsJsonArray();
+
+                for (int j = 0; j < users.size(); j++) {
+
+                    String uuid = users.get(j).getAsString();
+
+                    String name;
+
+                    if (UserCache.isUUIDDataOutdated() && UserCache.isUUIDDataCached(uuid) || !UserCache.isUUIDDataCached(uuid)) {
+                        name = getUserNameFromUUID(uuid);
+                        UserCache.addName(uuid, name);
+                    } else {
+                        name = UserCache.getName(users.get(j).getAsString());
+                    }
+
+                    UserCache.addUser(uuid, name, tagShort, tagLong);
+                    CosmeticsManager.addUser(uuid, name, tagShort, tagLong);
+
                 }
+
             }
-            for (int i = 0; i < HPRanks.length(); i++) {
-                SkyclientCosmetics.hypixelRanks.add(HPRanks.get(i).toString());
-            }
-        } catch (IOException ignored) {
+
+        } catch (IOException | CacheException ignored) {
         }
 
-        SkyclientCosmetics.LOGGER.debug(SkyclientCosmetics.uuidTags);
-        SkyclientCosmetics.LOGGER.debug(SkyclientCosmetics.hypixelRanks);
-        Cache.updateTimestamp();
-        Cache.saveCache();
+        UserCache.updateOutdated();
+        UserCache.save();
     }
 
-    public static JSONObject getApiData() throws IOException {
-        return new JSONObject(Requests.request("https://koxx12-dev.github.io/api/scc/tags.json"));
+    public static JsonObject getApiData() throws IOException, CacheException, APIException {
+        try {
+            SkyclientCosmetics.apiConnectionSuccess = true;
+            return JsonParser.parseString(Requests.request("https://kkkkoxx12-dev.github.io/api/scc/tags.json")).getAsJsonObject();
+        } catch (Exception e) {
+            List<String> keys = Lists.newArrayList(CacheManager.getCache("userCache").getRawAsJsonObject().keySet().iterator());
+
+            for (String s : keys) {
+               User user = UserCache.getUser(s);
+               CosmeticsManager.addUser(user.getUUID(),user.getName(),user.getLongTag(),user.getShortTag());
+            }
+            SkyclientCosmetics.apiConnectionSuccess = false;
+            Chat.sendSystemMessage(ChatColor.RED+"Failed to connect to the api, Loaded cache");
+            SkyclientCosmetics.LOGGER.error("Failed to connect to the api, Loaded cache");
+            return null;
+        }
+    }
+
+    public static String getUserNameFromUUID(String uuid) throws IOException {
+        String name = Requests.request("https://api.mojang.com/user/profiles/" + uuid + "/names");
+        JsonArray nameJson = JsonParser.parseString(name).getAsJsonArray();
+        return nameJson.get(nameJson.size() - 1).getAsJsonObject().get("name").getAsString();
     }
 
     public static void setRankColor() {
         try {
-                JSONObject response = new JSONObject(request("https://api.hypixel.net/player?key=" + Settings.hpApiKey + "&uuid=" + Minecraft.getMinecraft().getSession().getPlayerID()));
+                JsonObject response = JsonParser.parseString(request("https://api.hypixel.net/player?key=" + Settings.hpApiKey + "&uuid=" + Minecraft.getMinecraft().getSession().getPlayerID())).getAsJsonObject();
                 String rank;
-                if (response.getBoolean("success")) {
+                if (response.get("success").getAsBoolean()) {
                     try {
-                        rank = response.getJSONObject("player").get("rank").toString();
+                        rank = response.get("player").getAsJsonObject().get("rank").getAsString();
                     } catch (Exception e) {
                         try {
                             try {
-                                rank = response.getJSONObject("player").get("newPackageRank").toString();
+                                rank = response.get("player").getAsJsonObject().get("newPackageRank").getAsString();
                             } catch (Exception ee) {
-                                rank = response.getJSONObject("player").get("packageRank").toString();
+                                rank = response.get("player").getAsJsonObject().get("packageRank").getAsString();
                             }
                         } catch (Exception eee) {
-                            rank = response.getJSONObject("player").get("monthlyPackageRank").toString();
+                            rank = response.get("player").getAsJsonObject().get("monthlyPackageRank").getAsString();
                         }
                     }
 
