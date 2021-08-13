@@ -119,9 +119,10 @@ shadowJar {
     archiveFileName = jar.archiveFileName
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-    relocate("com.google.code.gson", "scc.googlecom.gson")
+    relocate("com.google.gson", "scc.googlecom.gson")
 
     exclude(
+            "dummyThing",
             "LICENSE.md",
             "pack.mcmeta",
             "**/module-info.class",
@@ -150,7 +151,7 @@ reobf {
 jar {
     manifest {
         attributes "ModSide": "CLIENT",
-                "FMLCorePlugin": "io.github.koxx12dev.scc.fml.CoreMod",
+                "FMLCorePlugin": "io.github.koxx12dev.scc.fml.SkyclientCosmeticsLoadingPlugin",
                 "FMLCorePluginContainsFMLMod": "true",
                 "ForceLoadAsMod": true,
                 "MixinConfigs": "mixins.scc.json",
