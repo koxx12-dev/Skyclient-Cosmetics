@@ -1,3 +1,20 @@
+/*
+ * SkyclientCosmetics - Cool cosmetics for a mod installer Skyclient!
+ * Copyright (C) koxx12-dev [2021 - 2021]
+ *
+ * This program comes with ABSOLUTELY NO WARRANTY
+ * This is free software, and you are welcome to redistribute it
+ * under the certain conditions that can be found here
+ * https://www.gnu.org/licenses/lgpl-3.0.en.html
+ *
+ * If you have any questions or concerns, please create
+ * an issue on the github page that can be found under this url
+ * https://github.com/koxx12-dev/Skyclient-Cosmetics
+ *
+ * If you have a private concern, please contact me on
+ * Discord: Koxx12#8061
+ */
+
 package io.github.koxx12dev.scc.gui;
 
 import gg.essential.vigilance.Vigilant;
@@ -31,31 +48,31 @@ public class Settings extends Vigilant {
         }
     }
 
-    @Property(type = PropertyType.SWITCH, name = "Debug Tags", description = "(RN DOES NOTHING) Replaces every message with your tag", category = "DEBUG", subcategory = "DEBUG")
+    @Property(type = PropertyType.SWITCH, name = "Debug Tags", description = "(RN DOES NOTHING) Replaces every message with your tag", category = "DEBUG", subcategory = "Tags")
     public static boolean debugTags = false;
 
-    @Property(type = PropertyType.SWITCH, name = "Debug Display Tags", description = "Changes player names to your tag", category = "DEBUG", subcategory = "DEBUG")
+    @Property(type = PropertyType.SWITCH, name = "Debug Display Tags", description = "Changes player names to your tag", category = "DEBUG", subcategory = "Chat")
     public static boolean debugDisplayTags = false;
 
-    @Property(type = PropertyType.SWITCH, name = "Show Debug info in the logs", description = "Spams your logs as fuck", category = "DEBUG", subcategory = "DEBUG")
+    @Property(type = PropertyType.SWITCH, name = "Show Debug info in the logs", description = "Spams your logs as fuck", category = "DEBUG", subcategory = "Logs")
     public static boolean debugLogs = false;
 
-    @Property(type = PropertyType.TEXT, name = "Discord RPC Second Line", description = "Allows you to set second line of the Discord RPC", category = "Main", subcategory = "RPC")
+    @Property(type = PropertyType.TEXT, name = "Discord RPC Second Line", description = "Allows you to set second line of the Discord RPC", category = "Main", subcategory = "Discord Rich Presence")
     public static String rpcLineTwo = "SBE bad";
 
-    @Property(type = PropertyType.TEXT, name = "Discord RPC First Line", description = "Allows you to set the first line of the Discord RPC", category = "Main", subcategory = "RPC")
+    @Property(type = PropertyType.TEXT, name = "Discord RPC First Line", description = "Allows you to set the first line of the Discord RPC", category = "Main", subcategory = "Discord Rich Presence")
     public static String rpcLineOne = "%player% is very cool";
 
-    @Property(type = PropertyType.TEXT, name = "Discord RPC Img Text", description = "Allows you to set text of the img", category = "Main", subcategory = "RPC")
+    @Property(type = PropertyType.TEXT, name = "Discord RPC Img Text", description = "Allows you to set text of the img\n\u00A7cAllows usage of Placeholders ()", category = "Main", subcategory = "Discord Rich Presence")
     public static String rpcImgText = "SkyClient is cool";
 
-    @Property(type = PropertyType.SWITCH, name = "Discord RPC", description = "Enables Discord RPC", category = "Main", subcategory = "RPC")
+    @Property(type = PropertyType.SWITCH, name = "Discord RPC", description = "Enables Discord RPC", category = "Main", subcategory = "Discord Rich Presence")
     public static boolean rpc = true;
 
-    @Property(type = PropertyType.CHECKBOX, name = "First time message", description = "Get \"First time message\" when u join next time", category = "Main", subcategory = "Other")
+    @Property(type = PropertyType.CHECKBOX, name = "First time message", description = "Get \"First time message\" when u join next time", category = "Misc", subcategory = "Chat")
     public static boolean joinMessage = true;
 
-    @Property(type = PropertyType.SWITCH, name = "Sbe sucks Mode", description = "Do i need to explain this?", category = "Main", subcategory = "RPC")
+    @Property(type = PropertyType.SWITCH, name = "Sbe sucks Mode", description = "Do i need to explain this?", category = "Main", subcategory = "Discord Rich Presence")
     public static boolean sbeBadMode = false;
 
     @Property(type = PropertyType.SWITCH, name = "Tags in Display Names", description = "Shows tags above player names\n\u00A7c(May crash)", category = "Main", subcategory = "Tags")
@@ -67,10 +84,10 @@ public class Settings extends Vigilant {
     @Property(type = PropertyType.SWITCH, name = "Display Name fix", description = "Fixes your display name color\n\u00A7c(only useful if you use patcher and requires restart)", category = "Fixes", subcategory = "Main")
     public static boolean displayNameFix = false;
 
-    @Property(type = PropertyType.SWITCH, name = "Debug Regex", description = "Sends debug regex info in the chat\n\u00A7c(Can break mods that read chat)", category = "DEBUG", subcategory = "DEBUG")
+    @Property(type = PropertyType.SWITCH, name = "Debug Regex", description = "Sends debug regex info in the chat\n\u00A7c(Can break mods that read chat)", category = "DEBUG", subcategory = "Chat")
     public static boolean debugRegexChat = false;
 
-    @Property(type = PropertyType.SWITCH, name = "Hide pet zord", description = "Why would you do that?", category = "Main", subcategory = "Misc")
+    @Property(type = PropertyType.SWITCH, name = "Hide pet zord", description = "Why would you do that?", category = "Misc", subcategory = "Gui")
     public static boolean hidePetZord = false;
 
     //@Property(type = PropertyType.TEXT, name = "Skyclient Cosmetics API key", description = "SkyclientCosmetics Api key is used for every feature of this mod", category = "Main", subcategory = "Main", protectedText = true)
@@ -82,7 +99,6 @@ public class Settings extends Vigilant {
         //final Class<Settings> SettingsClass = Settings.class;
 
         initialize();
-
 
         addDependency("debugTags","showDebug");
         addDependency("debugDisplayTags","showDebug");

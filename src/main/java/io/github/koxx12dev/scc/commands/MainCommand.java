@@ -1,3 +1,20 @@
+/*
+ * SkyclientCosmetics - Cool cosmetics for a mod installer Skyclient!
+ * Copyright (C) koxx12-dev [2021 - 2021]
+ *
+ * This program comes with ABSOLUTELY NO WARRANTY
+ * This is free software, and you are welcome to redistribute it
+ * under the certain conditions that can be found here
+ * https://www.gnu.org/licenses/lgpl-3.0.en.html
+ *
+ * If you have any questions or concerns, please create
+ * an issue on the github page that can be found under this url
+ * https://github.com/koxx12-dev/Skyclient-Cosmetics
+ *
+ * If you have a private concern, please contact me on
+ * Discord: Koxx12#8061
+ */
+
 package io.github.koxx12dev.scc.commands;
 
 import gg.essential.universal.ChatColor;
@@ -61,7 +78,7 @@ public class MainCommand extends CommandBase {
                 Chat.sendSystemMessage(ChatColor.RED+"User \""+args[1]+"\" is doesn't have a tag");
             }
         } else {
-            sender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED+"Unknown command\n"+EnumChatFormatting.RED+"\"/scc\" for config gui\n"+EnumChatFormatting.RED+"\"/scc reload\" to reload tags"));
+            sender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED+"Unknown command\n"+EnumChatFormatting.RED+"\"/scc\" for config gui\n"+EnumChatFormatting.RED+"\"/scc reload\" to reload tags\n"+EnumChatFormatting.RED+"\"/scc displaytag <playerName>\" to show someones tag"));
         }
     }
 
