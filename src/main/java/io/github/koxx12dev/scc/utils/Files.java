@@ -22,6 +22,13 @@ import io.github.koxx12dev.scc.utils.managers.CacheManager;
 import java.io.File;
 
 public class Files {
+    public static void setup() {
+
+        if (!CacheManager.sccFolder.exists()) {
+            CacheManager.sccFolder.mkdir();
+        }
+
+    }
     public static boolean hidePetZord() {
         return new File(CacheManager.sccFolder,"HIDEPETZORD").exists();
     }

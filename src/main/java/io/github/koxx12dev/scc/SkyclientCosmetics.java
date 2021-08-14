@@ -25,6 +25,7 @@ import io.github.koxx12dev.scc.listeners.ChatListeners;
 import io.github.koxx12dev.scc.listeners.GuiListners;
 import io.github.koxx12dev.scc.listeners.PlayerListeners;
 import io.github.koxx12dev.scc.rpc.RPC;
+import io.github.koxx12dev.scc.utils.Files;
 import io.github.koxx12dev.scc.utils.Requests;
 import io.github.koxx12dev.scc.utils.exceptions.APIException;
 import io.github.koxx12dev.scc.utils.exceptions.CacheException;
@@ -72,9 +73,13 @@ public static Logger LOGGER;
 public static String rankColor;
 
 @Mod.EventHandler
-public void onPreInit(FMLPreInitializationEvent event) throws IOException, CacheException, APIException, NoSuchFieldException {
+public void onPreInit(FMLPreInitializationEvent event) throws IOException, CacheException, APIException {
 
-    ProgressManager.ProgressBar progress = ProgressManager.push("Pre Init Setup", 4);
+    ProgressManager.ProgressBar progress = ProgressManager.push("Pre Init Setup", 5);
+
+    progress.step("Setting up Files");
+
+    Files.setup();
 
     progress.step("Loading Vigilance");
 

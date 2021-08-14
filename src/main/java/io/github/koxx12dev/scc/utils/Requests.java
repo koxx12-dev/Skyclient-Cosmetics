@@ -109,7 +109,7 @@ public class Requests {
     public static JsonObject getApiData() throws IOException, CacheException, APIException {
         try {
             SkyclientCosmetics.apiConnectionSuccess = true;
-            return JsonParser.parseString(Requests.request("https://kkkkoxx12-dev.github.io/api/scc/tags.json")).getAsJsonObject();
+            return JsonParser.parseString(Requests.request("https://koxx12-dev.github.io/api/scc/tags.json")).getAsJsonObject();
         } catch (Exception e) {
             List<String> keys = Lists.newArrayList(CacheManager.getCache("userCache").getRawAsJsonObject().keySet().iterator());
 

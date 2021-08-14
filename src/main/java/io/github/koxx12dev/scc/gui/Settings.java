@@ -40,7 +40,7 @@ public class Settings extends Vigilant {
     @Property(type = PropertyType.SWITCH, name = "Shorten custom tag", description = "Shortens all custom tags in new messages", category = "Main", subcategory = "Tags")
     public static boolean shortenTags = false;
 
-    @Property(type = PropertyType.BUTTON, name = "Reload Tags", description = "Reloads custom tags", category = "Main", subcategory = "Tags")
+    @Property(type = PropertyType.BUTTON, name = "Reload Tags", description = "Reloads custom tags", category = "Main", subcategory = "Tags", placeholder = "Reload")
     public static void reloadTags() throws APIException, CacheException, IOException {
         SkyclientCosmetics.api = Requests.getApiData();
         if (SkyclientCosmetics.apiConnectionSuccess) {
@@ -57,13 +57,13 @@ public class Settings extends Vigilant {
     @Property(type = PropertyType.SWITCH, name = "Show Debug info in the logs", description = "Spams your logs as fuck", category = "DEBUG", subcategory = "Logs")
     public static boolean debugLogs = false;
 
-    @Property(type = PropertyType.TEXT, name = "Discord RPC Second Line", description = "Allows you to set second line of the Discord RPC", category = "Main", subcategory = "Discord Rich Presence")
+    @Property(type = PropertyType.TEXT, name = "Discord RPC Second Line", description = "Allows you to set second line of the Discord RPC\n\u00A7aAllows usage of Placeholders. More info on the wiki (https://github.com/koxx12-dev/Skyclient-Cosmetics/wiki/Discord-RPC)", category = "Main", subcategory = "Discord Rich Presence")
     public static String rpcLineTwo = "SBE bad";
 
-    @Property(type = PropertyType.TEXT, name = "Discord RPC First Line", description = "Allows you to set the first line of the Discord RPC", category = "Main", subcategory = "Discord Rich Presence")
+    @Property(type = PropertyType.TEXT, name = "Discord RPC First Line", description = "Allows you to set the first line of the Discord RPC\n\u00A7aAllows usage of Placeholders. More info on the wiki (https://github.com/koxx12-dev/Skyclient-Cosmetics/wiki/Discord-RPC)", category = "Main", subcategory = "Discord Rich Presence")
     public static String rpcLineOne = "%player% is very cool";
 
-    @Property(type = PropertyType.TEXT, name = "Discord RPC Img Text", description = "Allows you to set text of the img\n\u00A7cAllows usage of Placeholders ()", category = "Main", subcategory = "Discord Rich Presence")
+    @Property(type = PropertyType.TEXT, name = "Discord RPC Img Text", description = "Allows you to set text of the img\n\u00A7aAllows usage of Placeholders. More info on the wiki (https://github.com/koxx12-dev/Skyclient-Cosmetics/wiki/Discord-RPC)", category = "Main", subcategory = "Discord Rich Presence")
     public static String rpcImgText = "SkyClient is cool";
 
     @Property(type = PropertyType.SWITCH, name = "Discord RPC", description = "Enables Discord RPC", category = "Main", subcategory = "Discord Rich Presence")
@@ -94,7 +94,7 @@ public class Settings extends Vigilant {
     //public static String SCCApiKey = "";
 
     public Settings()  {
-        super(new File("./config/skyclientcosmetics.toml"));
+        super(new File("./SkyclientCosmetics/skyclientcosmetics.toml"));
 
         //final Class<Settings> SettingsClass = Settings.class;
 
