@@ -53,7 +53,7 @@ dependencies {
 
     //implementation fileTree(dir: 'libs', include: '*.jar')
 
-    implementation "gg.essential:vigilance-1.8.9-forge:165"
+    implementation "gg.essential:vigilance-1.8.9-forge:169"
     implementation 'com.google.code.gson:gson:2.8.8'
     implementation 'com.github.JnCrMx:discord-game-sdk4j:v0.5.4'
 
