@@ -37,7 +37,7 @@ public class Settings extends Vigilant {
     @Property(type = PropertyType.SWITCH, name = "Show Custom Tags", description = "Show the custom tags, which are the main focus of this mod.", category = "Main", subcategory = "Tags")
     public static boolean showTags = true;
 
-    @Property(type = PropertyType.SWITCH, name = "Shorten custom tag", description = "Use shorter tags.\n[BOOSTER] becomes [B], for example.", category = "Main", subcategory = "Tags")
+    @Property(type = PropertyType.SWITCH, name = "Shorten Custom Tags", description = "Use shorter tags.\n[BOOSTER] becomes [B], for example.", category = "Main", subcategory = "Tags")
     public static boolean shortenTags = false;
 
     @Property(type = PropertyType.BUTTON, name = "Reload Tags", description = "Reloads the custom tags.", category = "Main", subcategory = "Tags", placeholder = "Reload")
@@ -54,13 +54,13 @@ public class Settings extends Vigilant {
     @Property(type = PropertyType.SWITCH, name = "Debug Display Tags", description = "Changes player names to your tag", category = "DEBUG", subcategory = "Chat")
     public static boolean debugDisplayTags = false;
 
-    @Property(type = PropertyType.SWITCH, name = "Show Debug info in the logs", description = "Shows a bunch of debug information in your logs, which will get quite spammy.", category = "DEBUG", subcategory = "Logs")
+    @Property(type = PropertyType.SWITCH, name = "Show debug info in logs", description = "Shows a bunch of debug information in your logs, which will get quite spammy.", category = "DEBUG", subcategory = "Logs")
     public static boolean debugLogs = false;
 
-    @Property(type = PropertyType.TEXT, name = "Discord RPC Second Line", description = "Allows you to set second line of the Discord RPC\n\u00A7aAllows usage of Placeholders. More info on the wiki (https://github.com/koxx12-dev/Skyclient-Cosmetics/wiki/Discord-RPC)", category = "Main", subcategory = "Discord Rich Presence")
+    @Property(type = PropertyType.TEXT, name = "Discord RPC Second Line", description = "Allows you to edit the second line of the Discord RPC\n\u00A7aAllows usage of Placeholders. More info on the wiki (https://github.com/koxx12-dev/Skyclient-Cosmetics/wiki/Discord-RPC)", category = "Main", subcategory = "Discord Rich Presence")
     public static String rpcLineTwo = "SBE bad";
 
-    @Property(type = PropertyType.TEXT, name = "Discord RPC First Line", description = "Allows you to set the first line of the Discord RPC\n\u00A7aAllows usage of Placeholders. More info on the wiki (https://github.com/koxx12-dev/Skyclient-Cosmetics/wiki/Discord-RPC)", category = "Main", subcategory = "Discord Rich Presence")
+    @Property(type = PropertyType.TEXT, name = "Discord RPC First Line", description = "Allows you to edit the first line of the Discord RPC\n\u00A7aAllows usage of Placeholders. More info on the wiki (https://github.com/koxx12-dev/Skyclient-Cosmetics/wiki/Discord-RPC)", category = "Main", subcategory = "Discord Rich Presence")
     public static String rpcLineOne = "%player% is very cool";
 
     @Property(type = PropertyType.TEXT, name = "Discord RPC Img Text", description = "Allows you to set text of the img\n\u00A7aAllows usage of Placeholders. More info on the wiki (https://github.com/koxx12-dev/Skyclient-Cosmetics/wiki/Discord-RPC)", category = "Main", subcategory = "Discord Rich Presence")
@@ -69,7 +69,7 @@ public class Settings extends Vigilant {
     @Property(type = PropertyType.SWITCH, name = "Discord RPC", description = "Enables Discord RPC", category = "Main", subcategory = "Discord Rich Presence")
     public static boolean rpc = true;
 
-    @Property(type = PropertyType.CHECKBOX, name = "First time message", description = "Get \"First time message\" when u join next time", category = "Misc", subcategory = "Chat")
+    @Property(type = PropertyType.CHECKBOX, name = "First Time Message", description = "Get \"First time message\" when u join next time", category = "Misc", subcategory = "Chat")
     public static boolean joinMessage = true;
 
     @Property(type = PropertyType.SWITCH, name = "SBE Sucks Mode", description = "https://github.com/MicrocontrollersDev/Alternatives/blob/1e409e056e3e14ca874a2368c045de96787e8cbd/SkyblockExtras.md", category = "Main", subcategory = "Discord Rich Presence")
@@ -81,7 +81,7 @@ public class Settings extends Vigilant {
     @Property(type = PropertyType.TEXT, name = "Hypixel API key", description = "Hypixel API key used for requests", category = "Main", subcategory = "Hypixel", protectedText = true)
     public static String hpApiKey = "";
 
-    @Property(type = PropertyType.SWITCH, name = "Display Name fix", description = "Fixes your display name color\n\u00A7c(only useful if you use patcher and requires restart)", category = "Fixes", subcategory = "Main")
+    @Property(type = PropertyType.SWITCH, name = "Display Name Fix", description = "Fixes your display name color\n\u00A7c(only useful if you use patcher and requires restart)", category = "Fixes", subcategory = "Main")
     public static boolean displayNameFix = false;
 
     @Property(type = PropertyType.SWITCH, name = "Debug Regex", description = "Sends debug regex info in the chat\n\u00A7c(Can break mods that read chat)", category = "DEBUG", subcategory = "Chat")
