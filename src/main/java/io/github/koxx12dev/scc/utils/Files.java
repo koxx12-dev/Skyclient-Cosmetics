@@ -29,7 +29,7 @@ public class Files {
         }
 
     }
-    public static boolean hidePetZord() {
-        return new File(CacheManager.sccFolder,"HIDEPETZORD").exists();
+    public static boolean hidePetLis() {
+        return new File(CacheManager.sccFolder,"HIDEPETLIS").exists();
     }
 }

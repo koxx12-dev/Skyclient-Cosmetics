@@ -28,10 +28,10 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 public abstract class MixinSplashProgress {
     @ModifyVariable(method = "start", at = @At(value = "STORE"), ordinal = 2, remap = false)
     private static ResourceLocation setForgeGif(ResourceLocation resourceLocation) {
-        if (Files.hidePetZord()) {
+        if (Files.hidePetLis()) {
             return resourceLocation;
         } else {
-            return new ResourceLocation("scc", "petzord.gif");
+            return new ResourceLocation("scc", "petlis.gif");
         }
     }
 }

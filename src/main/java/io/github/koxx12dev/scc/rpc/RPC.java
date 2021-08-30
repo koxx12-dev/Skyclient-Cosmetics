@@ -150,7 +150,6 @@ public class RPC extends Thread {
             core.activityManager().updateActivity(activity);
             SkyclientCosmetics.rpcOn = true;
         }
-
     }
 
     public static String generateID() {
@@ -165,5 +164,4 @@ public class RPC extends Thread {
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
     }
-
 }
