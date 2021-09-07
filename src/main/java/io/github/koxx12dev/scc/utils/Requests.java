@@ -109,6 +109,8 @@ public class Requests {
     public static JsonObject getApiData() throws IOException, CacheException, APIException {
         try {
             SkyclientCosmetics.apiConnectionSuccess = true;
+            //raw github request: https://raw.githubusercontent.com/koxx12-dev/koxx12-dev.github.io/main/docs/api/scc/tags.json
+            //github pages request: https://koxx12-dev.github.io/api/scc/tags.json
             return JsonParser.parseString(Requests.request("https://koxx12-dev.github.io/api/scc/tags.json")).getAsJsonObject();
         } catch (Exception e) {
             List<String> keys = Lists.newArrayList(CacheManager.getCache("userCache").getRawAsJsonObject().keySet().iterator());
