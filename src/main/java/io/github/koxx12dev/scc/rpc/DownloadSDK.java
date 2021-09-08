@@ -71,24 +71,17 @@ public class DownloadSDK {
                 File gameSDK = new File(Minecraft.getMinecraft().mcDataDir, name + suffix);
 
                 if (!new File(Minecraft.getMinecraft().mcDataDir, name + suffix).exists()) {
-
                     Files.copy(zin, gameSDK.toPath());
-
                 }
 
                 zin.close();
-
                 return gameSDK;
-
             }
 
             zin.closeEntry();
-
         }
-
         zin.close();
 
         return null;
     }
-
 }

@@ -30,10 +30,8 @@ public class PlayerListeners {
 
     @SubscribeEvent
     public void onPlayerLoggedIn(FMLNetworkEvent.ClientConnectedToServerEvent event) {
-
         Thread joinThread = new JoinThread();
         joinThread.start();
-
     }
 
     @SubscribeEvent

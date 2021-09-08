@@ -23,16 +23,14 @@ import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class GuiListners {
+public class GuiListeners {
 
     @SubscribeEvent
     public void onGuiInitPost(GuiScreenEvent.InitGuiEvent.Post event) {
         if (event.gui instanceof GuiIngameMenu) {
-
             int x = event.gui.width - 132;
             int y = 3;
             event.buttonList.add(new GuiButton(2666487, x, y, 130, 20, "SkyClient Cosmetics"));
-
         }
     }
 
@@ -42,5 +40,4 @@ public class GuiListners {
             SkyclientCosmetics.displayScreen = SkyclientCosmetics.config.gui();
         }
     }
-
 }

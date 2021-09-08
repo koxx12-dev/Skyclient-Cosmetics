@@ -22,7 +22,7 @@ import de.jcm.discordgamesdk.Core;
 import io.github.koxx12dev.scc.commands.MainCommand;
 import io.github.koxx12dev.scc.gui.Settings;
 import io.github.koxx12dev.scc.listeners.ChatListeners;
-import io.github.koxx12dev.scc.listeners.GuiListners;
+import io.github.koxx12dev.scc.listeners.GuiListeners;
 import io.github.koxx12dev.scc.listeners.PlayerListeners;
 import io.github.koxx12dev.scc.rpc.RPC;
 import io.github.koxx12dev.scc.utils.Files;
@@ -120,7 +120,7 @@ public void onInit(FMLInitializationEvent event) {
     MinecraftForge.EVENT_BUS.register(this);
     MinecraftForge.EVENT_BUS.register(new ChatListeners());
     MinecraftForge.EVENT_BUS.register(new PlayerListeners());
-    MinecraftForge.EVENT_BUS.register(new GuiListners());
+    MinecraftForge.EVENT_BUS.register(new GuiListeners());
 
     progress.step("Starting RPC");
 

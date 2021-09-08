@@ -34,7 +34,5 @@ public class JoinThread extends Thread {
             Chat.sendSystemMessage(EnumChatFormatting.AQUA +"Looks like you are using Skyclient Cosmetics for the first time\n"+ EnumChatFormatting.AQUA +"Use /scc to get started!\n"+ EnumChatFormatting.AQUA +"Use \"/api new\" to set hypixel API key!");
             Settings.joinMessage = false;
         }
-
     }
-
 }

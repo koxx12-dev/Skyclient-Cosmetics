@@ -28,3 +28,6 @@ notUsed/*
 run
 .DS_Store
 Thumbs.db
+
+# vsc
+.vscode

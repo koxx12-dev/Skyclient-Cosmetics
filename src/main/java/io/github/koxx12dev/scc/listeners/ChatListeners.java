@@ -82,8 +82,12 @@ public class ChatListeners {
                             } catch (Exception e) {
                                 playerColor = ChatColor.GRAY.toString();
                             }
+                            
                             playerName = playerText.replaceAll(rankRegex.pattern(),"").trim();
-                            Chat.sendSystemMessage(playerName);
+
+                            if (Settings.debugRegexChat){
+                                Chat.sendSystemMessage(playerName);
+                            }
                             if (CosmeticsManager.isUserAdded(playerName)) {
                                 String tag = CosmeticsManager.getUser(playerName).getTag();
                                 String newVal = tag+" "+playerColor+playerText;
@@ -144,16 +148,12 @@ public class ChatListeners {
                             SkyclientCosmetics.LOGGER.debug(cleanMessage + " (Nothing)");
                         }
                     }
-
                 }
 
             } catch (Exception e) {
-
                 e.printStackTrace();
-
             }
         }
-
     }
 
     @SubscribeEvent

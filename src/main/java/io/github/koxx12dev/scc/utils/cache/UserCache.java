@@ -28,7 +28,6 @@ import java.io.IOException;
 public class UserCache extends CacheManager {
 
     public static void setup() throws CacheException {
-
         if (!doesCacheExist("userCache")) {
             addCache("userCache",1);
         }
@@ -36,13 +35,10 @@ public class UserCache extends CacheManager {
         if (!doesCacheExist("userUUIDCache")) {
             addCache("userUUIDCache",2);
         }
-
     }
 
     public static void save() throws IOException {
-
         saveCache();
-
     }
 
     public static User getUser(String uuid) throws CacheException {
@@ -57,19 +53,15 @@ public class UserCache extends CacheManager {
     }
 
     public static String getName(String uuid) throws CacheException {
-
         if (isUUIDDataCached(uuid)) {
             return getCache("userUUIDCache").getAsString(uuid);
         } else {
             throw new CacheException("User UUID \""+uuid+"\" is not cached");
         }
-
     }
 
     public static void addName(String uuid, String name) throws CacheException {
-
         updateCache("userUUIDCache",uuid,name);
-
     }
 
     public static void addUser(String uuid, String name, String tagShort, String tagLong) throws CacheException {
@@ -86,39 +78,27 @@ public class UserCache extends CacheManager {
     }
 
     public static Boolean isUserDataCached(String uuid) throws CacheException {
-
         return getCache("userCache").getRawAsJsonObject().has(uuid);
-
     }
 
     public static Boolean isUUIDDataCached(String uuid) throws CacheException {
-
         return getCache("userUUIDCache").getRawAsJsonObject().has(uuid);
-
     }
 
     public static Boolean isUserDataOutdated() {
-
         return isCacheOutdated("userCache");
-
     }
 
     public static Boolean isUUIDDataOutdated() {
-
         return isCacheOutdated("userUUIDCache");
-
     }
 
     public static void updateUserDataTimestamp() {
-
         updateTimestamp("userCache",1);
-
     }
 
     public static void updateUUIDDataTimestamp() {
-
         updateTimestamp("userUUIDCache",2);
-
     }
 
     public static void updateOutdated() {
@@ -129,51 +109,37 @@ public class UserCache extends CacheManager {
         if (isUUIDDataOutdated()) {
             updateUUIDDataTimestamp();
         }
-
     }
 
     public static void invalidateCache() {
-
         invalidateCache("userCache");
         invalidateCache("userUUIDCache");
-
     }
 
 
     private static void updateCache(String id,String key,JsonObject cache) throws CacheException {
-
         if (!isCacheEmpty(id)) {
             JsonObject currentCache = getCache(id).getRawAsJsonObject();
-
             currentCache.add(key,cache);
-
             updateCache(id,new Cache(currentCache.toString()));
+
         } else {
             JsonObject json = new JsonObject();
-
             json.add(key,cache);
-
             updateCache(id,new Cache(json.toString()));
         }
-
     }
 
     private static void updateCache(String id,String key,String cache) throws CacheException {
 
         if (!isCacheEmpty(id)) {
             JsonObject currentCache = getCache(id).getRawAsJsonObject();
-
             currentCache.addProperty(key,cache);
-
             updateCache(id,new Cache(currentCache.toString()));
         } else {
             JsonObject json = new JsonObject();
-
             json.addProperty(key,cache);
-
             updateCache(id,new Cache(json.toString()));
         }
-
     }
-
 }
