@@ -24,6 +24,7 @@ import io.github.koxx12dev.scc.gui.Settings;
 import io.github.koxx12dev.scc.listeners.ChatListeners;
 import io.github.koxx12dev.scc.listeners.GuiListeners;
 import io.github.koxx12dev.scc.listeners.PlayerListeners;
+import io.github.koxx12dev.scc.listeners.WorldListener;
 import io.github.koxx12dev.scc.rpc.RPC;
 import io.github.koxx12dev.scc.utils.Files;
 import io.github.koxx12dev.scc.utils.Requests;
@@ -113,6 +114,7 @@ public class SkyclientCosmetics {
         MinecraftForge.EVENT_BUS.register(new ChatListeners());
         MinecraftForge.EVENT_BUS.register(new PlayerListeners());
         MinecraftForge.EVENT_BUS.register(new GuiListeners());
+        MinecraftForge.EVENT_BUS.register(new WorldListener());
 
         progress.step("Starting RPC");
 
