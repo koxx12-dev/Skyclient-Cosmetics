@@ -21,7 +21,7 @@ import gg.essential.api.EssentialAPI;
 import gg.essential.universal.ChatColor;
 import net.minecraft.client.Minecraft;
 
-public class Chat {
+public class ChatUtils {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
 
@@ -33,7 +33,7 @@ public class Chat {
 
     public static void sendClientMessage(String message) {
         if (mc != null && mc.theWorld != null) {
-            EssentialAPI.getMinecraftUtil().sendMessage(message);
+            EssentialAPI.getMinecraftUtil().sendMessage("",message);
         }
     }
 

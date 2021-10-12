@@ -73,43 +73,43 @@ public class StringTransformers {
                     break;
                 case "bits":
                     try {
-                        txt.set(i, Sidebar.getBits());
+                        txt.set(i, SidebarUtils.getBits());
                     } catch (Exception ignored) {
                     }
                     break;
                 case "time":
                     try {
-                        txt.set(i, Sidebar.getSBTime());
+                        txt.set(i, SidebarUtils.getSBTime());
                     } catch (Exception ignored) {
                     }
                     break;
                 case "date":
                     try {
-                        txt.set(i, Sidebar.getSBDate());
+                        txt.set(i, SidebarUtils.getSBDate());
                     } catch (Exception ignored) {
                     }
                     break;
                 case "loc":
                     try {
-                        txt.set(i, Sidebar.getSBLoc());
+                        txt.set(i, SidebarUtils.getSBLoc());
                     } catch (Exception ignored) {
                     }
                     break;
                 case "server":
                     try {
-                        txt.set(i, Sidebar.getServer());
+                        txt.set(i, SidebarUtils.getServer());
                     } catch (Exception ignored) {
                     }
                     break;
                 case "objective":
                     try {
-                        txt.set(i, Sidebar.getObjective());
+                        txt.set(i, SidebarUtils.getObjective());
                     } catch (Exception ignored) {
                     }
                     break;
                 case "purse":
                     try {
-                        txt.set(i, Sidebar.getPurse());
+                        txt.set(i, SidebarUtils.getPurse());
                     } catch (Exception ignored) {
                     }
                     break;

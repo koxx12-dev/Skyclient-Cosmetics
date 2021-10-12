@@ -17,7 +17,7 @@
 
 package io.github.koxx12dev.scc.mixins.forge;
 
-import io.github.koxx12dev.scc.utils.Files;
+import io.github.koxx12dev.scc.utils.FileUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.SplashProgress;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,7 +28,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 public abstract class MixinSplashProgress {
     @ModifyVariable(method = "start", at = @At(value = "STORE"), ordinal = 2, remap = false)
     private static ResourceLocation setForgeGif(ResourceLocation resourceLocation) {
-        if (Files.hidePetLis()) {
+        if (FileUtils.hidePetLis()) {
             return resourceLocation;
         } else {
             return new ResourceLocation("scc", "petlis.gif");

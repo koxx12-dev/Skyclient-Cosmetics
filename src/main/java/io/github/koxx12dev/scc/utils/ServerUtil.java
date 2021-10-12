@@ -17,20 +17,13 @@
 
 package io.github.koxx12dev.scc.utils;
 
-import io.github.koxx12dev.scc.utils.managers.CacheManager;
+import gg.essential.api.EssentialAPI;
 
-import java.io.File;
+public class ServerUtil {
 
-public class Files {
-    public static void setup() {
-
-        if (!CacheManager.sccFolder.exists()) {
-            CacheManager.sccFolder.mkdir();
-        }
-
+    public static boolean isPlayingSkyblock() {
+        return EssentialAPI.getMinecraftUtil().isHypixel() && "Skyblock".equals(SidebarUtils.getSidebarTitle());
     }
 
-    public static boolean hidePetLis() {
-        return new File(CacheManager.sccFolder, "HIDEPETLIS").exists();
-    }
 }
+

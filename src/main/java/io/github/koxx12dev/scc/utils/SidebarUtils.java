@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class Sidebar {
+public class SidebarUtils {
 
     private static List<String> getSidebarLines() {
 

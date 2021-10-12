@@ -120,7 +120,7 @@ public class Requests {
                 CosmeticsManager.addUser(user.getUUID(), user.getName(), user.getLongTag(), user.getShortTag());
             }
             SkyclientCosmetics.apiConnectionSuccess = false;
-            Chat.sendSystemMessage(ChatColor.RED + "Failed to connect to the api, Loaded cache");
+            ChatUtils.sendSystemMessage(ChatColor.RED + "Failed to connect to the api, Loaded cache");
             SkyclientCosmetics.LOGGER.error("Failed to connect to the api, Loaded cache");
             return null;
         }

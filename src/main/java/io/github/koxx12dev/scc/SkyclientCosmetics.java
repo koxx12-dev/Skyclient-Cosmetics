@@ -26,7 +26,7 @@ import io.github.koxx12dev.scc.listeners.GuiListeners;
 import io.github.koxx12dev.scc.listeners.PlayerListeners;
 import io.github.koxx12dev.scc.listeners.WorldListener;
 import io.github.koxx12dev.scc.rpc.RPC;
-import io.github.koxx12dev.scc.utils.Files;
+import io.github.koxx12dev.scc.utils.FileUtils;
 import io.github.koxx12dev.scc.utils.Requests;
 import io.github.koxx12dev.scc.utils.exceptions.APIException;
 import io.github.koxx12dev.scc.utils.exceptions.CacheException;
@@ -73,7 +73,7 @@ public class SkyclientCosmetics {
 
         progress.step("Setting up Files");
 
-        Files.setup();
+        FileUtils.setup();
 
         progress.step("Loading Vigilance");
 
