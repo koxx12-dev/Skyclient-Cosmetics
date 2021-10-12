@@ -69,14 +69,14 @@ public class User {
 
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getUUID() {
 
         return uuid;
 
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public void setUUID(String uuid) {

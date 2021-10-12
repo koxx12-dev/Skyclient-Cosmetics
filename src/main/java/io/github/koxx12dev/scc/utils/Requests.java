@@ -116,11 +116,11 @@ public class Requests {
             List<String> keys = Lists.newArrayList(CacheManager.getCache("userCache").getRawAsJsonObject().keySet().iterator());
 
             for (String s : keys) {
-               User user = UserCache.getUser(s);
-               CosmeticsManager.addUser(user.getUUID(),user.getName(),user.getLongTag(),user.getShortTag());
+                User user = UserCache.getUser(s);
+                CosmeticsManager.addUser(user.getUUID(), user.getName(), user.getLongTag(), user.getShortTag());
             }
             SkyclientCosmetics.apiConnectionSuccess = false;
-            Chat.sendSystemMessage(ChatColor.RED+"Failed to connect to the api, Loaded cache");
+            Chat.sendSystemMessage(ChatColor.RED + "Failed to connect to the api, Loaded cache");
             SkyclientCosmetics.LOGGER.error("Failed to connect to the api, Loaded cache");
             return null;
         }
@@ -134,47 +134,47 @@ public class Requests {
 
     public static void setRankColor() {
         try {
-                JsonObject response = JsonParser.parseString(request("https://api.hypixel.net/player?key=" + Settings.hpApiKey + "&uuid=" + Minecraft.getMinecraft().getSession().getPlayerID())).getAsJsonObject();
-                String rank;
-                if (response.get("success").getAsBoolean()) {
+            JsonObject response = JsonParser.parseString(request("https://api.hypixel.net/player?key=" + Settings.hpApiKey + "&uuid=" + Minecraft.getMinecraft().getSession().getPlayerID())).getAsJsonObject();
+            String rank;
+            if (response.get("success").getAsBoolean()) {
+                try {
+                    rank = response.get("player").getAsJsonObject().get("rank").getAsString();
+                } catch (Exception e) {
                     try {
-                        rank = response.get("player").getAsJsonObject().get("rank").getAsString();
-                    } catch (Exception e) {
                         try {
-                            try {
-                                rank = response.get("player").getAsJsonObject().get("newPackageRank").getAsString();
-                            } catch (Exception ee) {
-                                rank = response.get("player").getAsJsonObject().get("packageRank").getAsString();
-                            }
-                        } catch (Exception eee) {
-                            rank = response.get("player").getAsJsonObject().get("monthlyPackageRank").getAsString();
+                            rank = response.get("player").getAsJsonObject().get("newPackageRank").getAsString();
+                        } catch (Exception ee) {
+                            rank = response.get("player").getAsJsonObject().get("packageRank").getAsString();
                         }
+                    } catch (Exception eee) {
+                        rank = response.get("player").getAsJsonObject().get("monthlyPackageRank").getAsString();
                     }
-
-                    if (rank.equals("NONE") || rank.equals("NORMAL")) {
-                        SkyclientCosmetics.rankColor = "";
-                    } else {
-                        System.out.println("TEST: " + rank);
-                        switch (rank) {
-                            case "YOUTUBER":
-                                SkyclientCosmetics.rankColor = ChatColor.RED.toString();
-                                break;
-                            case "VIP":
-                            case "VIP_PLUS":
-                                SkyclientCosmetics.rankColor = ChatColor.GREEN.toString();
-                                break;
-                            case "MVP":
-                            case "MVP_PLUS":
-                                SkyclientCosmetics.rankColor = ChatColor.AQUA.toString();
-                                break;
-                            case "SUPERSTAR":
-                                SkyclientCosmetics.rankColor = ChatColor.GOLD.toString();
-                                break;
-                        }
-                    }
-                } else {
-                    throw new IOException("Getting rank color failed");
                 }
+
+                if (rank.equals("NONE") || rank.equals("NORMAL")) {
+                    SkyclientCosmetics.rankColor = "";
+                } else {
+                    System.out.println("TEST: " + rank);
+                    switch (rank) {
+                        case "YOUTUBER":
+                            SkyclientCosmetics.rankColor = ChatColor.RED.toString();
+                            break;
+                        case "VIP":
+                        case "VIP_PLUS":
+                            SkyclientCosmetics.rankColor = ChatColor.GREEN.toString();
+                            break;
+                        case "MVP":
+                        case "MVP_PLUS":
+                            SkyclientCosmetics.rankColor = ChatColor.AQUA.toString();
+                            break;
+                        case "SUPERSTAR":
+                            SkyclientCosmetics.rankColor = ChatColor.GOLD.toString();
+                            break;
+                    }
+                }
+            } else {
+                throw new IOException("Getting rank color failed");
+            }
         } catch (Exception e) {
             SkyclientCosmetics.rankColor = "";
         }

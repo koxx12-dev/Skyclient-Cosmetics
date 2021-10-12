@@ -33,92 +33,12 @@ import java.util.Random;
 
 public class RPC extends Thread {
 
+    private static final Instant timestamp = Instant.now();
     public static RPC INSTANCE = new RPC();
-
-    private Thread trd = new Thread(this);
-
-    private static Instant timestamp = Instant.now();
-
-    public void rpcManager() {
-        if (!SkyclientCosmetics.rpcRunning) {
-            SkyclientCosmetics.rpcRunning = true;
-            trd.start();
-        }
-    }
-
-    public void run() {
-
-        try {
-            File discordLibrary = DownloadSDK.downloadDiscordLibrary();
-            if(discordLibrary == null) {
-                System.err.println("Error downloading Discord SDK.");
-                System.exit(-1);
-            }
-            // Initialize the Core
-            Core.init(discordLibrary);
-
-            // Set parameters for the Core
-            try(CreateParams params = new CreateParams()) {
-                params.setClientID(857240025288802356L);
-                params.setFlags(CreateParams.Flags.NO_REQUIRE_DISCORD);
-                // Create the Core
-
-                params.registerEventHandler(new DiscordEventAdapter()
-                {
-
-                    @Override
-                    public void onActivityJoin(String secret)
-                    {
-                        SkyclientCosmetics.LOGGER.info("");
-                    }
-
-                });
-
-                try(Core core = new Core(params)) {
-                    // Run callbacks forever
-                    SkyclientCosmetics.rpcCore = core;
-
-                    while(SkyclientCosmetics.rpcRunning) {
-                        try {
-                            core.runCallbacks();
-                        } catch (GameSDKException e) {
-                            SkyclientCosmetics.LOGGER.warn("FAILED TO LAUNCH RPC");
-                            SkyclientCosmetics.rpcRunning = false;
-                        }
-                        try {
-                            if (SkyclientCosmetics.rpcRunning) {
-                                Thread.sleep(16);
-                            }
-
-                        }
-                        catch(InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        if (!Settings.rpc && SkyclientCosmetics.rpcOn && SkyclientCosmetics.rpcRunning) {
-                            core.activityManager().clearActivity();
-                            SkyclientCosmetics.rpcOn = false;
-                        } else if (Settings.rpc && SkyclientCosmetics.rpcRunning) {
-                            RPC.update(SkyclientCosmetics.rpcCore);
-                            SkyclientCosmetics.rpcOn = true;
-                        }
-
-                    }
-                } catch (GameSDKException e) {
-                    SkyclientCosmetics.LOGGER.warn("FAILED TO LAUNCH RPC");
-                    SkyclientCosmetics.rpcRunning = false;
-                }
-            }
-        }
-        catch(IOException e) {
-            e.printStackTrace();
-            System.err.println("Error downloading Discord SDK.");
-            System.exit(-1);
-        }
-
-    }
+    private final Thread trd = new Thread(this);
 
     public static void update(Core core) {
-        try(Activity activity = new Activity())  {
+        try (Activity activity = new Activity()) {
 
             String LineOne = StringTransformers.discordPlaceholder(Settings.rpcLineOne);
             String LineTwo = StringTransformers.discordPlaceholder(Settings.rpcLineTwo);
@@ -163,5 +83,79 @@ public class RPC extends Thread {
                 .limit(targetStringLength)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
+    }
+
+    public void rpcManager() {
+        if (!SkyclientCosmetics.rpcRunning) {
+            SkyclientCosmetics.rpcRunning = true;
+            trd.start();
+        }
+    }
+
+    public void run() {
+
+        try {
+            File discordLibrary = DownloadSDK.downloadDiscordLibrary();
+            if (discordLibrary == null) {
+                System.err.println("Error downloading Discord SDK.");
+                System.exit(-1);
+            }
+            // Initialize the Core
+            Core.init(discordLibrary);
+
+            // Set parameters for the Core
+            try (CreateParams params = new CreateParams()) {
+                params.setClientID(857240025288802356L);
+                params.setFlags(CreateParams.Flags.NO_REQUIRE_DISCORD);
+                // Create the Core
+
+                params.registerEventHandler(new DiscordEventAdapter() {
+
+                    @Override
+                    public void onActivityJoin(String secret) {
+                        SkyclientCosmetics.LOGGER.info("");
+                    }
+
+                });
+
+                try (Core core = new Core(params)) {
+                    // Run callbacks forever
+                    SkyclientCosmetics.rpcCore = core;
+
+                    while (SkyclientCosmetics.rpcRunning) {
+                        try {
+                            core.runCallbacks();
+                        } catch (GameSDKException e) {
+                            SkyclientCosmetics.LOGGER.warn("FAILED TO LAUNCH RPC");
+                            SkyclientCosmetics.rpcRunning = false;
+                        }
+                        try {
+                            if (SkyclientCosmetics.rpcRunning) {
+                                Thread.sleep(16);
+                            }
+
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        if (!Settings.rpc && SkyclientCosmetics.rpcOn && SkyclientCosmetics.rpcRunning) {
+                            core.activityManager().clearActivity();
+                            SkyclientCosmetics.rpcOn = false;
+                        } else if (Settings.rpc && SkyclientCosmetics.rpcRunning) {
+                            RPC.update(SkyclientCosmetics.rpcCore);
+                            SkyclientCosmetics.rpcOn = true;
+                        }
+
+                    }
+                } catch (GameSDKException e) {
+                    SkyclientCosmetics.LOGGER.warn("FAILED TO LAUNCH RPC");
+                    SkyclientCosmetics.rpcRunning = false;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Error downloading Discord SDK.");
+            System.exit(-1);
+        }
+
     }
 }
