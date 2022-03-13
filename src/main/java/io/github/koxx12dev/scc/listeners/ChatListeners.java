@@ -17,13 +17,15 @@
 
 package io.github.koxx12dev.scc.listeners;
 
+import cc.woverflow.onecore.utils.InternetUtils;
+import cc.woverflow.onecore.utils.JsonUtils;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import gg.essential.api.utils.Multithreading;
+import gg.essential.api.utils.WebUtil;
 import gg.essential.universal.ChatColor;
 import io.github.koxx12dev.scc.SkyclientCosmetics;
 import io.github.koxx12dev.scc.gui.Settings;
 import io.github.koxx12dev.scc.utils.Chat;
-import io.github.koxx12dev.scc.utils.Requests;
 import io.github.koxx12dev.scc.utils.StringTransformers;
 import io.github.koxx12dev.scc.utils.managers.CosmeticsManager;
 import net.minecraft.client.Minecraft;
@@ -74,7 +76,7 @@ public class ChatListeners {
                             if (Settings.debugLogs) {
                                 SkyclientCosmetics.LOGGER.info(parsedMessage);
                             }
-                            JsonObject jsonParsedMsg = JsonParser.parseString(parsedMessage).getAsJsonObject();
+                            JsonObject jsonParsedMsg = JsonUtils.asJsonElement(parsedMessage).getAsJsonObject();
                             String playerText = jsonParsedMsg.get("extra").getAsJsonArray().get(0).getAsJsonObject().get("text").getAsString();
                             String playerColor;
                             try {
@@ -167,19 +169,23 @@ public class ChatListeners {
                     String key = cleanMsg.replace("Your new API key is ", "");
                     SkyclientCosmetics.LOGGER.info(key);
                     Chat.sendSystemMessage(ChatColor.GREEN + "Checking API key");
-                    try {
-                        JsonObject response = JsonParser.parseString(Requests.request("https://api.hypixel.net/key?key=" + key)).getAsJsonObject();
+                    Multithreading.runAsync(() -> {
+                        try {
+                            JsonObject response = InternetUtils.fetchJsonElement(WebUtil.INSTANCE, "https://api.hypixel.net/key?key=" + key).getAsJsonObject();
 
-                        if (response.get("success").getAsBoolean() && response.get("record").getAsJsonObject().get("owner").getAsString().replaceAll("-", "").equals(Minecraft.getMinecraft().getSession().getPlayerID())) {
-                            Chat.sendSystemMessage(ChatColor.GREEN + "Verified API key!");
-                            Settings.hpApiKey = key;
-                        } else {
-                            Chat.sendSystemMessage(ChatColor.RED + "Couldn't verify \"" + key + "\" as a API key");
+                            if (response.get("success").getAsBoolean() && response.get("record").getAsJsonObject().get("owner").getAsString().replaceAll("-", "").equals(Minecraft.getMinecraft().getSession().getPlayerID())) {
+                                Chat.sendSystemMessage(ChatColor.GREEN + "Verified API key!");
+                                Settings.hpApiKey = key;
+                                SkyclientCosmetics.config.markDirty();
+                                SkyclientCosmetics.config.writeData();
+                            } else {
+                                Chat.sendSystemMessage(ChatColor.RED + "Couldn't verify \"" + key + "\" as a API key");
+                            }
+
+                        } catch (Exception e) {
+                            Chat.sendSystemMessage(ChatColor.RED + "\"" + key + "\" is not a valid API key");
                         }
-
-                    } catch (Exception e) {
-                        Chat.sendSystemMessage(ChatColor.RED + "\"" + key + "\" is not a valid API key");
-                    }
+                    });
                 }
             }
         }

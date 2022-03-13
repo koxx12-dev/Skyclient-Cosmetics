@@ -1,16 +1,16 @@
 [
   {
-    "modid": "${modid}",
+    "modid": "${id}",
     "name": "${name}",
-    "description": "${description}",
+    "description": "Cosmetics for the mod installer SkyClient!",
     "version": "${version}",
-    "mcversion": "${mcversion}",
+    "mcversion": "1.8.9",
     "url": "",
     "updateUrl": "",
     "authorList": [
       "koxx12"
     ],
-    "credits": "nacrt for creating skyclient",
+    "credits": "nacrt for creating SkyClient",
     "logoFile": "",
     "screenshots": [],
     "dependencies": []

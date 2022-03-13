@@ -69,7 +69,7 @@ public class Settings extends Vigilant {
     @Property(type = PropertyType.SWITCH, name = "Discord RPC", description = "Enables Discord RPC", category = "Main", subcategory = "Discord Rich Presence")
     public static boolean rpc = true;
 
-    @Property(type = PropertyType.CHECKBOX, name = "First Time Message", description = "Get \"First time message\" when u join next time", category = "Misc", subcategory = "Chat")
+    @Property(type = PropertyType.SWITCH, name = "First Time Message", description = "Get \"First time message\" when u join next time", category = "Misc", subcategory = "Chat", hidden = true)
     public static boolean joinMessage = true;
 
     @Property(type = PropertyType.SWITCH, name = "SBE Sucks Mode", description = "https://github.com/MicrocontrollersDev/Alternatives/blob/1e409e056e3e14ca874a2368c045de96787e8cbd/SkyblockExtras.md", category = "Main", subcategory = "Discord Rich Presence")

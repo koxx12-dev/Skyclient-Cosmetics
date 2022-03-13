@@ -17,9 +17,9 @@
 
 package io.github.koxx12dev.scc.listeners;
 
+import gg.essential.api.EssentialAPI;
 import io.github.koxx12dev.scc.SkyclientCosmetics;
 import io.github.koxx12dev.scc.gui.Settings;
-import io.github.koxx12dev.scc.threads.JoinThread;
 import io.github.koxx12dev.scc.utils.managers.CosmeticsManager;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -30,8 +30,12 @@ public class PlayerListeners {
 
     @SubscribeEvent
     public void onPlayerLoggedIn(FMLNetworkEvent.ClientConnectedToServerEvent event) {
-        Thread joinThread = new JoinThread();
-        joinThread.start();
+        if (Settings.joinMessage) {
+            EssentialAPI.getNotifications().push(SkyclientCosmetics.MOD_NAME, "Welcome to SkyClient Cosmetics!\nType /scc in chat to get started!\nType /api new in chat to set your Hypixel API Key!");
+            Settings.joinMessage = false;
+            SkyclientCosmetics.config.markDirty();
+            SkyclientCosmetics.config.writeData();
+        }
     }
 
     @SubscribeEvent

@@ -33,15 +33,15 @@ public class CosmeticsManager {
 
     }
 
-    public static boolean isUserAdded(String name)  {
+    public static boolean isUserAdded(String name) {
 
         return userData.containsKey(name);
 
     }
 
-    public static void addUser(String uuid,String name,String tagShort,String tagLong) {
+    public static void addUser(String uuid, String name, String tagShort, String tagLong) {
 
-        userData.put(name,new User(uuid,name,tagShort,tagLong));
+        userData.put(name, new User(uuid, name, tagShort, tagLong));
 
     }
 

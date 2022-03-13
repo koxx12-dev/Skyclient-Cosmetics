@@ -17,6 +17,7 @@
 
 package io.github.koxx12dev.scc.listeners;
 
+import cc.woverflow.onecore.utils.GuiUtils;
 import io.github.koxx12dev.scc.SkyclientCosmetics;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiIngameMenu;
@@ -37,7 +38,7 @@ public class GuiListeners {
     @SubscribeEvent
     public void onGuiAction(GuiScreenEvent.ActionPerformedEvent.Post event) {
         if (event.gui instanceof GuiIngameMenu && event.button.id == 2666487) {
-            SkyclientCosmetics.displayScreen = SkyclientCosmetics.config.gui();
+            GuiUtils.openScreen(SkyclientCosmetics.config);
         }
     }
 }

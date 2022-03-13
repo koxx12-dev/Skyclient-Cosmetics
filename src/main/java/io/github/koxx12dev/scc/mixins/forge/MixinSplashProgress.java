@@ -24,8 +24,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-@Mixin(value = {SplashProgress.class},priority = Integer.MAX_VALUE)
-public abstract class MixinSplashProgress {
+@Mixin(value = SplashProgress.class, priority = Integer.MAX_VALUE)
+public class MixinSplashProgress {
     @ModifyVariable(method = "start", at = @At(value = "STORE"), ordinal = 2, remap = false)
     private static ResourceLocation setForgeGif(ResourceLocation resourceLocation) {
         if (Files.hidePetLis()) {

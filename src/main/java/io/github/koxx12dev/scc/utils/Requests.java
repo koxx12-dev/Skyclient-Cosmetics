@@ -17,11 +17,12 @@
 
 package io.github.koxx12dev.scc.utils;
 
+import cc.woverflow.onecore.utils.InternetUtils;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import gg.essential.api.utils.WebUtil;
 import gg.essential.universal.ChatColor;
 import io.github.koxx12dev.scc.SkyclientCosmetics;
 import io.github.koxx12dev.scc.gui.Settings;
@@ -34,23 +35,10 @@ import io.github.koxx12dev.scc.utils.types.User;
 import net.minecraft.client.Minecraft;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.List;
-import java.util.Scanner;
+import java.util.Map;
 
 public class Requests {
-
-    public static String request(String URL) throws IOException {
-
-        java.net.URL url = new URL(URL);
-        URLConnection conn = url.openConnection();
-        InputStream inputStream = conn.getInputStream();
-        Scanner s = new Scanner(inputStream).useDelimiter("\\A");
-        return s.hasNext() ? s.next() : "";
-
-    }
 
     public static void reloadTags() throws IOException, CacheException {
 
@@ -63,21 +51,20 @@ public class Requests {
             JsonObject tags = api.getAsJsonObject("tags");
             JsonObject perms = api.getAsJsonObject("perms");
 
-            List<String> tagsIDList = Lists.newArrayList(tags.keySet().iterator());
-            List<String> permsIDList = Lists.newArrayList(perms.keySet().iterator());
+            List<Map.Entry<String, JsonElement>> tagsIDList = Lists.newArrayList(tags.entrySet().iterator());
+            List<Map.Entry<String, JsonElement>> permsIDList = Lists.newArrayList(perms.entrySet().iterator());
 
             if (permsIDList.size() != tagsIDList.size()) {
                 throw new Error("Someone broke the repo\nwait for staff to fix it");
             }
 
-            for (String s : tagsIDList) {
-                JsonElement tag = tags.get(s);
+            for (Map.Entry<String, JsonElement> s : tagsIDList) {
 
-                String tagLong = tag.getAsJsonArray().get(0).getAsString().replace("&", "\u00A7");
+                String tagLong = s.getValue().getAsJsonArray().get(0).getAsString().replace("&", "\u00A7");
 
-                String tagShort = tag.getAsJsonArray().get(1).getAsString().replace("&", "\u00A7");
+                String tagShort = s.getValue().getAsJsonArray().get(1).getAsString().replace("&", "\u00A7");
 
-                JsonArray users = perms.get(s).getAsJsonArray();
+                JsonArray users = perms.get(s.getKey()).getAsJsonArray();
 
                 for (int j = 0; j < users.size(); j++) {
 
@@ -111,70 +98,70 @@ public class Requests {
             SkyclientCosmetics.apiConnectionSuccess = true;
             //raw github request: https://raw.githubusercontent.com/koxx12-dev/koxx12-dev.github.io/main/docs/api/scc/tags.json
             //github pages request: https://koxx12-dev.github.io/api/scc/tags.json
-            return JsonParser.parseString(Requests.request("https://koxx12-dev.github.io/api/scc/tags.json")).getAsJsonObject();
+            return InternetUtils.fetchJsonElement(WebUtil.INSTANCE, "https://koxx12-dev.github.io/api/scc/tags.json").getAsJsonObject();
         } catch (Exception e) {
-            List<String> keys = Lists.newArrayList(CacheManager.getCache("userCache").getRawAsJsonObject().keySet().iterator());
+            List<Map.Entry<String, JsonElement>> keys = Lists.newArrayList(CacheManager.getCache("userCache").getRawAsJsonObject().entrySet().iterator());
 
-            for (String s : keys) {
-               User user = UserCache.getUser(s);
-               CosmeticsManager.addUser(user.getUUID(),user.getName(),user.getLongTag(),user.getShortTag());
+            for (Map.Entry<String, JsonElement> s : keys) {
+                User user = UserCache.getUser(s.getKey());
+                CosmeticsManager.addUser(user.getUUID(), user.getName(), user.getLongTag(), user.getShortTag());
             }
             SkyclientCosmetics.apiConnectionSuccess = false;
-            Chat.sendSystemMessage(ChatColor.RED+"Failed to connect to the api, Loaded cache");
+            Chat.sendSystemMessage(ChatColor.RED + "Failed to connect to the api, Loaded cache");
             SkyclientCosmetics.LOGGER.error("Failed to connect to the api, Loaded cache");
             return null;
         }
     }
 
     public static String getUserNameFromUUID(String uuid) throws IOException {
-        String name = Requests.request("https://api.mojang.com/user/profiles/" + uuid + "/names");
-        JsonArray nameJson = JsonParser.parseString(name).getAsJsonArray();
+        JsonElement name = InternetUtils.fetchJsonElement(WebUtil.INSTANCE, "https://api.mojang.com/user/profiles/" + uuid + "/names");
+        JsonArray nameJson = name.getAsJsonArray();
         return nameJson.get(nameJson.size() - 1).getAsJsonObject().get("name").getAsString();
     }
 
     public static void setRankColor() {
         try {
-                JsonObject response = JsonParser.parseString(request("https://api.hypixel.net/player?key=" + Settings.hpApiKey + "&uuid=" + Minecraft.getMinecraft().getSession().getPlayerID())).getAsJsonObject();
-                String rank;
-                if (response.get("success").getAsBoolean()) {
+            JsonObject response = InternetUtils.fetchJsonElement(WebUtil.INSTANCE, "https://api.hypixel.net/player?key=" + Settings.hpApiKey + "&uuid=" + Minecraft.getMinecraft().getSession().getPlayerID()).getAsJsonObject();
+            String rank;
+            if (response.get("success").getAsBoolean()) {
+                try {
+                    rank = response.get("player").getAsJsonObject().get("rank").getAsString();
+                } catch (Exception e) {
                     try {
-                        rank = response.get("player").getAsJsonObject().get("rank").getAsString();
-                    } catch (Exception e) {
                         try {
-                            try {
-                                rank = response.get("player").getAsJsonObject().get("newPackageRank").getAsString();
-                            } catch (Exception ee) {
-                                rank = response.get("player").getAsJsonObject().get("packageRank").getAsString();
-                            }
-                        } catch (Exception eee) {
-                            rank = response.get("player").getAsJsonObject().get("monthlyPackageRank").getAsString();
+                            rank = response.get("player").getAsJsonObject().get("newPackageRank").getAsString();
+                        } catch (Exception ee) {
+                            rank = response.get("player").getAsJsonObject().get("packageRank").getAsString();
                         }
+                    } catch (Exception eee) {
+                        rank = response.get("player").getAsJsonObject().get("monthlyPackageRank").getAsString();
                     }
-
-                    if (rank.equals("NONE") || rank.equals("NORMAL")) {
-                        SkyclientCosmetics.rankColor = "";
-                    } else {
-                        System.out.println("TEST: " + rank);
-                        switch (rank) {
-                            case "YOUTUBER":
-                                SkyclientCosmetics.rankColor = ChatColor.RED.toString();
-                                break;
-                            case "VIP":
-                            case "VIP_PLUS":
-                                SkyclientCosmetics.rankColor = ChatColor.GREEN.toString();
-                                break;
-                            case "MVP":
-                            case "MVP_PLUS":
-                                SkyclientCosmetics.rankColor = ChatColor.AQUA.toString();
-                                break;
-                            case "SUPERSTAR":
-                                SkyclientCosmetics.rankColor = ChatColor.GOLD.toString();
-                                break;
-                        }
-                    }
-                } else {
-                    throw new IOException("Getting rank color failed");
                 }
+
+                if (rank.equals("NONE") || rank.equals("NORMAL")) {
+                    SkyclientCosmetics.rankColor = "";
+                } else {
+                    System.out.println("TEST: " + rank);
+                    switch (rank) {
+                        case "YOUTUBER":
+                            SkyclientCosmetics.rankColor = ChatColor.RED.toString();
+                            break;
+                        case "VIP":
+                        case "VIP_PLUS":
+                            SkyclientCosmetics.rankColor = ChatColor.GREEN.toString();
+                            break;
+                        case "MVP":
+                        case "MVP_PLUS":
+                            SkyclientCosmetics.rankColor = ChatColor.AQUA.toString();
+                            break;
+                        case "SUPERSTAR":
+                            SkyclientCosmetics.rankColor = ChatColor.GOLD.toString();
+                            break;
+                    }
+                }
+            } else {
+                throw new IOException("Getting rank color failed");
+            }
         } catch (Exception e) {
             SkyclientCosmetics.rankColor = "";
         }

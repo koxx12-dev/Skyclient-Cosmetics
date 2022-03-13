@@ -29,11 +29,11 @@ public class UserCache extends CacheManager {
 
     public static void setup() throws CacheException {
         if (!doesCacheExist("userCache")) {
-            addCache("userCache",1);
+            addCache("userCache", 1);
         }
 
         if (!doesCacheExist("userUUIDCache")) {
-            addCache("userUUIDCache",2);
+            addCache("userUUIDCache", 2);
         }
     }
 
@@ -45,9 +45,9 @@ public class UserCache extends CacheManager {
 
         if (isUserDataCached(uuid)) {
             JsonObject cache = getCache("userCache").getAsJsonObject(uuid);
-            return new User(cache.get("uuid").getAsString(),cache.get("name").getAsString(),cache.get("tagShort").getAsString(),cache.get("tagLong").getAsString());
+            return new User(cache.get("uuid").getAsString(), cache.get("name").getAsString(), cache.get("tagShort").getAsString(), cache.get("tagLong").getAsString());
         } else {
-            throw new CacheException("User data \""+uuid+"\" is not cached");
+            throw new CacheException("User data \"" + uuid + "\" is not cached");
         }
 
     }
@@ -56,24 +56,24 @@ public class UserCache extends CacheManager {
         if (isUUIDDataCached(uuid)) {
             return getCache("userUUIDCache").getAsString(uuid);
         } else {
-            throw new CacheException("User UUID \""+uuid+"\" is not cached");
+            throw new CacheException("User UUID \"" + uuid + "\" is not cached");
         }
     }
 
     public static void addName(String uuid, String name) throws CacheException {
-        updateCache("userUUIDCache",uuid,name);
+        updateCache("userUUIDCache", uuid, name);
     }
 
     public static void addUser(String uuid, String name, String tagShort, String tagLong) throws CacheException {
 
         JsonObject json = new JsonObject();
 
-        json.addProperty("uuid",uuid);
-        json.addProperty("name",name);
-        json.addProperty("tagShort",tagShort);
-        json.addProperty("tagLong",tagLong);
+        json.addProperty("uuid", uuid);
+        json.addProperty("name", name);
+        json.addProperty("tagShort", tagShort);
+        json.addProperty("tagLong", tagLong);
 
-        updateCache("userCache",uuid,json);
+        updateCache("userCache", uuid, json);
 
     }
 
@@ -94,11 +94,11 @@ public class UserCache extends CacheManager {
     }
 
     public static void updateUserDataTimestamp() {
-        updateTimestamp("userCache",1);
+        updateTimestamp("userCache", 1);
     }
 
     public static void updateUUIDDataTimestamp() {
-        updateTimestamp("userUUIDCache",2);
+        updateTimestamp("userUUIDCache", 2);
     }
 
     public static void updateOutdated() {
@@ -117,29 +117,29 @@ public class UserCache extends CacheManager {
     }
 
 
-    private static void updateCache(String id,String key,JsonObject cache) throws CacheException {
+    private static void updateCache(String id, String key, JsonObject cache) throws CacheException {
         if (!isCacheEmpty(id)) {
             JsonObject currentCache = getCache(id).getRawAsJsonObject();
-            currentCache.add(key,cache);
-            updateCache(id,new Cache(currentCache.toString()));
+            currentCache.add(key, cache);
+            updateCache(id, new Cache(currentCache.toString()));
 
         } else {
             JsonObject json = new JsonObject();
-            json.add(key,cache);
-            updateCache(id,new Cache(json.toString()));
+            json.add(key, cache);
+            updateCache(id, new Cache(json.toString()));
         }
     }
 
-    private static void updateCache(String id,String key,String cache) throws CacheException {
+    private static void updateCache(String id, String key, String cache) throws CacheException {
 
         if (!isCacheEmpty(id)) {
             JsonObject currentCache = getCache(id).getRawAsJsonObject();
-            currentCache.addProperty(key,cache);
-            updateCache(id,new Cache(currentCache.toString()));
+            currentCache.addProperty(key, cache);
+            updateCache(id, new Cache(currentCache.toString()));
         } else {
             JsonObject json = new JsonObject();
-            json.addProperty(key,cache);
-            updateCache(id,new Cache(json.toString()));
+            json.addProperty(key, cache);
+            updateCache(id, new Cache(json.toString()));
         }
     }
 }

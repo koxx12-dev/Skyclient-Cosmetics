@@ -17,31 +17,30 @@
 
 package io.github.koxx12dev.scc.utils.managers;
 
+import cc.woverflow.onecore.utils.JsonUtils;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import io.github.koxx12dev.scc.SkyclientCosmetics;
 import io.github.koxx12dev.scc.utils.cache.UserCache;
 import io.github.koxx12dev.scc.utils.exceptions.CacheException;
 import io.github.koxx12dev.scc.utils.types.Cache;
 import net.minecraft.client.Minecraft;
+import org.apache.commons.io.FileUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
-import java.util.Scanner;
 
 public class CacheManager {
 
 
-    public static File sccFolder = new File(Minecraft.getMinecraft().mcDataDir,"SkyclientCosmetics");
-
-    private static final File sccCache = new File(sccFolder,"Cache.json");
-
-    private static JsonObject cache = new JsonObject();
-
     private static final String cacheVersion = "1v";
+    public static File sccFolder = new File(Minecraft.getMinecraft().mcDataDir, "SkyclientCosmetics");
+    private static final File sccCache = new File(sccFolder, "Cache.json");
+    private static JsonObject cache = new JsonObject();
 
     public static void setupCache() throws IOException, CacheException {
 
@@ -58,10 +57,10 @@ public class CacheManager {
         if (cache.has("cacheVersion")) {
             if (!Objects.equals(cache.get("cacheVersion").getAsString(), cacheVersion)) {
                 cache = new JsonObject();
-                cache.addProperty("cacheVersion",cacheVersion);
+                cache.addProperty("cacheVersion", cacheVersion);
             }
         } else {
-            cache.addProperty("cacheVersion",cacheVersion);
+            cache.addProperty("cacheVersion", cacheVersion);
         }
 
         UserCache.setup();
@@ -69,31 +68,20 @@ public class CacheManager {
     }
 
     public static void saveCache() throws IOException {
-
-        FileWriter fileWriter = new FileWriter(sccCache);
-        PrintWriter printWriter = new PrintWriter(fileWriter);
-        printWriter.print(cache.toString());
-        printWriter.close();
-
+        FileUtils.writeStringToFile(sccCache, cache.toString(), StandardCharsets.UTF_8);
     }
 
-    public static void loadCache() throws FileNotFoundException {
-        Scanner reader = new Scanner(sccCache);
-        if (reader.hasNextLine()) {
-            String data = reader.nextLine();
-            reader.close();
-            cache = JsonParser.parseString(data).getAsJsonObject();
-        }
-
+    public static void loadCache() throws IOException {
+        cache = JsonUtils.asJsonElement(FileUtils.readFileToString(sccCache, StandardCharsets.UTF_8)).getAsJsonObject();
     }
 
-    public static void addCache(String id,int time) throws CacheException {
+    public static void addCache(String id, int time) throws CacheException {
 
         if (!cache.has(id)) {
-            cache.add(id,new JsonObject());
-            cache.addProperty(id+"_timestamp",generateTimestamp(time));
+            cache.add(id, new JsonObject());
+            cache.addProperty(id + "_timestamp", generateTimestamp(time));
         } else {
-            throw new CacheException("Cache with id \""+id+"\" already exists");
+            throw new CacheException("Cache with id \"" + id + "\" already exists");
         }
 
     }
@@ -104,7 +92,7 @@ public class CacheManager {
             cache.add(id, cacheObj.getRawAsJsonObject());
             SkyclientCosmetics.LOGGER.info(cacheObj.getRawAsJsonObject().toString());
         } else {
-            throw new CacheException("Cache with id \""+id+"\" does not exist");
+            throw new CacheException("Cache with id \"" + id + "\" does not exist");
         }
 
     }
@@ -113,9 +101,9 @@ public class CacheManager {
 
         if (cache.has(id)) {
             cache.remove(id);
-            cache.remove(id+"_timestamp");
+            cache.remove(id + "_timestamp");
         } else {
-            throw new CacheException("Cache with id \""+id+"\" does not exist");
+            throw new CacheException("Cache with id \"" + id + "\" does not exist");
         }
 
     }
@@ -125,7 +113,7 @@ public class CacheManager {
         if (cache.has(id)) {
             return new Cache(cache.get(id).toString());
         } else {
-            throw new CacheException("Cache with id \""+id+"\" does not exist");
+            throw new CacheException("Cache with id \"" + id + "\" does not exist");
         }
 
     }
@@ -138,13 +126,13 @@ public class CacheManager {
 
     public static Long getTimestamp(String id) {
 
-        return cache.get(id+"_timestamp").getAsLong();
+        return cache.get(id + "_timestamp").getAsLong();
 
     }
 
-    public static void updateTimestamp(String id,int time) {
+    public static void updateTimestamp(String id, int time) {
 
-        cache.addProperty(id+"_timestamp",generateTimestamp(time));
+        cache.addProperty(id + "_timestamp", generateTimestamp(time));
 
     }
 
@@ -156,7 +144,7 @@ public class CacheManager {
 
     public static void invalidateCache(String id) {
 
-        cache.addProperty(id+"_timestamp",0);
+        cache.addProperty(id + "_timestamp", 0);
 
     }
 
@@ -170,7 +158,7 @@ public class CacheManager {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(Date.from(Instant.now()));
-        calendar.add(Calendar.HOUR_OF_DAY, 24*days);
+        calendar.add(Calendar.HOUR_OF_DAY, 24 * days);
 
         return calendar.getTimeInMillis() / 1000;
 

@@ -1,163 +1,106 @@
+//file:noinspection UnnecessaryQualifiedReference
+//file:noinspection GroovyAssignabilityCheck
 
-// For those who want the bleeding edge
 plugins {
-    id 'java'
-    id 'net.minecraftforge.gradle.forge' version '6f5327'
-    id 'com.github.johnrengelman.shadow' version '6.1.0'
-    id 'org.spongepowered.mixin' version '0.6-SNAPSHOT'
+    id "dev.architectury.architectury-pack200" version "0.1.3"
+    id "cc.woverflow.loom" version "0.10.1"
+    id "net.kyori.blossom" version "1.3.0"
+    id "java"
 }
-/*
-// for people who want stable - not yet functional for MC 1.8.8 - we require the forgegradle 2.1 snapshot
-plugins {
-    id "net.minecraftforge.gradle.forge" version "2.0.2"
-}
-*/
+
 version = mod_version
-group = "io.github.koxx12-dev"
-archivesBaseName = "!!"+mod_name
+group = "io.github.koxx12dev"
+archivesBaseName = mod_name
 
-compileJava {
-    sourceCompatibility = targetCompatibility = "1.8"
+blossom {
+    String className = "src/main/java/io/github/koxx12dev/scc/SkyclientCosmetics.java"
+    replaceToken("@VER@", project.version, className)
+    replaceToken("@NAME@", mod_name, className)
+    replaceToken("@ID@", mod_id, className)
 }
 
-minecraft {
-    version = "1.8.9-11.15.1.2318-1.8.9"
-    runDir = "run"
-    mappings = "stable_22"
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+compileJava.options.encoding = 'UTF-8'
 
-    replace('${GRADLE_MOD_ID}', mod_id)
-    replace('${GRADLE_MOD_NAME}', mod_name)
-    replace('${GRADLE_MOD_DESCRIPTION}', mod_description)
-    replace('${GRADLE_MOD_VERSION}', mod_version)
+loom {
+    launchConfigs {
+        client {
+            arg("--tweakClass", "cc.woverflow.onecore.tweaker.OneCoreTweaker")
+            property("onecore.mixin", "mixins.scc.json")
+        }
+    }
+    runConfigs {
+        client {
+            ideConfigGenerated = true
+        }
+    }
+    forge {
+        pack200Provider = new dev.architectury.pack200.java.Pack200Adapter()
+        mixinConfig("mixins.scc.json")
+        mixin.defaultRefmapName.set("mixins.scc.refmap.json")
+    }
+}
 
-    clientRunArgs += "--tweakClass org.spongepowered.asm.launch.MixinTweaker"
-    clientRunArgs += "--mixin mixins.scc.json"
-
-    // the mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   snapshot are built nightly.
-    // stable_#            stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not allways work.
-    // simply re-run your setup task after changing the mappings to update your workspace.
-
-    makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+configurations {
+    include
+    implementation.extendsFrom(include)
 }
 
 repositories {
-    mavenCentral()
-    maven { url 'https://jitpack.io' }
-    maven { url "https://repo.spongepowered.org/repository/maven-public/" }
-    maven { url "https://repo.sk1er.club/repository/maven-public/" }
+    maven { url 'https://repo.woverflow.cc/' }
 }
 
 dependencies {
-
-    //implementation fileTree(dir: 'libs', include: '*.jar')
-
-    implementation "gg.essential:vigilance-1.8.9-forge:189"
-    implementation 'com.google.code.gson:gson:2.8.9'
-    implementation 'com.github.JnCrMx:discord-game-sdk4j:v0.5.4'
-
-    implementation "org.spongepowered:mixin:0.7.11-SNAPSHOT"
-    annotationProcessor "org.spongepowered:mixin:0.7.11-SNAPSHOT"
-
-    // you may put jars on which you depend on in ./libs
-    // or you may define them like so..
-    //compile "some.group:artifact:version:classifier"
-    //compile "some.group:artifact:version"
-
-    // real examples
-    //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-
-    // the 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
-    //provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // the deobf configurations:  'deobfCompile' and 'deobfProvided' are the same as the normal compile and provided,
-    // except that these dependencies get remapped to your current MCP mappings
-    //deobfCompile 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-    //deobfProvided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // for more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
-}
-
-mixin {
-    add sourceSets.main, 'mixins.scc.refmap.json'
+    minecraft("com.mojang:minecraft:1.8.9")
+    mappings("de.oceanlabs.mcp:mcp_stable:22-1.8.9")
+    forge("net.minecraftforge:forge:1.8.9-11.15.1.2318-1.8.9")
+    compileOnly 'gg.essential:essential-1.8.9-forge:1933'
+    compileOnly 'cc.woverflow:onecore:1.3.3'
+    include 'com.github.JnCrMx:discord-game-sdk4j:v0.5.4'
+    include ('cc.woverflow:onecore-tweaker:1.3.0') {
+        transitive = false
+    }
+    compileOnly ('org.spongepowered:mixin:0.8.5-SNAPSHOT')
 }
 
 processResources {
-    inputs.property "version", mod_version
-    inputs.property "mcversion", project.minecraft.version
-    inputs.property 'name', mod_name
-    inputs.property 'modid', mod_id
-    inputs.property 'description', mod_description
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", version
+    inputs.property "name", mod_name
+    inputs.property "id", mod_id
 
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-
-        expand (
-                'version':mod_version,
-                'mcversion':project.minecraft.version,
-                'name':mod_name,
-                'modid': mod_id,
-                'description':mod_description
+    filesMatching("mcmod.info") {
+        expand(
+                "id": mod_id,
+                "name": mod_name,
+                "version": version
         )
-
-    }
-
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
     }
 
     rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
-
-shadowJar {
-    archiveFileName = jar.archiveFileName
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-    relocate("com.google.gson", "scc.googlecom.gson")
-
-    exclude(
-            "dummyThing",
-            "LICENSE.md",
-            "pack.mcmeta",
-            "**/module-info.class",
-            "*.so",
-            "*.dylib",
-            "*.dll",
-            "*.jnilib",
-            "ibxm/**",
-            "com/jcraft/**",
-            "org/lwjgl/**",
-            "net/java/**",
-            "META-INF/proguard/**",
-            "META-INF/maven/**",
-            "META-INF/versions/**",
-            "META-INF/com.android.tools/**",
-            "fabric.mod.json"
-    )
-}
-
-reobf {
-    shadowJar {
-        mappingType = 'SEARGE'
+sourceSets {
+    main {
+        output.resourcesDir = java.classesDirectory
     }
 }
 
 jar {
-    manifest {
-        attributes "ModSide": "CLIENT",
-                "FMLCorePlugin": "io.github.koxx12dev.scc.fml.SkyclientCosmeticsLoadingPlugin",
-                "FMLCorePluginContainsFMLMod": "true",
-                "ForceLoadAsMod": true,
-                "MixinConfigs": "mixins.scc.json",
-                "TweakClass": "org.spongepowered.asm.launch.MixinTweaker",
-                "TweakOrder": "0"
+    dependsOn configurations.include
+    from(configurations.include.collect { it.isDirectory() ? it : zipTree(it) }) {
+        def i = 0
+        filesMatching("META-INF/NOTICE*") { name = "$name.${i++}" }
+        filesMatching("META-INF/LICENSE*") { name = "$name.${i++}" }
+        filesMatching("META-INF/mods.toml") { name = "$name.${i++}" }
+        filesMatching("LICENSE*") { name = "$name.${i++}" }
     }
-}
 
-reobfJar.dependsOn tasks.shadowJar
+    manifest.attributes(
+            'ModSide': 'CLIENT',
+            'ForceLoadAsMod': true,
+            'TweakClass': 'cc.woverflow.onecore.tweaker.OneCoreTweaker',
+            'MixinConfigs': "mixins.scc.json",
+            "TweakOrder": "0"
+    )
+}
