@@ -17,19 +17,15 @@
 
 package io.github.koxx12dev.scc;
 
-import com.google.gson.JsonObject;
 import de.jcm.discordgamesdk.Core;
 import io.github.koxx12dev.scc.commands.SccComand;
+import io.github.koxx12dev.scc.cosmetics.TagCosmetics;
 import io.github.koxx12dev.scc.gui.Settings;
 import io.github.koxx12dev.scc.listeners.ChatListeners;
 import io.github.koxx12dev.scc.listeners.GuiListeners;
 import io.github.koxx12dev.scc.listeners.PlayerListeners;
 import io.github.koxx12dev.scc.rpc.RPC;
 import io.github.koxx12dev.scc.utils.Files;
-import io.github.koxx12dev.scc.utils.Requests;
-import io.github.koxx12dev.scc.utils.exceptions.APIException;
-import io.github.koxx12dev.scc.utils.exceptions.CacheException;
-import io.github.koxx12dev.scc.utils.managers.CacheManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ProgressManager;
@@ -37,8 +33,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
-
-import java.io.IOException;
 
 @Mod(modid = SkyclientCosmetics.MOD_ID, name = SkyclientCosmetics.MOD_NAME, version = SkyclientCosmetics.MOD_VERSION, clientSideOnly = true, acceptedMinecraftVersions = "[1.8.9]")
 public class SkyclientCosmetics {
@@ -55,8 +49,6 @@ public class SkyclientCosmetics {
 
     public static boolean apiConnectionSuccess = true;
 
-    public static JsonObject api;
-
     public static Core rpcCore;
 
     public static String partyID = RPC.generateID();
@@ -66,9 +58,9 @@ public class SkyclientCosmetics {
     public static String rankColor;
 
     @Mod.EventHandler
-    public void onPreInit(FMLPreInitializationEvent event) throws IOException, CacheException, APIException {
+    public void onPreInit(FMLPreInitializationEvent event) {
 
-        ProgressManager.ProgressBar progress = ProgressManager.push("Pre Init Setup", 5);
+        ProgressManager.ProgressBar progress = ProgressManager.push("Pre Init Setup", 3);
 
         progress.step("Setting up Files");
 
@@ -79,28 +71,11 @@ public class SkyclientCosmetics {
         config = new Settings();
         config.preload();
 
-        progress.step("Setting up Cache");
-
-        CacheManager.setupCache();
-
         progress.step("Getting log4j logger");
 
         LOGGER = event.getModLog();
 
-        progress.step("Getting api data");
-
-        api = Requests.getApiData();
-
         ProgressManager.pop(progress);
-    /*
-    if ((boolean)api.get("whitelist")) {
-        String UUID = Minecraft.getMinecraft().getSession().getPlayerID();
-        List<Object> whitelisted = api.getJSONArray("whitelisted").toList();
-        if (!whitelisted.contains(UUID)){
-            throw new Error("You are not whitelisted LMAO");
-        }
-    }
-    */
     }
 
     @Mod.EventHandler
@@ -129,21 +104,7 @@ public class SkyclientCosmetics {
     }
 
     @Mod.EventHandler
-    public void onPostInit(FMLPostInitializationEvent event) throws IOException, CacheException {
-
-        ProgressManager.ProgressBar progress = ProgressManager.push("Post Init Setup", 2);
-
-        progress.step("Loading tags");
-
-        if (apiConnectionSuccess) {
-            Requests.reloadTags();
-        }
-
-        progress.step("Setting rank color");
-
-        Requests.setRankColor();
-
-        ProgressManager.pop(progress);
-
+    public void onPostInit(FMLPostInitializationEvent event) {
+        TagCosmetics.getInstance().initialize();
     }
 }

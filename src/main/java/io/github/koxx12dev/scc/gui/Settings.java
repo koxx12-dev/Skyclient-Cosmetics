@@ -20,19 +20,13 @@ package io.github.koxx12dev.scc.gui;
 import gg.essential.vigilance.Vigilant;
 import gg.essential.vigilance.data.Property;
 import gg.essential.vigilance.data.PropertyType;
-import io.github.koxx12dev.scc.SkyclientCosmetics;
-import io.github.koxx12dev.scc.utils.Requests;
-import io.github.koxx12dev.scc.utils.exceptions.APIException;
-import io.github.koxx12dev.scc.utils.exceptions.CacheException;
-import io.github.koxx12dev.scc.utils.managers.CacheManager;
+import io.github.koxx12dev.scc.cosmetics.TagCosmetics;
+import io.github.koxx12dev.scc.utils.Files;
 
 import java.io.File;
 import java.io.IOException;
 
 public class Settings extends Vigilant {
-
-    @Property(type = PropertyType.SWITCH, name = "Show Debug Options", description = "Shows debug options. If you crash because of this, it is your fault.", category = "DEBUG", subcategory = "DEBUG")
-    public static boolean showDebug = false;
 
     @Property(type = PropertyType.SWITCH, name = "Show Custom Tags", description = "Show the custom tags, which are the main focus of this mod.", category = "Main", subcategory = "Tags")
     public static boolean showTags = true;
@@ -41,21 +35,9 @@ public class Settings extends Vigilant {
     public static boolean shortenTags = false;
 
     @Property(type = PropertyType.BUTTON, name = "Reload Tags", description = "Reloads the custom tags.", category = "Main", subcategory = "Tags", placeholder = "Reload")
-    public static void reloadTags() throws APIException, CacheException, IOException {
-        SkyclientCosmetics.api = Requests.getApiData();
-        if (SkyclientCosmetics.apiConnectionSuccess) {
-            Requests.reloadTags();
-        }
+    public static void reloadTags() {
+        if (TagCosmetics.getInstance().isInitialized()) TagCosmetics.getInstance().reInitialize();
     }
-
-    @Property(type = PropertyType.SWITCH, name = "Debug Tags", description = "(RN DOES NOTHING) Replaces every message with your tag", category = "DEBUG", subcategory = "Tags")
-    public static boolean debugTags = false;
-
-    @Property(type = PropertyType.SWITCH, name = "Debug Display Tags", description = "Changes player names to your tag", category = "DEBUG", subcategory = "Chat")
-    public static boolean debugDisplayTags = false;
-
-    @Property(type = PropertyType.SWITCH, name = "Show debug info in logs", description = "Shows a bunch of debug information in your logs, which will get quite spammy.", category = "DEBUG", subcategory = "Logs")
-    public static boolean debugLogs = false;
 
     @Property(type = PropertyType.TEXT, name = "Discord RPC Second Line", description = "Allows you to edit the second line of the Discord RPC\n\u00A7aAllows usage of Placeholders. More info on the wiki (https://github.com/koxx12-dev/Skyclient-Cosmetics/wiki/Discord-RPC)", category = "Main", subcategory = "Discord Rich Presence")
     public static String rpcLineTwo = "SBE bad";
@@ -81,12 +63,6 @@ public class Settings extends Vigilant {
     @Property(type = PropertyType.TEXT, name = "Hypixel API key", description = "Hypixel API key used for requests", category = "Main", subcategory = "Hypixel", protectedText = true)
     public static String hpApiKey = "";
 
-    @Property(type = PropertyType.SWITCH, name = "Display Name Fix", description = "Fixes your display name color\n\u00A7c(only useful if you use patcher and requires restart)", category = "Fixes", subcategory = "Main")
-    public static boolean displayNameFix = false;
-
-    @Property(type = PropertyType.SWITCH, name = "Debug Regex", description = "Sends debug regex info in the chat\n\u00A7c(Can break mods that read chat)", category = "DEBUG", subcategory = "Chat")
-    public static boolean debugRegexChat = false;
-
     @Property(type = PropertyType.SWITCH, name = "Hide Pet Lisena", description = "WARNING: TURNING THIS ON WILL BREAK EVERYTHING", category = "Misc", subcategory = "Gui")
     public static boolean hidePetLis = false;
 
@@ -99,11 +75,6 @@ public class Settings extends Vigilant {
         //final Class<Settings> SettingsClass = Settings.class;
 
         initialize();
-
-        addDependency("debugTags","showDebug");
-        addDependency("debugDisplayTags","showDebug");
-        addDependency("debugLogs","showDebug");
-        addDependency("debugRegexChat","showDebug");
 
         addDependency("sbeBadMode","rpc");
         addDependency("rpcLineTwo","rpc");
@@ -119,13 +90,13 @@ public class Settings extends Vigilant {
                 a -> {
             if ((boolean) a) {
                 try {
-                    new File(CacheManager.sccFolder,"HIDEPETLIS").createNewFile();
+                    new File(Files.sccFolder,"HIDEPETLIS").createNewFile();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             } else {
-                if (new File(CacheManager.sccFolder,"HIDEPETLIS").exists()) {
-                    new File(CacheManager.sccFolder, "HIDEPETLIS").delete();
+                if (new File(Files.sccFolder,"HIDEPETLIS").exists()) {
+                    new File(Files.sccFolder, "HIDEPETLIS").delete();
                 }
             }
         });

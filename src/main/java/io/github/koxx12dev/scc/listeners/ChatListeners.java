@@ -24,10 +24,11 @@ import gg.essential.api.utils.Multithreading;
 import gg.essential.api.utils.WebUtil;
 import gg.essential.universal.ChatColor;
 import io.github.koxx12dev.scc.SkyclientCosmetics;
+import io.github.koxx12dev.scc.cosmetics.Tag;
+import io.github.koxx12dev.scc.cosmetics.TagCosmetics;
 import io.github.koxx12dev.scc.gui.Settings;
 import io.github.koxx12dev.scc.utils.Chat;
 import io.github.koxx12dev.scc.utils.StringTransformers;
-import io.github.koxx12dev.scc.utils.managers.CosmeticsManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
@@ -40,22 +41,15 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//TODO: Add support for dg tags
-//TODO: Show tags in guild/party list
-
 public class ChatListeners {
 
-    public static Pattern chatRegex = Pattern.compile("((To|From)\\s)?((Guild|Co-op|Officer|Party)\\s\\>\\s)?(\\[(MVP|VIP|PIG|YOUTUBE|MOD|HELPER|ADMIN|OWNER|MOJANG|SLOTH|EVENTS|MCP)([\\+]{1,2})?\\]\\s)?[\\w]+:\\s.*");
-
-    public static Pattern dmRegex = Pattern.compile("((To|From)\\s)(\\[(MVP|VIP|PIG|YOUTUBE|MOD|HELPER|ADMIN|OWNER|MOJANG|SLOTH|EVENTS|MCP)([\\+]{1,2})?\\]\\s)?[\\w]+:\\s.*");
-
-    public static Pattern groupRegex = Pattern.compile("((Guild|Co-op|Officer|Party)\\s\\>\\s)(\\[(MVP|VIP|PIG|YOUTUBE|MOD|HELPER|ADMIN|OWNER|MOJANG|SLOTH|EVENTS|MCP)([\\+]{1,2})?\\]\\s)?[\\w]+:\\s.*");
-
-    public static Pattern rankRegex = Pattern.compile("\\[(MVP|VIP|PIG|YOUTUBE|MOD|HELPER|ADMIN|OWNER|MOJANG|SLOTH|EVENTS|MCP)([\\+]{1,2})?\\]");
-
-    public static Pattern groupRankRegex = Pattern.compile("((\u00A7[a-f0-9kmolnr](To|From))|(\u00A7[a-f0-9kmolnr](Guild|Co-op|Officer|Party)\\s(\u00A7[a-f0-9kmolnr])?\\\\u003e))\\s((\u00A7[a-f0-9kmolnr])?(\\[(MVP|VIP|PIG|YOUTUBE|MOD|HELPER|ADMIN|OWNER|MOJANG|SLOTH|EVENTS|MCP)([\\+]{1,2})?\\]\\s)?)?[\\w]+(\u00A7[a-f0-9kmolnr])?:");
-
     public static Pattern hypixelAPIKeyMsgRegex = Pattern.compile("Your new API key is [0-9a-z]{8}-([0-9a-z]{4}-){3}[0-9a-z]{12}");
+
+    public static Pattern chatRegex = Pattern.compile("((To|From)\\s)?((Guild|Co-op|Officer|Party)\\s\\>\\s)?(\\[(MVP|VIP|PIG|YOUTUBE|MOD|HELPER|ADMIN|OWNER|MOJANG|SLOTH|EVENTS|MCP)([\\+]{1,2})?\\]\\s)?[\\w]+:\\s.*");
+    public static Pattern dmRegex = Pattern.compile("((To|From)\\s)(\\[(MVP|VIP|PIG|YOUTUBE|MOD|HELPER|ADMIN|OWNER|MOJANG|SLOTH|EVENTS|MCP)([\\+]{1,2})?\\]\\s)?[\\w]+:\\s.*");
+    public static Pattern groupRegex = Pattern.compile("((Guild|Co-op|Officer|Party)\\s\\>\\s)(\\[(MVP|VIP|PIG|YOUTUBE|MOD|HELPER|ADMIN|OWNER|MOJANG|SLOTH|EVENTS|MCP)([\\+]{1,2})?\\]\\s)?[\\w]+:\\s.*");
+    public static Pattern rankRegex = Pattern.compile("\\[(MVP|VIP|PIG|YOUTUBE|MOD|HELPER|ADMIN|OWNER|MOJANG|SLOTH|EVENTS|MCP)([\\+]{1,2})?\\]");
+    public static Pattern groupRankRegex = Pattern.compile("((\u00A7[a-f0-9kmolnr](To|From))|(\u00A7[a-f0-9kmolnr](Guild|Co-op|Officer|Party)\\s(\u00A7[a-f0-9kmolnr])?\\\\u003e))\\s((\u00A7[a-f0-9kmolnr])?(\\[(MVP|VIP|PIG|YOUTUBE|MOD|HELPER|ADMIN|OWNER|MOJANG|SLOTH|EVENTS|MCP)([\\+]{1,2})?\\]\\s)?)?[\\w]+(\u00A7[a-f0-9kmolnr])?:");
 
     @SubscribeEvent
     public void onChatMsgTags(ClientChatReceivedEvent event) {
@@ -69,13 +63,6 @@ public class ChatListeners {
                     String playerName;
                     if (chatRegex.matcher(cleanMessage).matches()) {
                         if (dmRegex.matcher(cleanMessage).matches()) {
-                            if (Settings.debugRegexChat) {
-                                event.message.appendText(ChatColor.GRAY + " (dmRegex)");
-                                SkyclientCosmetics.LOGGER.debug(cleanMessage + " (dmRegex)");
-                            }
-                            if (Settings.debugLogs) {
-                                SkyclientCosmetics.LOGGER.info(parsedMessage);
-                            }
                             JsonObject jsonParsedMsg = JsonUtils.asJsonElement(parsedMessage).getAsJsonObject();
                             String playerText = jsonParsedMsg.get("extra").getAsJsonArray().get(0).getAsJsonObject().get("text").getAsString();
                             String playerColor;
@@ -84,70 +71,39 @@ public class ChatListeners {
                             } catch (Exception e) {
                                 playerColor = ChatColor.GRAY.toString();
                             }
-                            
+
                             playerName = playerText.replaceAll(rankRegex.pattern(),"").trim();
 
-                            if (Settings.debugRegexChat){
-                                Chat.sendSystemMessage(playerName);
-                            }
-                            if (CosmeticsManager.isUserAdded(playerName)) {
-                                String tag = CosmeticsManager.getUser(playerName).getTag();
-                                String newVal = tag+" "+playerColor+playerText;
+                            Tag tag = TagCosmetics.getInstance().getTag(playerName);
+                            if (tag != null) {
+                                String newVal = tag.getFullTag() + " " + playerColor+playerText;
                                 jsonParsedMsg.get("extra").getAsJsonArray().get(0).getAsJsonObject().addProperty("text",newVal);
-                                if (Settings.debugRegexChat) {
-                                    Chat.sendSystemMessage(newVal);
-                                }
                                 event.message = IChatComponent.Serializer.jsonToComponent(jsonParsedMsg.toString());
                             }
                         } else if (groupRegex.matcher(cleanMessage).matches()) {
-                            if (Settings.debugRegexChat) {
-                                event.message.appendText(ChatColor.GRAY + " (groupRegex)");
-                                SkyclientCosmetics.LOGGER.debug(cleanMessage + " (groupRegex)");
-                            }
-                            if (Settings.debugLogs) {
-                                SkyclientCosmetics.LOGGER.info(parsedMessage);
-                            }
                             if (parsedMatcher.find()) {
                                 String msg = parsedMatcher.group(0);
                                 List<String> msgList = new ArrayList<>(Arrays.asList(msg.split(" ")));
                                 List<String> cleanMsg = Arrays.asList(StringTransformers.cleanMessage(msg).split(" "));
                                 playerName = cleanMsg.get(cleanMsg.size()-1).replaceAll(":","");
-                                if (Settings.debugRegexChat) {
-                                    Chat.sendSystemMessage(playerName);
-                                }
-                                if (CosmeticsManager.isUserAdded(playerName)) {
-                                    String tag = CosmeticsManager.getUser(playerName).getTag();
-                                    msgList.add(2,tag);
+                                Tag tag = TagCosmetics.getInstance().getTag(playerName);
+                                if (tag != null) {
+                                    msgList.add(2, tag.getFullTag());
                                     String newVal = String.join(" ", msgList);
-                                    if (Settings.debugRegexChat) {
-                                        Chat.sendSystemMessage(newVal);
-                                    }
                                     event.message = IChatComponent.Serializer.jsonToComponent(parsedMessage.replace(msg,newVal));
-                                }
-                            } else {
-                                if (Settings.debugRegexChat) {
-                                    Chat.sendSystemMessage("Match Failed!");
                                 }
                             }
                         } else {
-                            if (Settings.debugRegexChat) {
-                                event.message.appendText(ChatColor.GRAY + " (msgRegex)");
-                                SkyclientCosmetics.LOGGER.debug(cleanMessage + " (msgRegex)");
-                            }
                             if (rankRegex.matcher(splitMessage.get(0)).matches()) {
                                 playerName = splitMessage.get(1);
                             } else {
                                 playerName = splitMessage.get(0);
                             }
                             playerName = playerName.replaceAll(":","");
-                            if (CosmeticsManager.isUserAdded(playerName)) {
-                                event.message = new ChatComponentText(CosmeticsManager.getUser(playerName).getTag()+" ").appendSibling(event.message);
+                            Tag tag = TagCosmetics.getInstance().getTag(playerName);
+                            if (tag != null) {
+                                event.message = new ChatComponentText(tag.getFullTag() + " ").appendSibling(event.message);
                             }
-                        }
-                    } else {
-                        if (Settings.debugRegexChat) {
-                            event.message.appendText(ChatColor.GRAY + " (Nothing)");
-                            SkyclientCosmetics.LOGGER.debug(cleanMessage + " (Nothing)");
                         }
                     }
                 }

@@ -17,7 +17,8 @@
 
 package io.github.koxx12dev.scc.utils;
 
-import io.github.koxx12dev.scc.utils.managers.CosmeticsManager;
+import io.github.koxx12dev.scc.cosmetics.Tag;
+import io.github.koxx12dev.scc.cosmetics.TagCosmetics;
 import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
@@ -59,15 +60,25 @@ public class StringTransformers {
                         txt.set(i, "Nothing");
                     }
                     break;
-                case "shorttag":
+                case "tag":
                     try {
-                        txt.set(i, cleanMessage(CosmeticsManager.getUser(Minecraft.getMinecraft().getSession().getUsername()).getLongTag()));
+                        Tag tag = TagCosmetics.getInstance().getTag(Minecraft.getMinecraft().getSession().getUsername());
+                        if (tag != null) {
+                            txt.set(i, TagCosmetics.getInstance().isInitialized() ? cleanMessage(tag.getFullTag()) : "");
+                        } else {
+                            txt.set(i, "");
+                        }
                     } catch (Exception ignored) {
                     }
                     break;
-                case "tag":
+                case "shorttag":
                     try {
-                        txt.set(i, cleanMessage(CosmeticsManager.getUser(Minecraft.getMinecraft().getSession().getUsername()).getShortTag()));
+                        Tag tag = TagCosmetics.getInstance().getTag(Minecraft.getMinecraft().getSession().getUsername());
+                        if (tag != null) {
+                            txt.set(i, TagCosmetics.getInstance().isInitialized() ? cleanMessage(tag.getShortTag()) : "");
+                        } else {
+                            txt.set(i, "");
+                        }
                     } catch (Exception ignored) {
                     }
                     break;

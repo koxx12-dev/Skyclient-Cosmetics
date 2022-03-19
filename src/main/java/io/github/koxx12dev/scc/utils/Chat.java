@@ -28,13 +28,13 @@ public class Chat {
     private static final Minecraft mc = Minecraft.getMinecraft();
 
     public static void sendSystemMessage(String message) {
-        if (mc != null && mc.theWorld != null) {
+        if (mc.theWorld != null) {
             EssentialAPI.getMinecraftUtil().sendMessage(ChatColor.DARK_GREEN + "[" + ChatColor.AQUA + "SkyClien" + ChatColor.DARK_AQUA + "'" + ChatColor.AQUA + "t Cosmetics" + ChatColor.DARK_GREEN + "]" + ChatColor.WHITE + ": ", message);
         }
     }
 
     public static void sendClientMessage(String message) {
-        if (mc != null && mc.theWorld != null) {
+        if (mc.theWorld != null) {
             UChat.chat(message);
         }
     }

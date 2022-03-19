@@ -25,10 +25,14 @@ import de.jcm.discordgamesdk.activity.Activity;
 import io.github.koxx12dev.scc.SkyclientCosmetics;
 import io.github.koxx12dev.scc.gui.Settings;
 import io.github.koxx12dev.scc.utils.StringTransformers;
+import net.minecraft.client.Minecraft;
 
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class RPC extends Thread {

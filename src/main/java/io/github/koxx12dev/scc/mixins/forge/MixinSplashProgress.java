@@ -23,10 +23,13 @@ import net.minecraftforge.fml.client.SplashProgress;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(value = SplashProgress.class, priority = Integer.MAX_VALUE)
+import java.awt.*;
+
+@Mixin(value = SplashProgress.class, priority = Integer.MAX_VALUE, remap = false)
 public class MixinSplashProgress {
-    @ModifyVariable(method = "start", at = @At(value = "STORE"), ordinal = 2, remap = false)
+    @ModifyVariable(method = "start", at = @At(value = "STORE"), ordinal = 2)
     private static ResourceLocation setForgeGif(ResourceLocation resourceLocation) {
         if (Files.hidePetLis()) {
             return resourceLocation;
@@ -34,4 +37,16 @@ public class MixinSplashProgress {
             return new ResourceLocation("scc", "petlis.gif");
         }
     }
+
+    /*/
+    @ModifyVariable(method = "start", at = @At(value = "STORE"), ordinal = 1)
+    private static ResourceLocation setMojangGif(ResourceLocation resourceLocation) {
+        if (Files.hidePetLis()) {
+            return resourceLocation;
+        } else {
+            return new ResourceLocation("scc", "skyclient_logo.png");
+        }
+    }
+
+     */
 }
