@@ -26,7 +26,7 @@ import gg.essential.universal.ChatColor;
 import io.github.koxx12dev.scc.SkyclientCosmetics;
 import io.github.koxx12dev.scc.cosmetics.Tag;
 import io.github.koxx12dev.scc.cosmetics.TagCosmetics;
-import io.github.koxx12dev.scc.gui.Settings;
+import io.github.koxx12dev.scc.config.Settings;
 import io.github.koxx12dev.scc.utils.Chat;
 import io.github.koxx12dev.scc.utils.StringTransformers;
 import net.minecraft.client.Minecraft;

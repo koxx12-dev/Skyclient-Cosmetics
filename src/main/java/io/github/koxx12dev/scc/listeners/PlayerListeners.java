@@ -19,10 +19,9 @@ package io.github.koxx12dev.scc.listeners;
 
 import gg.essential.api.EssentialAPI;
 import io.github.koxx12dev.scc.SkyclientCosmetics;
+import io.github.koxx12dev.scc.config.Settings;
 import io.github.koxx12dev.scc.cosmetics.Tag;
 import io.github.koxx12dev.scc.cosmetics.TagCosmetics;
-import io.github.koxx12dev.scc.gui.Settings;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;

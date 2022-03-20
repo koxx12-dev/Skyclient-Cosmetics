@@ -19,10 +19,14 @@ package io.github.koxx12dev.scc.listeners;
 
 import cc.woverflow.onecore.utils.GuiUtils;
 import io.github.koxx12dev.scc.SkyclientCosmetics;
+import io.github.koxx12dev.scc.gui.SkyClientMainMenu;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiIngameMenu;
+import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class GuiListeners {
 
@@ -39,6 +43,15 @@ public class GuiListeners {
     public void onGuiAction(GuiScreenEvent.ActionPerformedEvent.Post event) {
         if (event.gui instanceof GuiIngameMenu && event.button.id == 2666487) {
             GuiUtils.openScreen(SkyclientCosmetics.config);
+        }
+    }
+
+    @SubscribeEvent
+    public void onTick(TickEvent.ClientTickEvent event) {
+        if (event.phase == TickEvent.Phase.END) {
+            if (Minecraft.getMinecraft().currentScreen instanceof GuiMainMenu && !(Minecraft.getMinecraft().currentScreen instanceof SkyClientMainMenu)) {
+                Minecraft.getMinecraft().displayGuiScreen(new SkyClientMainMenu());
+            }
         }
     }
 }

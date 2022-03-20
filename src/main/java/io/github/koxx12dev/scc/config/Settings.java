@@ -15,7 +15,7 @@
  * Discord: Koxx12#8061
  */
 
-package io.github.koxx12dev.scc.gui;
+package io.github.koxx12dev.scc.config;
 
 import gg.essential.vigilance.Vigilant;
 import gg.essential.vigilance.data.Property;

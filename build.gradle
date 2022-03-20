@@ -27,6 +27,7 @@ loom {
         client {
             arg("--tweakClass", "cc.woverflow.onecore.tweaker.OneCoreTweaker")
             property("onecore.mixin", "mixins.scc.json")
+            property("mixin.debug.export", "true")
         }
     }
     runConfigs {
@@ -81,7 +82,9 @@ processResources {
 }
 
 sourceSets {
+    dummy
     main {
+        compileClasspath += dummy.output
         output.resourcesDir = java.classesDirectory
     }
 }

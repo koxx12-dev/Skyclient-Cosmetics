@@ -20,7 +20,7 @@ package io.github.koxx12dev.scc;
 import de.jcm.discordgamesdk.Core;
 import io.github.koxx12dev.scc.commands.SccComand;
 import io.github.koxx12dev.scc.cosmetics.TagCosmetics;
-import io.github.koxx12dev.scc.gui.Settings;
+import io.github.koxx12dev.scc.config.Settings;
 import io.github.koxx12dev.scc.listeners.ChatListeners;
 import io.github.koxx12dev.scc.listeners.GuiListeners;
 import io.github.koxx12dev.scc.listeners.PlayerListeners;
