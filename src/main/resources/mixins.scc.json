@@ -5,6 +5,9 @@
   "package": "io.github.koxx12dev.scc.mixins",
   "refmap": "mixins.scc.refmap.json",
   "mixins": [
-    "forge.MixinSplashProgress"
+    "replaymod.AbstractGuiTooltipMixin",
+    "replaymod.GuiHandlerMixin",
+    "replaymod.I18nMixin",
+    "MinecraftMixin"
   ]
 }

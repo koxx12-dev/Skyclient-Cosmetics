@@ -17,150 +17,94 @@
 
 package io.github.koxx12dev.scc;
 
-import com.google.gson.JsonObject;
 import de.jcm.discordgamesdk.Core;
-import io.github.koxx12dev.scc.commands.MainCommand;
-import io.github.koxx12dev.scc.gui.Settings;
+import io.github.koxx12dev.scc.commands.SccComand;
+import io.github.koxx12dev.scc.cosmetics.TagCosmetics;
+import io.github.koxx12dev.scc.config.Settings;
 import io.github.koxx12dev.scc.listeners.ChatListeners;
 import io.github.koxx12dev.scc.listeners.GuiListeners;
 import io.github.koxx12dev.scc.listeners.PlayerListeners;
 import io.github.koxx12dev.scc.rpc.RPC;
 import io.github.koxx12dev.scc.utils.Files;
-import io.github.koxx12dev.scc.utils.Requests;
-import io.github.koxx12dev.scc.utils.exceptions.APIException;
-import io.github.koxx12dev.scc.utils.exceptions.CacheException;
-import io.github.koxx12dev.scc.utils.managers.CacheManager;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ProgressManager;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
-
-@Mod(modid = SkyclientCosmetics.MOD_ID, name = SkyclientCosmetics.MOD_NAME, version = SkyclientCosmetics.MOD_VERSION, clientSideOnly = true,  acceptedMinecraftVersions = "[1.8.9]")
+@Mod(modid = SkyclientCosmetics.MOD_ID, name = SkyclientCosmetics.MOD_NAME, version = SkyclientCosmetics.MOD_VERSION, clientSideOnly = true, acceptedMinecraftVersions = "[1.8.9]")
 public class SkyclientCosmetics {
 
-public static final String MOD_NAME = "${GRADLE_MOD_NAME}";
-public static final String MOD_ID = "${GRADLE_MOD_ID}";
-public static final String MOD_VERSION = "${GRADLE_MOD_VERSION}";
+    public static final String MOD_NAME = "@NAME@";
+    public static final String MOD_ID = "@ID@";
+    public static final String MOD_VERSION = "@VER@";
 
-public static boolean rpcRunning = false;
+    public static boolean rpcRunning = false;
 
-public static boolean rpcOn = false;
+    public static boolean rpcOn = false;
 
-public static GuiScreen displayScreen;
+    public static Settings config;
 
-public static Settings config;
+    public static boolean apiConnectionSuccess = true;
 
-public static boolean apiConnectionSuccess = true;
+    public static Core rpcCore;
 
-public static JsonObject api;
+    public static String partyID = RPC.generateID();
 
-public static Core rpcCore;
+    public static Logger LOGGER;
 
-public static String partyID = RPC.generateID();
+    public static String rankColor;
 
-public static Logger LOGGER;
+    @Mod.EventHandler
+    public void onPreInit(FMLPreInitializationEvent event) {
 
-public static String rankColor;
+        ProgressManager.ProgressBar progress = ProgressManager.push("Pre Init Setup", 3);
 
-@Mod.EventHandler
-public void onPreInit(FMLPreInitializationEvent event) throws IOException, CacheException, APIException {
+        progress.step("Setting up Files");
 
-    ProgressManager.ProgressBar progress = ProgressManager.push("Pre Init Setup", 5);
+        Files.setup();
 
-    progress.step("Setting up Files");
+        progress.step("Loading Vigilance");
 
-    Files.setup();
+        config = new Settings();
+        config.preload();
 
-    progress.step("Loading Vigilance");
+        progress.step("Getting log4j logger");
 
-    config = new Settings();
-    config.preload();
+        LOGGER = event.getModLog();
 
-    progress.step("Setting up Cache");
-
-    CacheManager.setupCache();
-
-    progress.step("Getting log4j logger");
-
-    LOGGER = event.getModLog();
-
-    progress.step("Getting api data");
-
-    api = Requests.getApiData();
-
-    ProgressManager.pop(progress);
-    /*
-    if ((boolean)api.get("whitelist")) {
-        String UUID = Minecraft.getMinecraft().getSession().getPlayerID();
-        List<Object> whitelisted = api.getJSONArray("whitelisted").toList();
-        if (!whitelisted.contains(UUID)){
-            throw new Error("You are not whitelisted LMAO");
-        }
-    }
-    */
-}
-
-@Mod.EventHandler
-public void onInit(FMLInitializationEvent event) {
-
-    ProgressManager.ProgressBar progress = ProgressManager.push("Init Setup", 3);
-
-    progress.step("Registering Listeners");
-
-    MinecraftForge.EVENT_BUS.register(this);
-    MinecraftForge.EVENT_BUS.register(new ChatListeners());
-    MinecraftForge.EVENT_BUS.register(new PlayerListeners());
-    MinecraftForge.EVENT_BUS.register(new GuiListeners());
-
-    progress.step("Starting RPC");
-
-    RPC.INSTANCE.rpcManager();
-
-    MinecraftForge.EVENT_BUS.register(RPC.INSTANCE);
-
-    progress.step("Registering Commands");
-
-    ClientCommandHandler.instance.registerCommand(new MainCommand());
-
-    ProgressManager.pop(progress);
-}
-
-@Mod.EventHandler
-public void onPostInit(FMLPostInitializationEvent event) throws IOException, CacheException {
-
-    ProgressManager.ProgressBar progress = ProgressManager.push("Post Init Setup", 2);
-
-    progress.step("Loading tags");
-
-    if (apiConnectionSuccess) {
-        Requests.reloadTags();
+        ProgressManager.pop(progress);
     }
 
-    progress.step("Setting rank color");
+    @Mod.EventHandler
+    public void onInit(FMLInitializationEvent event) {
 
-    Requests.setRankColor();
+        ProgressManager.ProgressBar progress = ProgressManager.push("Init Setup", 3);
 
-    ProgressManager.pop(progress);
+        progress.step("Registering Listeners");
 
-}
+        MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(new ChatListeners());
+        MinecraftForge.EVENT_BUS.register(new PlayerListeners());
+        MinecraftForge.EVENT_BUS.register(new GuiListeners());
 
-@SubscribeEvent
-public void onTick(TickEvent.ClientTickEvent event) {
-        if (event.phase != TickEvent.Phase.START)
-            return;
-        if (displayScreen != null) {
-            Minecraft.getMinecraft().displayGuiScreen(displayScreen);
-            displayScreen = null;
-        }
+        progress.step("Starting RPC");
+
+        RPC.INSTANCE.rpcManager();
+
+        MinecraftForge.EVENT_BUS.register(RPC.INSTANCE);
+
+        progress.step("Registering Commands");
+
+        new SccComand().register();
+
+        ProgressManager.pop(progress);
+    }
+
+    @Mod.EventHandler
+    public void onPostInit(FMLPostInitializationEvent event) {
+        TagCosmetics.getInstance().initialize();
     }
 }

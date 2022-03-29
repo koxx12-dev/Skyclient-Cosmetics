@@ -17,19 +17,21 @@
 
 package io.github.koxx12dev.scc.utils;
 
-import io.github.koxx12dev.scc.utils.managers.CacheManager;
+import net.minecraft.launchwrapper.Launch;
 
 import java.io.File;
 
 public class Files {
+    public static final File sccFolder = new File(Launch.minecraftHome, "SkyclientCosmetics");
     public static void setup() {
 
-        if (!CacheManager.sccFolder.exists()) {
-            CacheManager.sccFolder.mkdir();
+        if (!sccFolder.exists()) {
+            sccFolder.mkdirs();
         }
 
     }
+
     public static boolean hidePetLis() {
-        return new File(CacheManager.sccFolder,"HIDEPETLIS").exists();
+        return new File(sccFolder, "HIDEPETLIS").exists();
     }
 }

@@ -23,7 +23,7 @@ import de.jcm.discordgamesdk.DiscordEventAdapter;
 import de.jcm.discordgamesdk.GameSDKException;
 import de.jcm.discordgamesdk.activity.Activity;
 import io.github.koxx12dev.scc.SkyclientCosmetics;
-import io.github.koxx12dev.scc.gui.Settings;
+import io.github.koxx12dev.scc.config.Settings;
 import io.github.koxx12dev.scc.utils.StringTransformers;
 
 import java.io.File;
