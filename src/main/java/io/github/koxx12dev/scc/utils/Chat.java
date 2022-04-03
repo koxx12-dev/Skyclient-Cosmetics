@@ -19,9 +19,7 @@ package io.github.koxx12dev.scc.utils;
 
 import gg.essential.api.EssentialAPI;
 import gg.essential.universal.ChatColor;
-import gg.essential.universal.UChat;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ChatComponentText;
 
 public class Chat {
 
@@ -30,12 +28,6 @@ public class Chat {
     public static void sendSystemMessage(String message) {
         if (mc.theWorld != null) {
             EssentialAPI.getMinecraftUtil().sendMessage(ChatColor.DARK_GREEN + "[" + ChatColor.AQUA + "SkyClien" + ChatColor.DARK_AQUA + "'" + ChatColor.AQUA + "t Cosmetics" + ChatColor.DARK_GREEN + "]" + ChatColor.WHITE + ": ", message);
-        }
-    }
-
-    public static void sendClientMessage(String message) {
-        if (mc.theWorld != null) {
-            UChat.chat(message);
         }
     }
 

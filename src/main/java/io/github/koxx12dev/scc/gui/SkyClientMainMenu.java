@@ -17,6 +17,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Project;
 
 import java.awt.*;
+import java.lang.reflect.InvocationTargetException;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -91,8 +92,8 @@ public class SkyClientMainMenu extends GuiMainMenu {
                 break;
             case 6:
                 try {
-                    this.mc.displayGuiScreen((GuiScreen) cosmeticGui.newInstance());
-                } catch (InstantiationException | IllegalAccessException e) {
+                    this.mc.displayGuiScreen((GuiScreen) cosmeticGui.getDeclaredConstructor().newInstance());
+                } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
                 break;

@@ -47,15 +47,11 @@ public class SkyclientCosmetics {
 
     public static Settings config;
 
-    public static boolean apiConnectionSuccess = true;
-
     public static Core rpcCore;
 
     public static String partyID = RPC.generateID();
 
     public static Logger LOGGER;
-
-    public static String rankColor;
 
     @Mod.EventHandler
     public void onPreInit(FMLPreInitializationEvent event) {
