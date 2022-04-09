@@ -65,8 +65,8 @@ public class SkyClientMainMenu extends GuiMainMenu {
         buttonList.add(new GuiButton(1, width / 20, (height / 2) - 20, 100, 20, "Singleplayer"));
         buttonList.add(new GuiButton(2, width / 20, (height / 2) + 10, 100, 20, "§6Play Hypixel§r"));
         buttonList.add(new GuiButton(3, width / 20, (height / 2) + 40, 100, 20, "Servers"));
-        buttonList.add(new GuiButton(4, width / 20, (height / 2) + 70, 100, 20, "Settings"));
-        buttonList.add(new GuiButton(5, width / 20, (height / 2) + 100, 100, 20, "Quit Game"));
+        buttonList.add(new GuiButton(4, width / 20, height - 60, 100, 20, "Settings"));
+        buttonList.add(new GuiButton(5, width / 20, height - 30, 100, 20, "Quit Game"));
         buttonList.add(new ImageButton(new ResourceLocation("scc", "cosmetics.png"), 6, width - 22, height - 35, 20, 20));
         //buttonList.add(new ImageButton(new ResourceLocation("scc", "essential4.png"), 7, width - 22, height - 35, 20, 20));
     }
@@ -96,6 +96,7 @@ public class SkyClientMainMenu extends GuiMainMenu {
                     e.printStackTrace();
                 }
                 break;
+            // TODO: Replay Viewer button
         }
     }
 
