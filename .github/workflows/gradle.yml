@@ -25,8 +25,6 @@ jobs:
         distribution: 'adopt'
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-    - name: Setup CI env
-      run: ./gradlew setupCIWorkspace
     - name: Build with Gradle
       run: ./gradlew build
     - name: Upload Artifact
