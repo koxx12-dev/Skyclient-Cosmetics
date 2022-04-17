@@ -23,15 +23,10 @@ import java.io.File;
 
 public class Files {
     public static final File sccFolder = new File(Launch.minecraftHome, "SkyclientCosmetics");
+    public static final File greetingFile = new File(sccFolder, "greeting");
     public static void setup() {
-
         if (!sccFolder.exists()) {
             sccFolder.mkdirs();
         }
-
-    }
-
-    public static boolean hidePetLis() {
-        return new File(sccFolder, "HIDEPETLIS").exists();
     }
 }

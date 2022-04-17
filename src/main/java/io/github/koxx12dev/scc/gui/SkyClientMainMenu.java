@@ -1,5 +1,8 @@
 package io.github.koxx12dev.scc.gui;
 
+import gg.essential.api.EssentialAPI;
+import io.github.koxx12dev.gui.greeting.IntroductionGreetingSlide;
+import io.github.koxx12dev.scc.utils.Files;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.multiplayer.ServerData;
@@ -33,6 +36,7 @@ public class SkyClientMainMenu extends GuiMainMenu {
     private ResourceLocation backgroundTexture;
     private GuiButton selectedButton;
     private static Class<?> cosmeticGui;
+    private static boolean bypass = false;
 
     static {
         try {
@@ -42,10 +46,6 @@ public class SkyClientMainMenu extends GuiMainMenu {
         }
     }
 
-    public SkyClientMainMenu() {
-
-    }
-
     @Override
     public void updateScreen() {
         ++this.panoramaTimer;
@@ -53,6 +53,10 @@ public class SkyClientMainMenu extends GuiMainMenu {
 
     @Override
     public void initGui() {
+        if (!Files.greetingFile.exists() || (EssentialAPI.getMinecraftUtil().isDevelopment() && !bypass)) {
+            bypass = true;
+            EssentialAPI.getGuiUtil().openScreen(new IntroductionGreetingSlide());
+        }
         GlStateManager.disableTexture2D();
         GlStateManager.enableBlend();
         GlStateManager.disableAlpha();
