@@ -8,7 +8,10 @@ import gg.essential.elementa.components.UIBlock
 import gg.essential.elementa.components.UIImage
 import gg.essential.elementa.components.UIText
 import gg.essential.elementa.components.Window
-import gg.essential.elementa.constraints.*
+import gg.essential.elementa.constraints.CenterConstraint
+import gg.essential.elementa.constraints.ConstraintType
+import gg.essential.elementa.constraints.HeightConstraint
+import gg.essential.elementa.constraints.WidthConstraint
 import gg.essential.elementa.constraints.animation.Animations
 import gg.essential.elementa.constraints.resolution.ConstraintVisitor
 import gg.essential.elementa.dsl.*
@@ -22,6 +25,11 @@ import net.minecraft.client.gui.GuiScreen
 import java.awt.Color
 
 open class GreetingSlide<T : GuiScreen>(val nextGui: Class<T>, val onClick: () -> Unit = {}) : WindowScreen(version = ElementaVersion.V1, drawDefaultBackground = false, restoreCurrentGuiOnClose = false, newGuiScale = GuiScale.scaleForScreenSize().ordinal) {
+    init {
+        if (previousScale == Int.MIN_VALUE) {
+            previousScale = Minecraft.getMinecraft().gameSettings.guiScale
+        }
+    }
     private val background by UIBlock(Color.DARK_GRAY) constrain {
         x = 0.pixels()
         y = 0.pixels()
@@ -87,7 +95,7 @@ open class GreetingSlide<T : GuiScreen>(val nextGui: Class<T>, val onClick: () -
         }
     }
 
-    open protected fun setButtonFloat() {
+    protected open fun setButtonFloat() {
         button.setFloating(true)
     }
 
@@ -139,5 +147,6 @@ open class GreetingSlide<T : GuiScreen>(val nextGui: Class<T>, val onClick: () -
 
     companion object {
         val TRANSPARENT_BLACK = Color(0, 0, 0, 0)
+        var previousScale = Int.MIN_VALUE
     }
 }

@@ -27,6 +27,7 @@ import io.github.koxx12dev.scc.listeners.PlayerListeners;
 import io.github.koxx12dev.scc.rpc.RPC;
 import io.github.koxx12dev.scc.utils.Files;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ProgressManager;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -52,6 +53,8 @@ public class SkyclientCosmetics {
     public static String partyID = RPC.generateID();
 
     public static Logger LOGGER;
+
+    public static boolean isPatcher;
 
     @Mod.EventHandler
     public void onPreInit(FMLPreInitializationEvent event) {
@@ -102,5 +105,6 @@ public class SkyclientCosmetics {
     @Mod.EventHandler
     public void onPostInit(FMLPostInitializationEvent event) {
         TagCosmetics.getInstance().initialize();
+        isPatcher = Loader.isModLoaded("patcher");
     }
 }

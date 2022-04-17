@@ -7,9 +7,11 @@ import gg.essential.elementa.components.UIText
 import gg.essential.elementa.components.UIWrappedText
 import gg.essential.elementa.components.Window
 import gg.essential.elementa.constraints.CenterConstraint
+import gg.essential.elementa.constraints.SiblingConstraint
 import gg.essential.elementa.dsl.*
 import gg.essential.universal.ChatColor
 import gg.essential.vigilance.gui.settings.ButtonComponent
+import io.github.koxx12dev.gui.greeting.components.CorrectOutsidePixelConstraint
 import net.minecraft.client.Minecraft
 import net.minecraft.launchwrapper.Launch
 import java.awt.Color
@@ -37,14 +39,20 @@ class ImportSlide : GreetingSlide<OptimizationSlide>(OptimizationSlide::class.ja
     }
 
     val text by UIWrappedText("""
-        ${ChatColor.BOLD}Would you like to import your config from .minecraft?${ChatColor.RESET}
-        -
-        ${ChatColor.ITALIC}You will still need to import resource packs manually. Please contact SkyClient discord for more information.${ChatColor.RESET}
+        Would you like to import your config from .minecraft?
     """.trimIndent(), centered = true) constrain {
         x = CenterConstraint()
         y = CenterConstraint() //todo find better wording for this
         width = 75.percent()
         textScale = 3.pixels()
+    } childOf window
+
+    val secondaryText by UIWrappedText("""
+        ${ChatColor.ITALIC}You will still need to import resource packs manually. Please contact SkyClient discord for more information.${ChatColor.RESET}
+    """.trimIndent(), centered = true) constrain {
+        x = CenterConstraint()
+        y = SiblingConstraint(5f).also { it.constrainTo = text }
+        width = 100.percent()
     } childOf window
 
     val progressText by UIText() constrain {
@@ -60,10 +68,12 @@ class ImportSlide : GreetingSlide<OptimizationSlide>(OptimizationSlide::class.ja
             progressText.setText("Downloading config locations...")
             val configLocations = arrayListOf<String>()
             try {
-                WebUtil.fetchJsonElement("https://raw.githubusercontent.com/Wyvest/SkyblockClient-REPO/main/files/config_locations.json").asJsonArray.forEach {
+                WebUtil.fetchJsonElement("https://raw.githubusercontent.com/nacrt/SkyblockClient-REPO/main/files/config_locations.json").asJsonArray.forEach {
                     configLocations.add(it.asString)
                 }
             } catch (e: Exception) {
+                progressText.setText("${ChatColor.RED}Failed, using offline locations...")
+                Thread.sleep(1000)
                 e.printStackTrace()
                 configLocations.add("config")
                 configLocations.add("W-OVERFLOW")
@@ -75,11 +85,17 @@ class ImportSlide : GreetingSlide<OptimizationSlide>(OptimizationSlide::class.ja
                     progressText.setText("Finding \"$location\"...")
                     val file = File(parentConfig, location)
                     if (file.exists()) {
-                        progressText.setText("Moving \"$location\"...")
+                        progressText.setText("Copying \"$location\"...")
                         file.copyRecursively(File(Launch.minecraftHome, location), overwrite = true, onError = { _, _ -> OnErrorAction.SKIP })
+                        Thread.sleep(500)
+                    } else {
+                        progressText.setText("${ChatColor.RED}\"$location\" not found, skipping...")
+                        Thread.sleep(1000)
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
+                    progressText.setText("${ChatColor.RED}Finding \"$location\" failed, skipping...")
+                    Thread.sleep(1000)
                 }
             }
             Window.enqueueRenderOperation {
@@ -88,7 +104,7 @@ class ImportSlide : GreetingSlide<OptimizationSlide>(OptimizationSlide::class.ja
         }
     } constrain {
         y = CenterConstraint()
-        x = CenterConstraint() - 2.pixels(alignOutside = true)
+        x = CorrectOutsidePixelConstraint(window.getWidth() / 2 - 2)
     } childOf blackbar
 
     private fun hideButtons() {
@@ -100,7 +116,7 @@ class ImportSlide : GreetingSlide<OptimizationSlide>(OptimizationSlide::class.ja
         displayNextScreen()
     } constrain {
         y = CenterConstraint()
-        x = CenterConstraint() + 2.pixels()
+        x = (window.getWidth() / 2 + 2).pixels()
     } childOf blackbar
 
     override fun setButtonFloat() {

@@ -21,7 +21,7 @@ class IntroductionGreetingSlide : GreetingSlide<SummarySlide>(SummarySlide::clas
     } childOf window
 
     override fun initScreen(width: Int, height: Int) {
-        @Suppress("DEPRECATION")
+        @Suppress("DEPRECATION") // we need to run this to force reenable opengl stuff (also this wouldn't run in 1.17+)
         UGraphics.disableTexture2D()
         UGraphics.enableBlend()
         UGraphics.disableAlpha()

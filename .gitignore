@@ -26,6 +26,7 @@ build
 # other
 notUsed/*
 run
+.minecraft
 .DS_Store
 Thumbs.db
 
