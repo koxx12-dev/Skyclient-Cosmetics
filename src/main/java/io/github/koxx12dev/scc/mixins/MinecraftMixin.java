@@ -2,6 +2,7 @@ package io.github.koxx12dev.scc.mixins;
 
 import gg.essential.api.EssentialAPI;
 import io.github.koxx12dev.scc.SkyclientCosmetics;
+import io.github.koxx12dev.scc.config.Settings;
 import io.github.koxx12dev.scc.gui.SkyClientMainMenu;
 import io.github.koxx12dev.scc.utils.Files;
 import io.github.koxx12dev.scc.utils.IconLoader;
@@ -28,9 +29,11 @@ public abstract class MinecraftMixin {
 
     @Inject(method = "displayGuiScreen", at = @At("HEAD"), cancellable = true)
     private void onDisplayScreen(GuiScreen i, CallbackInfo ci) {
-        if (i instanceof GuiMainMenu && !(i instanceof SkyClientMainMenu) && (EssentialAPI.getOnboardingData().hasAcceptedEssentialTOS() || EssentialAPI.getOnboardingData().hasDeniedEssentialTOS())) {
-            ci.cancel();
-            displayGuiScreen(new SkyClientMainMenu());
+        if (Settings.customMainMenu) {
+            if (i instanceof GuiMainMenu && !(i instanceof SkyClientMainMenu) && (EssentialAPI.getOnboardingData().hasAcceptedEssentialTOS() || EssentialAPI.getOnboardingData().hasDeniedEssentialTOS())) {
+                ci.cancel();
+                displayGuiScreen(new SkyClientMainMenu());
+            }
         }
     }
 

@@ -28,6 +28,9 @@ import java.io.IOException;
 
 public class Settings extends Vigilant {
 
+    @Property(type = PropertyType.SWITCH, name = "Custom Main Menu", description = "Enable the SkyClient Custom Main Menu.", category = "Main")
+    public static boolean customMainMenu = true;
+
     @Property(type = PropertyType.SWITCH, name = "Show Custom Tags", description = "Show the custom tags, which are the main focus of this mod.", category = "Main", subcategory = "Tags")
     public static boolean showTags = true;
 

@@ -8,7 +8,7 @@ import gg.essential.universal.UGraphics
 import io.github.koxx12dev.gui.greeting.components.GreetingSlide
 import java.awt.Color
 
-class IntroductionGreetingSlide : GreetingSlide<SummarySlide>(SummarySlide::class.java) {
+class IntroductionGreetingSlide : GreetingSlide<DiscordSlide>(DiscordSlide::class.java) {
     val title by UIText("SkyClient") constrain {
         x = CenterConstraint()
         y = CenterConstraint()
