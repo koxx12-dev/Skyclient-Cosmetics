@@ -44,8 +44,6 @@ public class TagCosmetics {
         initialized = false;
         Multithreading.runAsync(() -> {
             try {
-                throw new RuntimeException();
-                /*
                 rawData = InternetUtils.fetchJsonElement(WebUtil.INSTANCE, "https://koxx12-dev.github.io/api/scc/tags.json").getAsJsonObject();
                 Multithreading.runAsync(() -> {
                     try {
@@ -54,8 +52,6 @@ public class TagCosmetics {
                         e.printStackTrace();
                     }
                 });
-
-                 */
             } catch (Exception e) {
                 e.printStackTrace();
                 if (cacheFile.exists()) {

@@ -5,6 +5,7 @@ import gg.essential.elementa.constraints.CenterConstraint
 import gg.essential.elementa.constraints.SiblingConstraint
 import gg.essential.elementa.dsl.*
 import gg.essential.universal.UGraphics
+import io.github.koxx12dev.gui.greeting.components.GreetingSlide
 import java.awt.Color
 
 class IntroductionGreetingSlide : GreetingSlide<SummarySlide>(SummarySlide::class.java) {

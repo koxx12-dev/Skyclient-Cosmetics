@@ -70,7 +70,7 @@ public class SkyclientCosmetics {
         config = new Settings();
         config.preload();
 
-        progress.step("Getting log4j logger");
+        progress.step("Getting Log4j Logger");
 
         LOGGER = event.getModLog();
 

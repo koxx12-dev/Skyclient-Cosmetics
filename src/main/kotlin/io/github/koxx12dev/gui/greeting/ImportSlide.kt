@@ -12,6 +12,7 @@ import gg.essential.elementa.dsl.*
 import gg.essential.universal.ChatColor
 import gg.essential.vigilance.gui.settings.ButtonComponent
 import io.github.koxx12dev.gui.greeting.components.CorrectOutsidePixelConstraint
+import io.github.koxx12dev.gui.greeting.components.GreetingSlide
 import net.minecraft.client.Minecraft
 import net.minecraft.launchwrapper.Launch
 import java.awt.Color

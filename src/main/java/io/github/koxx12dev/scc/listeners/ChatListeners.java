@@ -27,8 +27,8 @@ import io.github.koxx12dev.scc.SkyclientCosmetics;
 import io.github.koxx12dev.scc.cosmetics.Tag;
 import io.github.koxx12dev.scc.cosmetics.TagCosmetics;
 import io.github.koxx12dev.scc.config.Settings;
-import io.github.koxx12dev.scc.utils.Chat;
-import io.github.koxx12dev.scc.utils.StringTransformers;
+import io.github.koxx12dev.scc.utils.ChatUtils;
+import io.github.koxx12dev.scc.utils.StringUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
@@ -56,7 +56,7 @@ public class ChatListeners {
         if (Settings.showTags) {
             try {
                 if (event.type == 0) {
-                    String cleanMessage = StringTransformers.cleanMessage(event.message.getUnformattedText());
+                    String cleanMessage = StringUtils.cleanMessage(event.message.getUnformattedText());
                     List<String> splitMessage = Arrays.asList(cleanMessage.split("\\s"));
                     String parsedMessage = IChatComponent.Serializer.componentToJson(event.message);
                     Matcher parsedMatcher = groupRankRegex.matcher(parsedMessage);
@@ -84,7 +84,7 @@ public class ChatListeners {
                             if (parsedMatcher.find()) {
                                 String msg = parsedMatcher.group(0);
                                 List<String> msgList = new ArrayList<>(Arrays.asList(msg.split(" ")));
-                                List<String> cleanMsg = Arrays.asList(StringTransformers.cleanMessage(msg).split(" "));
+                                List<String> cleanMsg = Arrays.asList(StringUtils.cleanMessage(msg).split(" "));
                                 playerName = cleanMsg.get(cleanMsg.size()-1).replaceAll(":","");
                                 Tag tag = TagCosmetics.getInstance().getTag(playerName);
                                 if (tag != null) {
@@ -117,29 +117,29 @@ public class ChatListeners {
     @SubscribeEvent
     public void onChatMsgHpApi(ClientChatReceivedEvent event) {
         if (event.type == 0) {
-            String msg = StringTransformers.cleanMessage(event.message.getUnformattedText());
+            String msg = StringUtils.cleanMessage(event.message.getUnformattedText());
             if (msg.contains("Your new API key is ")) {
                 Matcher match = hypixelAPIKeyMsgRegex.matcher(msg);
                 if (match.find()) {
                     String cleanMsg = match.group();
                     String key = cleanMsg.replace("Your new API key is ", "");
                     SkyclientCosmetics.LOGGER.info(key);
-                    Chat.sendSystemMessage(ChatColor.GREEN + "Checking API key");
+                    ChatUtils.sendSystemMessage(ChatColor.GREEN + "Checking API key");
                     Multithreading.runAsync(() -> {
                         try {
                             JsonObject response = InternetUtils.fetchJsonElement(WebUtil.INSTANCE, "https://api.hypixel.net/key?key=" + key).getAsJsonObject();
 
                             if (response.get("success").getAsBoolean() && response.get("record").getAsJsonObject().get("owner").getAsString().replaceAll("-", "").equals(Minecraft.getMinecraft().getSession().getPlayerID())) {
-                                Chat.sendSystemMessage(ChatColor.GREEN + "Verified API key!");
+                                ChatUtils.sendSystemMessage(ChatColor.GREEN + "Verified API key!");
                                 Settings.hpApiKey = key;
                                 SkyclientCosmetics.config.markDirty();
                                 SkyclientCosmetics.config.writeData();
                             } else {
-                                Chat.sendSystemMessage(ChatColor.RED + "Couldn't verify \"" + key + "\" as a API key");
+                                ChatUtils.sendSystemMessage(ChatColor.RED + "Couldn't verify \"" + key + "\" as a API key");
                             }
 
                         } catch (Exception e) {
-                            Chat.sendSystemMessage(ChatColor.RED + "\"" + key + "\" is not a valid API key");
+                            ChatUtils.sendSystemMessage(ChatColor.RED + "\"" + key + "\" is not a valid API key");
                         }
                     });
                 }

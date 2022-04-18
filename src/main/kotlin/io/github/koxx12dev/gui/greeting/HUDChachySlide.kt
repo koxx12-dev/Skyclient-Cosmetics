@@ -8,6 +8,7 @@ import gg.essential.elementa.dsl.*
 import gg.essential.universal.ChatColor
 import gg.essential.vigilance.gui.settings.ButtonComponent
 import io.github.koxx12dev.gui.greeting.components.CorrectOutsidePixelConstraint
+import io.github.koxx12dev.gui.greeting.components.GreetingSlide
 import io.github.koxx12dev.scc.SkyclientCosmetics
 
 class HUDChachySlide : GreetingSlide<EndSlide>(EndSlide::class.java) {

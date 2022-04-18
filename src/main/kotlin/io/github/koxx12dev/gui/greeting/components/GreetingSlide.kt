@@ -1,36 +1,31 @@
-package io.github.koxx12dev.gui.greeting
+package io.github.koxx12dev.gui.greeting.components
 
 import gg.essential.api.utils.Multithreading
 import gg.essential.elementa.ElementaVersion
-import gg.essential.elementa.UIComponent
 import gg.essential.elementa.WindowScreen
 import gg.essential.elementa.components.UIBlock
 import gg.essential.elementa.components.UIImage
 import gg.essential.elementa.components.UIText
 import gg.essential.elementa.components.Window
 import gg.essential.elementa.constraints.CenterConstraint
-import gg.essential.elementa.constraints.ConstraintType
-import gg.essential.elementa.constraints.HeightConstraint
-import gg.essential.elementa.constraints.WidthConstraint
 import gg.essential.elementa.constraints.animation.Animations
-import gg.essential.elementa.constraints.resolution.ConstraintVisitor
 import gg.essential.elementa.dsl.*
-import gg.essential.elementa.state.BasicState
-import gg.essential.elementa.state.State
 import gg.essential.elementa.utils.withAlpha
 import gg.essential.universal.GuiScale
+import gg.essential.vigilance.gui.VigilancePalette
 import gg.essential.vigilance.gui.settings.ButtonComponent
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import java.awt.Color
 
-open class GreetingSlide<T : GuiScreen>(val nextGui: Class<T>, val onClick: () -> Unit = {}) : WindowScreen(version = ElementaVersion.V1, drawDefaultBackground = false, restoreCurrentGuiOnClose = false, newGuiScale = GuiScale.scaleForScreenSize().ordinal) {
+open class GreetingSlide<T : GuiScreen>(private val nextGui: Class<T>, val onClick: () -> Unit = {}) : WindowScreen(version = ElementaVersion.V1, drawDefaultBackground = false, restoreCurrentGuiOnClose = false, newGuiScale = GuiScale.scaleForScreenSize().ordinal) {
     init {
         if (previousScale == Int.MIN_VALUE) {
             previousScale = Minecraft.getMinecraft().gameSettings.guiScale
         }
     }
-    private val background by UIBlock(Color.DARK_GRAY) constrain {
+
+    private val background by UIBlock(VigilancePalette.getBackground()) constrain {
         x = 0.pixels()
         y = 0.pixels()
         width = 100.percent()
@@ -118,30 +113,6 @@ open class GreetingSlide<T : GuiScreen>(val nextGui: Class<T>, val onClick: () -
                     }
                 }
             }
-        }
-    }
-
-    class HeightRelativeConstraint(value: Float) : WidthConstraint, HeightConstraint {
-        override var cachedValue = 0f
-        override var recalculate = true
-        override var constrainTo: UIComponent? = null
-
-        private var valueState: State<Float> = BasicState(value)
-
-        var value: Float
-            get() = valueState.get()
-            set(value) { valueState.set(value) }
-
-        override fun getWidthImpl(component: UIComponent): Float {
-            return (constrainTo ?: component.parent).getHeight() * valueState.get()
-        }
-
-        override fun getHeightImpl(component: UIComponent): Float {
-            return (constrainTo ?: component.parent).getHeight() * valueState.get()
-        }
-
-        override fun visitImpl(visitor: ConstraintVisitor, type: ConstraintType) {
-
         }
     }
 

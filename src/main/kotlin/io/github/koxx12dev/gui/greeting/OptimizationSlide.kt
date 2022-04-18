@@ -9,6 +9,7 @@ import gg.essential.elementa.dsl.*
 import gg.essential.universal.ChatColor
 import gg.essential.vigilance.gui.settings.ButtonComponent
 import io.github.koxx12dev.gui.greeting.components.CorrectOutsidePixelConstraint
+import io.github.koxx12dev.gui.greeting.components.GreetingSlide
 import io.github.koxx12dev.scc.SkyclientCosmetics
 import io.github.koxx12dev.scc.utils.TickDelay
 import net.minecraft.client.settings.GameSettings
@@ -36,7 +37,7 @@ class OptimizationSlide : GreetingSlide<HUDChachySlide>(HUDChachySlide::class.ja
     } childOf window
 
     val yesButton by ButtonComponent("${ChatColor.GREEN}Yes") {
-        progressText.setText("Applying fixes... This might take a while...")
+        progressText.setText("Applying optimized settings... This might take a while...")
         TickDelay(2) {
             if (isOptifineLoaded()) {
                 try {

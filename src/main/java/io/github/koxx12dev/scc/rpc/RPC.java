@@ -24,7 +24,7 @@ import de.jcm.discordgamesdk.GameSDKException;
 import de.jcm.discordgamesdk.activity.Activity;
 import io.github.koxx12dev.scc.SkyclientCosmetics;
 import io.github.koxx12dev.scc.config.Settings;
-import io.github.koxx12dev.scc.utils.StringTransformers;
+import io.github.koxx12dev.scc.utils.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -120,8 +120,8 @@ public class RPC extends Thread {
     public static void update(Core core) {
         try(Activity activity = new Activity())  {
 
-            String LineOne = StringTransformers.discordPlaceholder(Settings.rpcLineOne);
-            String LineTwo = StringTransformers.discordPlaceholder(Settings.rpcLineTwo);
+            String LineOne = StringUtils.discordPlaceholder(Settings.rpcLineOne);
+            String LineTwo = StringUtils.discordPlaceholder(Settings.rpcLineTwo);
 
             if (LineOne.length() >= 2 && LineOne.length() <= 127) {
                 activity.setDetails(LineOne);
@@ -142,7 +142,7 @@ public class RPC extends Thread {
                 activity.assets().setLargeImage("skyclienticon");
             }
 
-            activity.assets().setLargeText(StringTransformers.discordPlaceholder(Settings.rpcImgText));
+            activity.assets().setLargeText(StringUtils.discordPlaceholder(Settings.rpcImgText));
 
             //activity.party().setID(SkyclientCosmetics.PartyID);
             //activity.secrets().setJoinSecret("Secret");

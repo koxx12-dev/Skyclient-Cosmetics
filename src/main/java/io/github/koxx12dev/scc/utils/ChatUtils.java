@@ -21,7 +21,7 @@ import gg.essential.api.EssentialAPI;
 import gg.essential.universal.ChatColor;
 import net.minecraft.client.Minecraft;
 
-public class Chat {
+public class ChatUtils {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
 

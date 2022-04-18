@@ -2,11 +2,9 @@ package io.github.koxx12dev.gui.greeting
 
 import gg.essential.elementa.components.UIWrappedText
 import gg.essential.elementa.constraints.CenterConstraint
-import gg.essential.elementa.dsl.childOf
-import gg.essential.elementa.dsl.constrain
-import gg.essential.elementa.dsl.percent
-import gg.essential.elementa.dsl.provideDelegate
+import gg.essential.elementa.dsl.*
 import gg.essential.universal.ChatColor
+import io.github.koxx12dev.gui.greeting.components.GreetingSlide
 
 class SummarySlide : GreetingSlide<DiscordSlide>(DiscordSlide::class.java) {
     val text by UIWrappedText("""
@@ -17,5 +15,6 @@ class SummarySlide : GreetingSlide<DiscordSlide>(DiscordSlide::class.java) {
         x = CenterConstraint()
         y = CenterConstraint()
         width = 75.percent()
+        textScale = 2.pixels()
     } childOf window
 }

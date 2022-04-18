@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class StringTransformers {
+public class StringUtils {
 
     public static String cleanMessage(String msg) {
         return msg.replaceAll("\u00A7[a-f0-9kmolnr]", "");
@@ -84,43 +84,43 @@ public class StringTransformers {
                     break;
                 case "bits":
                     try {
-                        txt.set(i, Sidebar.getBits());
+                        txt.set(i, SidebarUtils.getBits());
                     } catch (Exception ignored) {
                     }
                     break;
                 case "time":
                     try {
-                        txt.set(i, Sidebar.getSBTime());
+                        txt.set(i, SidebarUtils.getSBTime());
                     } catch (Exception ignored) {
                     }
                     break;
                 case "date":
                     try {
-                        txt.set(i, Sidebar.getSBDate());
+                        txt.set(i, SidebarUtils.getSBDate());
                     } catch (Exception ignored) {
                     }
                     break;
                 case "loc":
                     try {
-                        txt.set(i, Sidebar.getSBLoc());
+                        txt.set(i, SidebarUtils.getSBLoc());
                     } catch (Exception ignored) {
                     }
                     break;
                 case "server":
                     try {
-                        txt.set(i, Sidebar.getServer());
+                        txt.set(i, SidebarUtils.getServer());
                     } catch (Exception ignored) {
                     }
                     break;
                 case "objective":
                     try {
-                        txt.set(i, Sidebar.getObjective());
+                        txt.set(i, SidebarUtils.getObjective());
                     } catch (Exception ignored) {
                     }
                     break;
                 case "purse":
                     try {
-                        txt.set(i, Sidebar.getPurse());
+                        txt.set(i, SidebarUtils.getPurse());
                     } catch (Exception ignored) {
                     }
                     break;

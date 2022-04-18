@@ -8,7 +8,7 @@ import gg.essential.api.commands.SubCommand;
 import io.github.koxx12dev.scc.SkyclientCosmetics;
 import io.github.koxx12dev.scc.cosmetics.Tag;
 import io.github.koxx12dev.scc.cosmetics.TagCosmetics;
-import io.github.koxx12dev.scc.utils.Chat;
+import io.github.koxx12dev.scc.utils.ChatUtils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -40,12 +40,12 @@ public class SccComand extends Command {
     public void displaytag(@DisplayName("Player name") String name) {
         Tag tag = TagCosmetics.getInstance().getTag(name);
         if (tag != null) {
-            Chat.sendSystemMessage(name + "'s tag: " + tag);
+            ChatUtils.sendSystemMessage(name + "'s tag: " + tag);
         }
     }
 
     @SubCommand("tags")
     public void tags() {
-        Chat.sendSystemMessage(String.valueOf(TagCosmetics.getInstance().getTags()));
+        ChatUtils.sendSystemMessage(String.valueOf(TagCosmetics.getInstance().getTags()));
     }
 }

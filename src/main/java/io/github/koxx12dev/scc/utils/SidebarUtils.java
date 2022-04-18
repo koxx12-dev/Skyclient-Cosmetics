@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class Sidebar {
+public class SidebarUtils {
 
     private static List<String> getSidebarLines() {
 
@@ -60,7 +60,7 @@ public class Sidebar {
 
         for (Score score : scores) {
             ScorePlayerTeam team = scoreboard.getPlayersTeam(score.getPlayerName());
-            lines.add(StringTransformers.cleanMessage(StringTransformers.cleanEmojis(ScorePlayerTeam.formatPlayerName(team, score.getPlayerName()))));
+            lines.add(StringUtils.cleanMessage(StringUtils.cleanEmojis(ScorePlayerTeam.formatPlayerName(team, score.getPlayerName()))));
         }
 
         return lines;
@@ -209,7 +209,7 @@ public class Sidebar {
             return null;
         }
 
-        return StringTransformers.cleanMessage(objective.getDisplayName());
+        return StringUtils.cleanMessage(objective.getDisplayName());
     }
 
 }
