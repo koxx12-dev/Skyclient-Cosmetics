@@ -96,7 +96,6 @@ public class SkyClientMainMenu extends GuiMainMenu {
                     e.printStackTrace();
                 }
                 break;
-            // TODO: Replay Viewer button
         }
     }
 
